@@ -1,0 +1,73 @@
+<view class="page detail-page">
+  <view class="loading" wx:if="{{loading}}">正在打开菜谱…</view>
+
+  <block wx:elif="{{recipe}}">
+    <view class="detail-hero anim">
+      <view class="hero-row">
+        <view class="category-badge">{{recipe.categoryLabel}}</view>
+        <view class="difficulty">{{recipe.difficultyText}}</view>
+      </view>
+      <view class="recipe-title">{{recipe.name}}</view>
+      <view class="recipe-summary" wx:if="{{recipe.summary}}">{{recipe.summary}}</view>
+      <view class="hero-meta">
+        <view class="hero-pill">{{recipe.levelLabel}}</view>
+        <view class="hero-pill">{{recipe.calories}}</view>
+        <view class="hero-pill" wx:for="{{recipe.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</view>
+      </view>
+    </view>
+
+    <view class="card section-card anim" style="animation-delay:60ms">
+      <view class="section-heading"><view class="heading-bar"></view>准备清单</view>
+      <view class="requirement-group" wx:for="{{recipe.requirementGroups}}" wx:key="key">
+        <view class="group-title">{{item.title}}</view>
+        <view class="requirement-tags">
+          <view class="requirement-tag" wx:for="{{item.items}}" wx:for-item="requirement" wx:key="key">
+            {{requirement.name}}<text class="optional" wx:if="{{requirement.optional}}">可选</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card section-card" wx:if="{{recipe.amountGroups.length}}">
+      <view class="section-heading"><view class="heading-bar gold"></view>参考用量</view>
+      <view class="amount-group" wx:for="{{recipe.amountGroups}}" wx:key="key">
+        <view class="group-title">{{item.title}}</view>
+        <view class="amount-note" wx:for="{{item.notes}}" wx:key="*this">{{item}}</view>
+        <view class="amount-row" wx:for="{{item.items}}" wx:for-item="amount" wx:key="key">
+          <view class="amount-name">{{amount.name}}<text class="kind-label">{{amount.kindLabel}}</text></view>
+          <view class="amount-value">{{amount.amount}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card section-card">
+      <view class="section-heading"><view class="heading-bar green"></view>详细步骤</view>
+      <view class="step-group" wx:for="{{recipe.stepGroups}}" wx:key="key">
+        <view class="step-group-title" wx:if="{{recipe.stepGroups.length > 1 || item.title !== '制作步骤'}}">{{item.title}}</view>
+        <view class="step-row" wx:for="{{item.steps}}" wx:for-item="step" wx:key="key">
+          <view class="step-number">{{step.number}}</view>
+          <view class="step-text">{{step.text}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card section-card notice-card">
+      <view class="section-heading"><view class="heading-bar orange"></view>注意事项</view>
+      <block wx:if="{{recipe.notes.length}}">
+        <view class="note-row" wx:for="{{recipe.notes}}" wx:key="*this">
+          <view class="note-dot"></view><view class="note-text">{{item}}</view>
+        </view>
+      </block>
+      <view class="no-note" wx:else>原菜谱没有额外注意事项，请根据实际火力和食材状态灵活调整。</view>
+    </view>
+
+    <view class="source-note">数据来自 Anduin2017/HowToCook · Unlicense</view>
+  </block>
+
+  <view class="error card" wx:else>
+    <view class="error-mark">!</view>
+    <view class="error-title">菜谱没有找到</view>
+    <view class="error-copy">数据可能已更新，返回列表重新选择一道吧。</view>
+    <button class="btn btn-primary" bindtap="goBack">返回菜谱列表</button>
+  </view>
+</view>

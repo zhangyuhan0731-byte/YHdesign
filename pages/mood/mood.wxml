@@ -1,0 +1,127 @@
+<view class="page">
+  <view class="mood-head anim">
+    <view>
+      <view class="mood-kicker">MOOD NOTE</view>
+      <view class="mood-heading">心情日记</view>
+    </view>
+    <view class="date-pill">{{todayKey}}</view>
+  </view>
+
+  <view class="card today-card anim" style="animation-delay:60ms;">
+    <view class="section-title"><view class="bar"></view>今日记录</view>
+    <view class="today-preview" style="background:{{selectedMood.soft}};">
+      <view class="mood-face big-face mood-{{selectedMood.id}}" style="--face-color:{{selectedMood.color}};">
+        <image class="mood-img" wx:if="{{selectedMood.id === 'normal'}}" src="/images/mood-heart.png" mode="aspectFit" />
+        <image class="mood-img" wx:if="{{selectedMood.id === 'angry'}}" src="/images/mood-angry.png" mode="aspectFit" />
+        <image class="mood-img" wx:if="{{selectedMood.id === 'sad'}}" src="/images/mood-sad.png" mode="aspectFit" />
+        <image class="mood-img" wx:if="{{selectedMood.id === 'happy'}}" src="/images/mood-happy.png" mode="aspectFit" />
+        <image class="mood-img" wx:if="{{selectedMood.id === 'tired'}}" src="/images/mood-tired.png" mode="aspectFit" />
+        <view class="face-mark mark-a"></view>
+        <view class="face-mark mark-b"></view>
+        <view class="eye eye-l"></view>
+        <view class="eye eye-r"></view>
+        <view class="cheek cheek-l"></view>
+        <view class="cheek cheek-r"></view>
+        <view class="mouth"></view>
+      </view>
+      <view class="today-copy">
+        <view class="today-name">{{selectedMood.name}}</view>
+        <view class="today-tip">选择今天最接近的感受</view>
+      </view>
+    </view>
+
+    <view class="mood-grid">
+      <view class="mood-option {{selectedMood.id === item.id ? 'active' : ''}}"
+            wx:for="{{moods}}" wx:key="id" bindtap="chooseMood" data-id="{{item.id}}"
+            style="--mood-color:{{item.color}};--mood-soft:{{item.soft}};">
+        <view class="mood-face option-face mood-{{item.id}}" style="--face-color:{{item.color}};">
+          <image class="mood-img" wx:if="{{item.id === 'normal'}}" src="/images/mood-heart.png" mode="aspectFit" />
+          <image class="mood-img" wx:if="{{item.id === 'angry'}}" src="/images/mood-angry.png" mode="aspectFit" />
+          <image class="mood-img" wx:if="{{item.id === 'sad'}}" src="/images/mood-sad.png" mode="aspectFit" />
+          <image class="mood-img" wx:if="{{item.id === 'happy'}}" src="/images/mood-happy.png" mode="aspectFit" />
+          <image class="mood-img" wx:if="{{item.id === 'tired'}}" src="/images/mood-tired.png" mode="aspectFit" />
+          <view class="face-mark mark-a"></view>
+          <view class="face-mark mark-b"></view>
+          <view class="eye eye-l"></view>
+          <view class="eye eye-r"></view>
+          <view class="cheek cheek-l"></view>
+          <view class="cheek cheek-r"></view>
+          <view class="mouth"></view>
+        </view>
+        <view class="mood-name">{{item.name}}</view>
+      </view>
+    </view>
+
+    <view class="field-label">一句话日记</view>
+    <textarea class="field note-field" maxlength="80" value="{{note}}" bindinput="onNoteInput"
+              placeholder="写一句今天发生的小事或此刻感受" />
+    <view class="note-count">{{note.length}}/80</view>
+
+    <button class="btn btn-primary btn-block save-btn" bindtap="saveToday">
+      <view class="ic ic-check ic-w" style="width:32rpx;height:32rpx;margin-right:10rpx;"></view>
+      保存今日心情
+    </button>
+  </view>
+
+  <view class="card calendar-card anim" style="animation-delay:120ms;">
+    <view class="calendar-top">
+      <view class="section-title calendar-title"><view class="bar"></view>心情月历</view>
+    </view>
+
+    <view class="month-row">
+      <button class="month-btn" bindtap="prevMonth">
+        <view class="ic ic-back" style="width:24rpx;height:24rpx;"></view>
+      </button>
+      <view class="month-text">{{monthText}}</view>
+      <button class="month-btn next" bindtap="nextMonth">
+        <view class="ic ic-back" style="width:24rpx;height:24rpx;"></view>
+      </button>
+    </view>
+
+    <view class="week-row">
+      <view class="week-cell" wx:for="{{weekHeads}}" wx:key="*this">{{item}}</view>
+    </view>
+
+    <view class="calendar-grid">
+      <view class="day-cell {{item.inMonth ? '' : 'muted-day'}} {{item.isToday ? 'today' : ''}} {{item.selected ? 'selected' : ''}}"
+            wx:for="{{calendarDays}}" wx:key="date" bindtap="tapDay" data-date="{{item.date}}">
+        <view class="day-num">{{item.day}}</view>
+        <view class="mood-face mini-face mood-{{item.moodId}}" wx:if="{{item.moodId}}" style="--face-color:{{item.moodColor}};">
+          <image class="mood-img" wx:if="{{item.moodId === 'normal'}}" src="/images/mood-heart.png" mode="aspectFit" />
+          <image class="mood-img" wx:if="{{item.moodId === 'angry'}}" src="/images/mood-angry.png" mode="aspectFit" />
+          <image class="mood-img" wx:if="{{item.moodId === 'sad'}}" src="/images/mood-sad.png" mode="aspectFit" />
+          <image class="mood-img" wx:if="{{item.moodId === 'happy'}}" src="/images/mood-happy.png" mode="aspectFit" />
+          <image class="mood-img" wx:if="{{item.moodId === 'tired'}}" src="/images/mood-tired.png" mode="aspectFit" />
+          <view class="face-mark mark-a"></view>
+          <view class="eye eye-l"></view>
+          <view class="eye eye-r"></view>
+          <view class="mouth"></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="selected-card" wx:if="{{selectedEntry}}">
+      <view class="mood-face selected-mood mood-{{selectedEntry.mood.id}}" style="--face-color:{{selectedEntry.mood.color}};">
+        <image class="mood-img" wx:if="{{selectedEntry.mood.id === 'normal'}}" src="/images/mood-heart.png" mode="aspectFit" />
+        <image class="mood-img" wx:if="{{selectedEntry.mood.id === 'angry'}}" src="/images/mood-angry.png" mode="aspectFit" />
+        <image class="mood-img" wx:if="{{selectedEntry.mood.id === 'sad'}}" src="/images/mood-sad.png" mode="aspectFit" />
+        <image class="mood-img" wx:if="{{selectedEntry.mood.id === 'happy'}}" src="/images/mood-happy.png" mode="aspectFit" />
+        <image class="mood-img" wx:if="{{selectedEntry.mood.id === 'tired'}}" src="/images/mood-tired.png" mode="aspectFit" />
+        <view class="face-mark mark-a"></view>
+        <view class="face-mark mark-b"></view>
+        <view class="eye eye-l"></view>
+        <view class="eye eye-r"></view>
+        <view class="cheek cheek-l"></view>
+        <view class="cheek cheek-r"></view>
+        <view class="mouth"></view>
+      </view>
+      <view class="selected-copy">
+        <view class="selected-title">{{selectedEntry.date}} · {{selectedEntry.moodName}}</view>
+        <view class="selected-note">{{selectedEntry.noteText}}</view>
+      </view>
+    </view>
+    <view class="empty-small" wx:else>
+      这一天还没有记录
+    </view>
+  </view>
+</view>

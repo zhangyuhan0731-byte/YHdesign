@@ -1,0 +1,53 @@
+<view class="page chef-page">
+  <view class="search-sticky">
+    <view class="search-box">
+      <view class="ic ic-search search-icon"></view>
+      <input class="search-input" value="{{keyword}}" placeholder="搜索菜名、食材…" confirm-type="search" bindinput="onSearchInput" />
+      <button class="clear-search" wx:if="{{keyword}}" bindtap="clearSearch" aria-label="清空搜索">×</button>
+    </view>
+  </view>
+
+  <view class="browse-layout">
+    <scroll-view class="category-column" scroll-y enhanced show-scrollbar="{{false}}">
+      <view wx:for="{{categories}}" wx:key="key"
+            class="category-item {{activeCategory === item.key ? 'active' : ''}}"
+            bindtap="chooseCategory" data-key="{{item.key}}">
+        <view class="category-name">{{item.label}}</view>
+        <view class="category-count">{{item.count}} 道</view>
+      </view>
+    </scroll-view>
+
+    <view class="recipe-column">
+      <view class="result-head">
+        <view class="result-title">{{activeCategoryLabel}}</view>
+        <view class="result-count">{{resultCount}} 道</view>
+      </view>
+
+      <view class="recipe-list" wx:if="{{visibleRecipes.length}}">
+        <view class="recipe-card card" wx:for="{{visibleRecipes}}" wx:key="id" bindtap="openRecipe" data-id="{{item.id}}">
+          <view class="recipe-card-top">
+            <view class="category-badge">{{item.categoryLabel}}</view>
+            <view class="difficulty-stars">{{item.difficultyText}}</view>
+          </view>
+          <view class="recipe-name">{{item.name}}</view>
+          <view class="ingredient-preview">{{item.ingredientsText}}</view>
+          <view class="recipe-meta">
+            <view class="meta-pill">{{item.levelLabel}}</view>
+            <view class="meta-pill calorie">{{item.calories}}</view>
+          </view>
+          <view class="open-copy">查看做法 ›</view>
+        </view>
+        <view class="load-tip">{{hasMore ? '继续上滑查看更多' : '共 ' + resultCount + ' 道'}}</view>
+      </view>
+
+      <view class="empty card" wx:else>
+        <view class="empty-symbol">?</view>
+        <view class="tip">没有找到菜谱</view>
+        <view class="tip-sub">换个关键词试试</view>
+        <button class="btn btn-ghost empty-reset" bindtap="showAll">查看全部</button>
+      </view>
+
+      <view class="source-note">数据来自 {{sourceName}} v{{sourceVersion}}</view>
+    </view>
+  </view>
+</view>

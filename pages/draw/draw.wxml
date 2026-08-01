@@ -1,0 +1,32 @@
+<!-- pages/draw/draw.wxml -->
+<view class="page">
+  <view class="hero card anim">
+    <view class="hero-top">
+      <view class="hero-date">{{dateStr}}</view>
+      <view class="badge" wx:if="{{drawnToday && !drawing}}">今日已抽</view>
+    </view>
+    <view class="hero-title">每日抽签</view>
+    <view class="hero-sub">心诚则灵，每日一签</view>
+  </view>
+
+  <view class="lot-card card {{drawing ? 'drawing' : ''}}">
+    <view class="lot-seal {{display.cls}}">
+      <view class="seal-top">签</view>
+      <view class="seal-level">{{display.level}}</view>
+    </view>
+    <view class="lot-poem">「{{display.poem}}」</view>
+    <view class="lot-advice muted">{{display.advice}}</view>
+  </view>
+
+  <button class="btn btn-primary btn-block draw-btn" bindtap="draw" disabled="{{drawing}}">
+    {{drawing ? '洗签中…' : (drawnToday ? '再抽一次' : '开始抽签')}}
+  </button>
+
+  <view class="muted tiny tc tip">每日按生日与日期确定一签 · 可反复抽签查看动画</view>
+
+  <view class="sound-bar bottom-bar">
+    <view class="sound-fab" bindtap="toggleMute">
+      <view class="ic {{muted ? 'ic-sound-off' : 'ic-sound-on'}}" style="width:38rpx;height:38rpx;"></view>
+    </view>
+  </view>
+</view>

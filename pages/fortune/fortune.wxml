@@ -1,0 +1,72 @@
+<!-- pages/fortune/fortune.wxml -->
+<view class="page">
+  <view class="hero card anim">
+    <view class="hero-top">
+      <view class="hero-date">{{dateStr}}</view>
+      <view class="badge" wx:if="{{basedOn}}">已绑定生日</view>
+    </view>
+    <view class="ring" style="--p:{{composite}}">
+      <view class="ring-inner">
+        <view class="ring-score">{{composite}}</view>
+        <view class="ring-label">综合</view>
+      </view>
+    </view>
+    <view class="hero-title">今日运势</view>
+    <view class="hero-sub">愿今天一切顺意</view>
+  </view>
+
+  <view class="reveal {{revealing ? 'revealing' : ''}}">
+    <view class="card">
+      <view class="section-title"><view class="bar"></view>五维运势</view>
+      <view class="dim" wx:for="{{fortune.dims}}" wx:key="name">
+        <view class="dim-head">
+          <text class="dim-name">{{item.name}}</text>
+          <view class="stars">
+            <text class="star {{s < item.stars ? 'on' : ''}}"
+                  wx:for="{{[0,1,2,3,4]}}" wx:for-item="s" wx:key="*this">★</text>
+          </view>
+        </view>
+        <view class="dim-text muted">{{item.text}}</view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="section-title"><view class="bar"></view>幸运物</view>
+      <view class="lucky-row">
+        <view class="lucky-item">
+          <view class="lucky-label muted tiny">幸运色</view>
+          <view class="color-swatch" style="background:{{fortune.color.hex}}"></view>
+          <view class="lucky-val">{{fortune.color.name}}</view>
+        </view>
+        <view class="lucky-item">
+          <view class="lucky-label muted tiny">幸运数字</view>
+          <view class="num-circle">{{fortune.number}}</view>
+        </view>
+      </view>
+      <view class="divider"></view>
+      <view class="yiji">
+        <view class="yiji-col">
+          <text class="yj-tag yi">宜</text>
+          <text class="yj-val">{{lot.yi}}</text>
+        </view>
+        <view class="yiji-col">
+          <text class="yj-tag ji">忌</text>
+          <text class="yj-val">{{lot.ji}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card poem-card">
+      <view class="poem">「{{lot.poem}}」</view>
+      <button class="btn btn-ghost btn-block" bindtap="changeLot">换一签</button>
+    </view>
+  </view>
+
+  <view class="muted tiny tc foot">{{basedOn ? '已根据你的生日生成 · 同一天固定' : '同一天运势固定'}} · 仅供娱乐</view>
+
+  <view class="sound-bar bottom-bar">
+    <view class="sound-fab" bindtap="toggleMute">
+      <view class="ic {{muted ? 'ic-sound-off' : 'ic-sound-on'}}" style="width:38rpx;height:38rpx;"></view>
+    </view>
+  </view>
+</view>

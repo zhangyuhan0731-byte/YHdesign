@@ -1,0 +1,128 @@
+/* pages/woodfish/woodfish.wxss - 黑底白鱼，雅致版 */
+page {
+  background: radial-gradient(90% 58% at 50% 8%, #454052 0%, #171923 58%, #090a0f 100%);
+  color: #ffffff;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 56rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
+}
+
+/* ---------- 统计 ---------- */
+.stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48rpx;
+  padding: 28rpx 30rpx;
+  border-radius: 32rpx;
+  background: rgba(255,255,255,0.07);
+  border: 1rpx solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(12rpx);
+}
+.stat { text-align: center; }
+.stat-num {
+  font-size: 66rpx;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: 1rpx;
+}
+.stat-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 8rpx;
+}
+.stat-divider {
+  width: 2rpx;
+  height: 64rpx;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ---------- 木鱼区域 ---------- */
+.fish-area {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 520rpx;
+}
+.glow {
+  position: absolute;
+  width: 560rpx;
+  height: 560rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 207, 134, 0.18) 0%, rgba(244, 207, 134, 0) 68%);
+  pointer-events: none;
+}
+.fish {
+  width: 470rpx;
+  height: 470rpx;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 28rpx 70rpx rgba(0, 0, 0, 0.62));
+}
+.fish-area.knock .fish { transform: scale(0.93); }
+
+.floaters {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.floater {
+  position: absolute;
+  top: 24%;
+  transform: translateX(-50%);
+  color: #f4cf86;
+  font-weight: 700;
+  font-size: 36rpx;
+  white-space: nowrap;
+  text-shadow: 0 2rpx 14rpx rgba(244, 207, 134, 0.5);
+  animation: floatUp 0.95s ease-out forwards;
+}
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translate(-50%, 18rpx) scale(0.85); }
+  18%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -150rpx) scale(1.08); }
+}
+
+.hint {
+  text-align: center;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.58);
+  margin: 20rpx 0 48rpx;
+}
+
+/* ---------- 按钮 ---------- */
+.ctrls {
+  display: flex;
+  gap: 28rpx;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 92rpx;
+  border-radius: 46rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  line-height: 1;
+  border: none;
+  transition: transform 0.1s ease, background 0.2s ease;
+}
+.btn::after { border: none; }
+.btn-dark {
+  background: rgba(255, 255, 255, 0.10);
+  color: #ffffff;
+  border: 2rpx solid rgba(255, 255, 255, 0.18);
+}
+.btn-dark:active {
+  background: rgba(255, 255, 255, 0.16);
+  transform: scale(0.97);
+}

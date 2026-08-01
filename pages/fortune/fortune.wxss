@@ -1,0 +1,161 @@
+/* pages/fortune/fortune.wxss */
+.page { padding: 28rpx 24rpx 60rpx; }
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  background: linear-gradient(150deg, #fff6df 0%, #ffffff 55%, #edf5ff 100%);
+  margin-bottom: 26rpx;
+  padding: 36rpx 32rpx 40rpx;
+}
+.hero.card {
+  border: 1rpx solid rgba(244, 166, 42, 0.14);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  left: -52rpx;
+  top: -52rpx;
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: rgba(244, 166, 42, 0.16);
+}
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  margin-bottom: 22rpx;
+}
+.hero-date { font-size: 25rpx; color: var(--muted); }
+.badge {
+  font-size: 21rpx;
+  color: var(--primary);
+  background: var(--primary-tint);
+  padding: 6rpx 18rpx;
+  border-radius: 999rpx;
+  font-weight: 600;
+}
+
+.ring {
+  position: relative;
+  z-index: 1;
+  width: 168rpx;
+  height: 168rpx;
+  border-radius: 50%;
+  background: conic-gradient(var(--gold) calc(var(--p) * 1%), #eef3f7 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20rpx;
+  box-shadow: 0 14rpx 30rpx rgba(244, 166, 42, 0.24);
+}
+.ring-inner {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ring-score {
+  font-size: 48rpx;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+}
+.ring-label { font-size: 22rpx; color: var(--muted); margin-top: 6rpx; }
+
+.hero-title { position: relative; z-index: 1; font-size: 40rpx; font-weight: 800; color: var(--ink); }
+.hero-sub { font-size: 24rpx; color: var(--muted); margin-top: 8rpx; }
+
+/* 五维 */
+.dim { padding: 20rpx 0; }
+.dim + .dim { border-top: 1rpx solid var(--line); }
+.dim-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dim-name { font-size: 28rpx; font-weight: 800; color: var(--ink); }
+.dim-text { font-size: 25rpx; margin-top: 8rpx; line-height: 1.6; }
+
+/* 幸运物 */
+.lucky-row { display: flex; gap: 24rpx; }
+.lucky-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(180deg, #fffaf2, #f7f4ee);
+  border-radius: var(--radius-sm);
+  padding: 24rpx 0;
+  border: 1rpx solid #f0e6d6;
+}
+.lucky-label { margin-bottom: 14rpx; }
+.color-swatch {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  border: 4rpx solid #fff;
+  box-shadow: 0 4rpx 12rpx rgba(58, 155, 214, 0.20);
+}
+.lucky-val { font-size: 26rpx; font-weight: 600; color: var(--ink); margin-top: 14rpx; }
+.num-circle {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffb84d, #2d7dd2);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6rpx 16rpx rgba(58, 155, 214, 0.30);
+}
+
+.yiji { display: flex; gap: 24rpx; }
+.yiji-col {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14rpx;
+}
+.yj-tag {
+  width: 54rpx;
+  height: 54rpx;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.yj-tag.yi { background: #2fae6b; }
+.yj-tag.ji { background: var(--danger); }
+.yj-val { font-size: 30rpx; font-weight: 600; color: var(--ink); }
+
+.poem-card { text-align: center; }
+.poem-card.card {
+  background: linear-gradient(135deg, #ffffff, #fff7e6);
+}
+.poem {
+  font-size: 30rpx;
+  color: var(--ink);
+  line-height: 1.8;
+  padding: 12rpx 0 24rpx;
+  font-style: italic;
+}
+
+.foot { margin-top: 8rpx; }
+
+/* 揭晓/换签 过渡动画 */
+.reveal { transition: opacity 0.45s ease, transform 0.45s ease; }
+.reveal.revealing { opacity: 0; transform: translateY(16rpx); }

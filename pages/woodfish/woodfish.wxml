@@ -1,0 +1,36 @@
+<!-- pages/woodfish/woodfish.wxml -->
+<view class="page">
+  <view class="stats">
+    <view class="stat">
+      <view class="stat-num">{{total}}</view>
+      <view class="stat-label">总功德</view>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat">
+      <view class="stat-num">{{todayCount}}</view>
+      <view class="stat-label">今日敲击</view>
+    </view>
+  </view>
+
+  <view class="fish-area {{knocking ? 'knock' : ''}}" bindtap="knock">
+    <view class="glow"></view>
+    <view class="floaters">
+      <view class="floater" wx:for="{{floaters}}" wx:key="id"
+            style="left: calc(50% + {{item.dx}}rpx);">功德 +1</view>
+    </view>
+    <image class="fish" src="/images/woodfish.svg" mode="aspectFit" />
+  </view>
+
+  <view class="hint">轻触木鱼，积一份功德</view>
+
+  <view class="ctrls">
+    <button class="btn btn-dark flex-1" bindtap="toggleMute">
+      <view class="ic {{muted ? 'ic-sound-off' : 'ic-sound-on'}} ic-w" style="width:34rpx;height:34rpx;margin-right:10rpx;"></view>
+      {{muted ? '已静音' : '声音开'}}
+    </button>
+    <button class="btn btn-dark flex-1" bindtap="reset">
+      <view class="ic ic-trash ic-w" style="width:32rpx;height:32rpx;margin-right:10rpx;"></view>
+      重置
+    </button>
+  </view>
+</view>

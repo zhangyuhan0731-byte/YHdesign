@@ -1,0 +1,85 @@
+<view class="page">
+  <view class="weight-head anim">
+    <view>
+      <view class="weight-kicker">WEIGHT</view>
+      <view class="weight-heading">体重记录</view>
+    </view>
+    <view class="unit-pill">kg</view>
+  </view>
+
+  <view class="today-card card anim" style="animation-delay:60ms;">
+    <view class="today-label">今日体重</view>
+    <view wx:if="{{todayRecord}}">
+      <view class="today-number">{{todayText}}<text>kg</text></view>
+      <view class="today-date">{{todayRecord.date}} {{todayRecord.time}}</view>
+      <view class="today-actions">
+        <button class="btn btn-ghost btn-sm" bindtap="editToday">修改</button>
+        <button class="btn btn-danger btn-sm" bindtap="deleteToday">删除</button>
+      </view>
+    </view>
+    <view wx:else class="today-empty">今天还没有记录体重</view>
+  </view>
+
+  <view class="card form-card anim" style="animation-delay:100ms;">
+    <view class="section-title"><view class="bar"></view>{{formTitle}}</view>
+    <view class="field-label">日期</view>
+    <picker mode="date" value="{{formDate}}" bindchange="onDateChange">
+      <view class="date-field">{{formDate}}</view>
+    </picker>
+    <view class="field-label">体重</view>
+    <view class="weight-input-row">
+      <input class="field weight-input" type="digit" value="{{formWeight}}" bindinput="onWeightInput" placeholder="例如 52.5" />
+      <view class="kg">kg</view>
+    </view>
+    <button class="btn btn-primary btn-block save-btn" bindtap="saveRecord">
+      <view class="ic ic-check ic-w" style="width:32rpx;height:32rpx;margin-right:10rpx;"></view>
+      保存记录
+    </button>
+  </view>
+
+  <view class="card trend-card anim" style="animation-delay:140ms;">
+    <view class="trend-head">
+      <view class="section-title trend-title"><view class="bar"></view>近期趋势</view>
+      <view class="range-tabs">
+        <view class="range-tab {{item.className}}" wx:for="{{rangeOptions}}" wx:key="key"
+              data-range="{{item.key}}" bindtap="switchRange">{{item.label}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{chart.hasData}}" class="chart-wrap">
+      <canvas class="chart-canvas" canvas-id="weightTrendCanvas"></canvas>
+    </view>
+    <view wx:else class="chart-empty">暂无数据，记录一次后显示趋势</view>
+
+    <view class="change-line {{change.type}}">{{change.text}}</view>
+  </view>
+
+  <view class="card stats-card" wx:if="{{stats}}">
+    <view class="section-title"><view class="bar"></view>数据统计</view>
+    <view class="stats-grid">
+      <view class="stat-item"><view class="stat-label">最新</view><view class="stat-value">{{stats.latest}}kg</view></view>
+      <view class="stat-item"><view class="stat-label">初始</view><view class="stat-value">{{stats.initial}}kg</view></view>
+      <view class="stat-item"><view class="stat-label">最高</view><view class="stat-value">{{stats.highest}}kg</view></view>
+      <view class="stat-item"><view class="stat-label">最低</view><view class="stat-value">{{stats.lowest}}kg</view></view>
+      <view class="stat-item wide"><view class="stat-label">总变化</view><view class="stat-value">{{stats.totalChange}}kg</view></view>
+    </view>
+  </view>
+
+  <view class="card history-card">
+    <view class="section-title"><view class="bar"></view>历史记录</view>
+    <view wx:if="{{records.length}}">
+      <view class="history-item" wx:for="{{records}}" wx:key="id">
+        <view class="history-main">
+          <view class="history-date">{{item.dateText}}</view>
+          <view class="history-time">{{item.time}}</view>
+        </view>
+        <view class="history-weight">{{item.weight}}<text>kg</text></view>
+        <view class="history-actions">
+          <button class="mini-btn" data-id="{{item.id}}" bindtap="editRecord">编辑</button>
+          <button class="mini-btn danger" data-id="{{item.id}}" bindtap="deleteRecord">删除</button>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty-small">还没有体重记录</view>
+  </view>
+</view>

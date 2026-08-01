@@ -1,0 +1,56 @@
+<!-- pages/about/about.wxml - 我的信息 -->
+<view class="page">
+  <view class="profile anim">
+    <view class="avatar" bindtap="chooseAvatar">
+      <image wx:if="{{avatar}}" class="avatar-img" src="{{avatar}}" mode="aspectFill"/>
+      <view wx:else class="ic ic-user ic-w" style="width:46rpx;height:46rpx;"></view>
+      <view class="avatar-badge">换头像</view>
+    </view>
+    <view class="info">
+      <view class="name">{{nickname || '未命名小伙伴'}}</view>
+      <view class="ver muted small">{{genders[genderIndex]}} · {{birthday ? birthday : '还未设置生日'}}</view>
+    </view>
+  </view>
+
+  <view class="card anim" style="animation-delay:80ms">
+    <view class="section-title"><view class="bar"></view>我的信息</view>
+
+    <view class="form-row">
+      <text class="form-label">昵称</text>
+      <input class="field-in" placeholder="怎么称呼你？" placeholder-class="ph"
+             value="{{nickname}}" bindinput="onNick" maxlength="12" confirm-type="done"/>
+    </view>
+    <view class="divider"></view>
+
+    <view class="form-row">
+      <text class="form-label">性别</text>
+      <picker class="field-picker" mode="selector" range="{{genders}}" value="{{genderIndex}}" bindchange="onGender">
+        <view class="picker-val">
+          {{genders[genderIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+    <view class="divider"></view>
+
+    <view class="form-row">
+      <text class="form-label">生日</text>
+      <picker class="field-picker" mode="date" value="{{birthday}}" end="{{endDate}}" bindchange="onBirth">
+        <view class="picker-val {{birthday ? '' : 'ph'}}">
+          {{birthday || '选择生日'}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="derive" wx:if="{{birthday}}">
+      <view class="chip chip-active">{{constellation}}</view>
+      <view class="chip chip-active">属{{zodiac}}</view>
+    </view>
+
+    <button class="btn btn-primary btn-block" bindtap="save">保存信息</button>
+    <view class="muted tiny tc tip">保存后，每日抽签会按你的生日生成</view>
+  </view>
+
+  <view class="foot muted tiny tc">愿你每天都有小确幸</view>
+</view>

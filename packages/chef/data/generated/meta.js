@@ -1,0 +1,2 @@
+// 此文件由 tools/import-howtocook.js 自动生成，请勿手工编辑。
+module.exports={"source":"Anduin2017/HowToCook","license":"Unlicense","version":"1.6.0","total":368,"categories":[["meat_dish","荤菜",110],["vegetable_dish","素菜",63],["aquatic","水产",28],["breakfast","早餐",25],["staple","主食",58],["soup","汤羹",23],["dessert","甜点",19],["drink","饮品",23],["condiment","调味料",9],["semi-finished","半成品",10]],"tags":[["粤味",28],["川味",18],["湘味",11],["闽味",3],["鲁味",6],["浙味",1],["苏味",1]]};

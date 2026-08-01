@@ -1,0 +1,54 @@
+<!-- pages/home/home.wxml -->
+<view class="page">
+  <view class="hero anim">
+    <view class="hero-copy">
+      <view class="hero-greet">{{greet}}，今天想玩点什么？</view>
+      <view class="hero-title">趣玩小工具</view>
+      <view class="hero-sub">把抽签、转盘、备忘和小运势收进一个轻松的口袋。</view>
+    </view>
+    <view class="hero-orbit">
+      <view class="orbit-dot dot-a"></view>
+      <view class="orbit-dot dot-b"></view>
+      <view class="orbit-dot dot-c"></view>
+      <view class="orbit-core">
+        <view class="core-grid">
+          <view class="core-cell cell-blue">
+            <view class="ic ic-ledger ic-w" style="width:24rpx;height:24rpx;"></view>
+          </view>
+          <view class="core-cell cell-gold">
+            <view class="ic ic-countdown ic-w" style="width:24rpx;height:24rpx;"></view>
+          </view>
+          <view class="core-cell cell-mint">
+            <view class="ic ic-memo ic-w" style="width:24rpx;height:24rpx;"></view>
+          </view>
+          <view class="core-cell cell-rose">
+            <view class="ic ic-wheel ic-w" style="width:24rpx;height:24rpx;"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-head">
+    <view>
+      <view class="section-kicker">TOOLS</view>
+      <view class="section-name">今天的小工具</view>
+    </view>
+    <view class="section-count">{{tools.length}}个</view>
+  </view>
+
+  <view class="grid">
+    <view class="grid-item anim" wx:for="{{tools}}" wx:key="key"
+          style="animation-delay:{{index * 60}}ms"
+          bindtap="onTap" data-path="{{item.path}}">
+      <view class="icon-tile tone-{{item.tone}}">
+        <view class="ic {{item.icon}}" style="width:52rpx;height:52rpx;"></view>
+      </view>
+      <view class="tool-copy">
+        <view class="name">{{item.name}}</view>
+        <view class="desc">{{item.desc}}</view>
+      </view>
+      <view class="enter">打开</view>
+    </view>
+  </view>
+</view>

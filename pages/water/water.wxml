@@ -1,0 +1,106 @@
+<view class="page">
+  <view class="water-head anim">
+    <view>
+      <view class="water-kicker">WATER</view>
+      <view class="water-heading">喝水提醒</view>
+    </view>
+    <view class="date-pill">{{date}}</view>
+  </view>
+
+  <view class="card hero-card anim" style="animation-delay:60ms;">
+    <view class="cup-wrap">
+      <view class="cup">
+        <view class="water-fill" style="{{waterStyle}}"></view>
+        <view class="cup-shine"></view>
+      </view>
+    </view>
+    <view class="hero-info">
+      <view class="hero-num">{{todayCups}}<text>/{{settings.targetCups}}杯</text></view>
+      <view class="hero-ml">{{todayMl}}ml / {{targetMl}}ml</view>
+      <view class="hero-percent">{{percent}}%</view>
+      <view class="done-tip" wx:if="{{done}}">今日目标已完成</view>
+    </view>
+  </view>
+
+  <view class="action-row">
+    <button class="btn btn-primary flex-1" bindtap="drinkOne">喝一杯</button>
+    <button class="btn btn-ghost undo-btn" bindtap="undoLast">撤销</button>
+  </view>
+
+  <view class="card setting-card">
+    <view class="section-title"><view class="bar"></view>每日目标</view>
+    <view class="setting-grid">
+      <view>
+        <view class="field-label">目标杯数</view>
+        <input class="field" type="number" value="{{targetInput}}" bindinput="onTargetInput" />
+      </view>
+      <view>
+        <view class="field-label">每杯容量 ml</view>
+        <input class="field" type="number" value="{{cupInput}}" bindinput="onCupInput" />
+      </view>
+    </view>
+    <button class="btn btn-ghost btn-block save-setting" bindtap="saveSettings">保存目标</button>
+  </view>
+
+  <view class="card remind-card">
+    <view class="remind-top">
+      <view class="section-title remind-title"><view class="bar"></view>本地提醒</view>
+      <switch checked="{{settings.remindOn}}" bindchange="toggleRemind" color="#2d7dd2" />
+    </view>
+    <view class="remind-note">关闭小程序后，提醒可能无法准时触发；打开小程序时会根据上次记录提示。</view>
+    <view class="time-row">
+      <picker mode="time" value="{{settings.startTime}}" bindchange="onStartChange"><view class="time-pill">{{settings.startTime}}</view></picker>
+      <view class="to">至</view>
+      <picker mode="time" value="{{settings.endTime}}" bindchange="onEndChange"><view class="time-pill">{{settings.endTime}}</view></picker>
+    </view>
+    <view class="field-label">提醒间隔（小时）</view>
+    <input class="field" type="number" value="{{intervalInput}}" bindinput="onIntervalInput" />
+    <button class="btn btn-ghost btn-block save-setting" bindtap="saveSettings">保存提醒设置</button>
+    <view class="next-tip">{{nextTip}}</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title"><view class="bar"></view>今日记录</view>
+    <view wx:if="{{todayLogs.length}}">
+      <view class="log-item" wx:for="{{todayLogs}}" wx:key="id">
+        <view class="drop"></view>
+        <view class="log-main">
+          <view class="log-time">{{item.time}}</view>
+          <view class="log-sub">第 {{item.cup}} 杯 · {{item.ml}}ml</view>
+        </view>
+        <button class="mini-btn danger" data-id="{{item.id}}" bindtap="deleteLog">删除</button>
+      </view>
+    </view>
+    <view wx:else class="empty-small">今天还没有喝水记录</view>
+  </view>
+
+  <view class="card history-card">
+    <view class="section-title"><view class="bar"></view>最近7天</view>
+    <view class="history-item" wx:for="{{history}}" wx:key="date" data-date="{{item.date}}" bindtap="showHistory">
+      <view class="history-date">{{item.date}}</view>
+      <view class="history-mid">
+        <view class="history-text">{{item.cups}}杯 · {{item.ml}}ml · {{item.doneText}}</view>
+        <view class="history-bar"><view class="history-fill" style="{{item.barStyle}}"></view></view>
+      </view>
+      <view class="history-percent">{{item.percent}}%</view>
+    </view>
+  </view>
+
+  <view class="mask {{selectedHistoryVisible ? 'show' : ''}}" bindtap="closeHistory"></view>
+  <view class="sheet {{selectedHistoryVisible ? 'show' : ''}}">
+    <view class="sheet-head">
+      <view class="sheet-title">{{selectedHistory.date}}</view>
+      <view class="ic ic-close" style="width:34rpx;height:34rpx;" bindtap="closeHistory"></view>
+    </view>
+    <view wx:if="{{selectedHistory.logs.length}}">
+      <view class="log-item" wx:for="{{selectedHistory.logs}}" wx:key="id">
+        <view class="drop"></view>
+        <view class="log-main">
+          <view class="log-time">{{item.time}}</view>
+          <view class="log-sub">{{item.ml}}ml</view>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty-small">这一天还没有记录</view>
+  </view>
+</view>

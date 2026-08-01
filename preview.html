@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>趣玩小工具 · 重做预览</title>
+<style>
+  :root{
+    --bg:#eaf6fb; --card:#fff; --primary:#3a9bd6; --primary-deep:#2f86bd;
+    --primary-soft:#e8f4fc; --primary-tint:#f1f9fe; --ink:#213545; --ink-2:#4a6376;
+    --muted:#93a9ba; --line:#e7f1f7; --danger:#e8756b; --gold:#f0a93b;
+    --radius:28px; --radius-sm:18px;
+    --shadow:0 12px 34px rgba(58,155,214,.10),0 2px 8px rgba(58,155,214,.05);
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:#dfeef5;color:var(--ink);padding:32px;}
+  h1.title{text-align:center;color:#2b3a47;font-size:22px;margin:0 0 6px}
+  p.sub{text-align:center;color:#7d97a8;font-size:13px;margin:0 0 28px}
+  .grid{display:flex;flex-wrap:wrap;gap:26px;justify-content:center;align-items:flex-start}
+  .phone{width:360px;background:var(--bg);border-radius:44px;padding:14px;
+    box-shadow:0 20px 50px rgba(30,60,80,.18);border:1px solid #cfdde6}
+  .screen{width:332px;min-height:660px;border-radius:34px;overflow:hidden;background:
+    radial-gradient(130% 80% at 50% -10%,#f5fbfe 0%,#eaf6fb 46%,#e4f1f9 100%);
+    padding:18px 16px 26px;position:relative}
+  .screen.dark{background:radial-gradient(120% 80% at 50% 0,#1c2230,#0c0e14 60%,#07080c)}
+  .pname{text-align:center;font-size:12px;color:#9bb1c0;margin-top:10px;font-weight:600;letter-spacing:1px}
+
+  .card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+  .card + .card{margin-top:14px}
+  .sec{display:flex;align-items:center;font-weight:700;font-size:15px;margin-bottom:12px}
+  .sec .bar{width:5px;height:15px;border-radius:3px;background:linear-gradient(180deg,#56b0e4,var(--primary));margin-right:8px}
+  .muted{color:var(--muted)} .tiny{font-size:11px} .tc{text-align:center}
+
+  /* home */
+  .hero{text-align:center;padding:26px 18px;background:linear-gradient(160deg,#fff,#f0f9fe);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px}
+  .hero .g{font-size:13px;color:var(--primary);font-weight:600}
+  .hero .t{font-size:26px;font-weight:800;margin-top:6px;letter-spacing:1px}
+  .hero .ln{width:36px;height:4px;border-radius:3px;background:linear-gradient(90deg,#56b0e4,var(--primary));margin:10px auto 8px}
+  .hero .s{font-size:13px;color:var(--muted)}
+  .grid3{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+  .gitem{width:calc((100% - 24px)/3);background:#fff;border-radius:16px;box-shadow:var(--shadow);
+    padding:16px 4px;display:flex;flex-direction:column;align-items:center}
+  .tile{width:54px;height:54px;border-radius:16px;background:linear-gradient(150deg,#eaf5fc,#dceffa);
+    display:flex;align-items:center;justify-content:center;margin-bottom:9px}
+  .gitem .n{font-size:13px;font-weight:600} .gitem .d{font-size:10px;color:var(--muted);margin-top:3px}
+
+  /* icons */
+  .ic{display:inline-block;background-repeat:no-repeat;background-position:center;background-size:contain;vertical-align:middle}
+  .wheel-i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 3 L12 21 M3 12 L21 12'/%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3C/svg%3E")}
+  .fortune-i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='9' r='6'/%3E%3Cpath d='M8.5 20 a3.5 3.5 0 0 0 7 0'/%3E%3Cpath d='M18 3 l.8 2 2 .8 -2 .8 -.8 2 -.8 -2 -2 -.8 2 -.8 z'/%3E%3C/svg%3E")}
+  .draw-i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='7' width='18' height='10' rx='2'/%3E%3Cpath d='M14 7 v10' stroke-dasharray='2 2'/%3E%3C/svg%3E")}
+  .con-i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 l2.4 6.6 6.6 2.4 -6.6 2.4 -2.4 6.6 -2.4 -6.6 -6.6 -2.4 6.6 -2.4 z'/%3E%3C/svg%3E")}
+  .zod-i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Crect x='9' y='9' width='6' height='6' rx='1'/%3E%3C/svg%3E")}
+  .memo-i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20 h4 l11 -11 -4 -4 L4 16 z'/%3E%3Cpath d='M14 6 l4 4'/%3E%3C/svg%3E")}
+  .cd-i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4 h10 M7 20 h10'/%3E%3Cpath d='M8 4 L12 12 L8 20 M16 4 L12 12 L16 20'/%3E%3C/svg%3E")}
+  .wood-i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12 c4 -5 11 -5 15 0 c-4 5 -11 5 -15 0 z'/%3E%3Ccircle cx='17' cy='12' r='1.2' fill='%233a9bd6'/%3E%3C/svg%3E")}
+
+  /* buttons */
+  .btn{display:flex;align-items:center;justify-content:center;height:50px;border-radius:25px;font-weight:600;font-size:15px;border:none}
+  .btn.pri{background:linear-gradient(135deg,#49a9e1,#2f86bd);color:#fff;box-shadow:0 10px 22px rgba(58,155,214,.34);width:100%}
+  .btn.ghost{background:#fff;color:var(--primary);border:1.5px solid #cde8f6}
+
+  /* form */
+  .frow{display:flex;align-items:center;min-height:50px}
+  .flabel{width:60px;font-weight:600;font-size:14px}
+  .fval{flex:1;text-align:right;font-size:14px;color:var(--ink)}
+  .pill{display:inline-flex;padding:7px 14px;border-radius:999px;background:var(--primary-tint);color:var(--primary);font-size:12px;font-weight:500}
+  .pill.on{background:linear-gradient(135deg,#49a9e1,#2f86bd);color:#fff}
+
+  .profile{display:flex;align-items:center;padding:22px 18px;border-radius:var(--radius);
+    background:linear-gradient(135deg,#49a9e1,#2f86bd);color:#fff;box-shadow:0 16px 40px rgba(58,155,214,.32)}
+  .pavatar{width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;margin-right:13px}
+  .pavatar .ic{filter:brightness(0) invert(1);width:24px;height:24px}
+  .pname2{font-size:18px;font-weight:700}
+  .pver{font-size:12px;color:rgba(255,255,255,.82);margin-top:4px}
+
+  /* wheel */
+  .wheelwrap{position:relative;display:flex;flex-direction:column;align-items:center;padding:10px 0}
+  .ptr{width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid #2f86bd;margin-bottom:-13px;z-index:5;filter:drop-shadow(0 5px 6px rgba(47,134,189,.4))}
+  .frame{width:300px;height:300px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 8px rgba(58,155,214,.10),0 0 0 2px rgba(58,155,214,.2),0 12px 30px rgba(58,155,214,.2)}
+  .disc{width:270px;height:270px;border-radius:50%;background:
+    conic-gradient(#5B9BD5 0 45deg,#7BC4A0 45deg 90deg,#F2B36A 90deg 135deg,#E8839B 135deg 180deg,#9B8ED4 180deg 225deg,#5DC5C5 225deg 270deg,#E8A87C 270deg 315deg,#93C06A 315deg 360deg);
+    box-shadow:inset 0 0 0 6px #fff}
+  .ctr{position:absolute;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#fff,#eaf6fb);border:3px solid #3a9bd6;
+    display:flex;align-items:center;justify-content:center;z-index:6}
+  .ctr .ic{width:22px;height:22px}
+
+  /* fortune ring */
+  .ring{width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--gold) 80%,#eef3f7 0);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 8px 20px rgba(240,169,59,.22)}
+  .ring i{width:74px;height:74px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-style:normal}
+  .ring b{font-size:28px;font-weight:800;color:var(--gold);line-height:1}
+  .ring span{font-size:11px;color:var(--muted)}
+
+  .dim{padding:10px 0;border-top:1px solid var(--line)}
+  .dim:first-of-type{border-top:none}
+  .dimhd{display:flex;justify-content:space-between;align-items:center}
+  .dimhd .nm{font-weight:600;font-size:13px}
+  .stars{color:#dde9f1;font-size:14px;letter-spacing:1px}
+  .stars .on{color:var(--gold)}
+  .dimtx{font-size:12px;color:var(--muted);margin-top:4px}
+
+  .lucky{display:flex;gap:12px;margin-bottom:12px}
+  .lucky div{flex:1;background:var(--primary-tint);border-radius:var(--radius-sm);padding:12px 0;text-align:center}
+  .lucky .lab{font-size:10px;color:var(--muted);margin-bottom:6px}
+  .sw{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 3px 8px rgba(58,155,214,.2);margin:0 auto}
+  .num{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#49a9e1,#2f86bd);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto;font-weight:700}
+  .yiji{display:flex;gap:12px}
+  .yiji div{flex:1;display:flex;align-items:center;justify-content:center;gap:6px}
+  .yjtag{width:26px;height:26px;border-radius:50%;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .poem{font-size:14px;text-align:center;font-style:italic;padding:6px 0 12px;line-height:1.6}
+
+  /* match */
+  .pickers{display:flex;align-items:stretch;gap:8px;margin-bottom:14px}
+  .pcard{flex:1;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;padding:14px 6px}
+  .av{width:64px;height:64px;border-radius:50%;background:linear-gradient(150deg,#56b0e4,#2f86bd);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(58,155,214,.28);margin-bottom:8px}
+  .av.g{background:linear-gradient(150deg,#7bc4a0,#2fae6b)}
+  .who{font-size:11px;color:var(--muted);background:var(--primary-tint);padding:2px 10px;border-radius:999px;margin-bottom:6px}
+  .pv{font-size:12px;color:var(--primary);font-weight:600}
+  .vs{align-self:center;width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid var(--line);color:var(--muted);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+  .scorering{width:96px;height:96px;border-radius:50%;background:conic-gradient(#2fae6b 84%,#eef3f7 0);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 20px rgba(58,155,214,.18)}
+  .scorering i{width:74px;height:74px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-style:normal}
+  .scorering b{font-size:34px;font-weight:800;line-height:1}
+  .scorering span{font-size:10px;color:var(--muted)}
+  .result{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .result .meta{flex:1}
+  .lvl{display:inline-block;font-size:13px;font-weight:700;padding:4px 13px;border-radius:999px;color:#fff;background:#2fae6b}
+  .rel{font-size:13px;margin-top:8px}
+  .comment{font-size:13px;color:var(--ink-2);line-height:1.7}
+
+  /* memo */
+  .search{display:flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:0 14px;height:42px;box-shadow:var(--shadow);flex:1}
+  .search input{border:none;outline:none;flex:1;font-size:13px}
+  .topbar{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .addbtn{width:auto;padding:0 16px;font-size:13px;height:42px;border-radius:21px}
+  .cats{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .mitem{position:relative;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 14px 14px 22px;margin-bottom:12px;overflow:hidden}
+  .mitem .ac{position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:0 5px 5px 0}
+  .mitem .mt{font-weight:600;font-size:14px}
+  .mitem .mc{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}
+  .mitem .mf{margin-top:8px;display:flex;align-items:center;flex-wrap:wrap}
+  .ct{font-size:11px;padding:2px 9px;border-radius:999px;font-weight:600;margin-right:6px}
+
+  /* countdown */
+  .cd{display:flex;align-items:center;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin-bottom:12px}
+  .cdn{width:64px;height:64px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;margin-right:13px;font-weight:800;font-size:26px;background:linear-gradient(150deg,#eaf5fc,#dceffa);color:var(--primary)}
+  .cdn .u{font-size:11px;margin-top:2px;font-weight:600}
+  .cd .ct2{font-weight:600;font-size:14px}
+  .cd .cdt{font-size:11px;color:var(--muted);margin-top:4px}
+
+  /* woodfish */
+  .wstats{display:flex;align-items:center;justify-content:center;gap:26px;padding-top:18px}
+  .wstats .n{font-size:34px;font-weight:800;color:#fff}
+  .wstats .l{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;text-align:center}
+  .wdiv{width:1px;height:34px;background:rgba(255,255,255,.14)}
+  .warea{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-height:320px}
+  .wglow{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.1),rgba(255,255,255,0) 68%)}
+  .fish{width:230px;height:230px;position:relative;z-index:2;filter:drop-shadow(0 14px 36px rgba(0,0,0,.55))}
+  .floater{position:absolute;top:30%;left:50%;transform:translateX(-50%);color:#f4cf86;font-weight:700;font-size:18px;z-index:3;text-shadow:0 2px 10px rgba(244,207,134,.5)}
+  .whint{text-align:center;font-size:13px;color:rgba(255,255,255,.5);margin:12px 0 26px}
+  .wctrls{display:flex;gap:14px}
+  .wbtn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;height:48px;border-radius:24px;font-weight:600;font-size:14px;background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.18)}
+
+  /* draw */
+  .lot{text-align:center;padding:28px 16px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .seal{width:80px;height:80px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px solid #2fae6b;background:#e6f7ee;color:#2fae6b;margin-bottom:16px}
+  .seal .st{font-size:11px;opacity:.8} .seal .sl{font-size:18px;font-weight:800;margin-top:2px}
+  .lotp{font-size:16px;font-weight:600;line-height:1.8}
+  .lota{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6}
+
+  .empty{text-align:center;color:var(--muted);padding:50px 20px}
+  .empty .e{width:80px;height:80px;margin:0 auto 12px;opacity:.8}
+  .empty .t{font-size:13px}
+</style>
+</head>
+<body>
+<h1 class="title">趣玩小工具 · 重做预览</h1>
+<p class="sub">10 个页面统一浅蓝治愈设计系统 · 内联 SVG 图标 · 入场动画 · 触感反馈</p>
+
+<div class="grid">
+
+  <!-- HOME -->
+  <div class="phone"><div class="screen">
+    <div class="hero">
+      <div class="g">下午好，今天想玩点什么？</div>
+      <div class="t">趣玩小工具</div>
+      <div class="ln"></div>
+      <div class="s">生活里的小确幸，随手就能玩</div>
+    </div>
+    <div class="grid3">
+      <div class="gitem"><div class="tile"><span class="ic wheel-i" style="width:26px;height:26px"></span></div><div class="n">幸运转盘</div><div class="d">转一转</div></div>
+      <div class="gitem"><div class="tile"><span class="ic fortune-i" style="width:26px;height:26px"></span></div><div class="n">今日运势</div><div class="d">每日一签</div></div>
+      <div class="gitem"><div class="tile"><span class="ic draw-i" style="width:26px;height:26px"></span></div><div class="n">每日抽签</div><div class="d">抽支签</div></div>
+      <div class="gitem"><div class="tile"><span class="ic con-i" style="width:26px;height:26px"></span></div><div class="n">星座匹配</div><div class="d">契合度</div></div>
+      <div class="gitem"><div class="tile"><span class="ic zod-i" style="width:26px;height:26px"></span></div><div class="n">生肖匹配</div><div class="d">属相</div></div>
+      <div class="gitem"><div class="tile"><span class="ic memo-i" style="width:26px;height:26px"></span></div><div class="n">备忘录</div><div class="d">随手记</div></div>
+      <div class="gitem"><div class="tile"><span class="ic cd-i" style="width:26px;height:26px"></span></div><div class="n">倒数日记</div><div class="d">日子</div></div>
+      <div class="gitem"><div class="tile"><span class="ic wood-i" style="width:26px;height:26px"></span></div><div class="n">敲木鱼</div><div class="d">功德</div></div>
+    </div>
+    <div class="muted tiny tc" style="margin-top:22px">数据仅保存在本机 · 不上传任何服务器</div>
+  </div></div><div class="pname">首页</div></div>
+
+  <!-- ABOUT -->
+  <div class="phone"><div class="screen">
+    <div class="profile">
+      <div class="pavatar" style="position:relative">
+        <span class="ic" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20 a8 8 0 0 1 16 0'/%3E%3C/svg%3E&quot;);width:24px;height:24px;background-repeat:no-repeat;background-position:center;background-size:contain"></span>
+        <span style="position:absolute;right:0;bottom:0;font-size:10px;color:#fff;background:rgba(0,0,0,.42);padding:2px 7px;border-top-left-radius:10px">换头像</span>
+      </div>
+      <div><div class="pname2">未命名小伙伴</div><div class="pver">保密 · 还未设置生日</div></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="sec"><div class="bar"></div>我的信息</div>
+      <div class="frow"><div class="flabel">昵称</div><div class="fval">怎么称呼你？</div></div>
+      <div style="height:1px;background:var(--line);margin:4px 0"></div>
+      <div class="frow"><div class="flabel">性别</div><div class="fval">保密 ›</div></div>
+      <div style="height:1px;background:var(--line);margin:4px 0"></div>
+      <div class="frow"><div class="flabel">生日</div><div class="fval">选择生日 ›</div></div>
+      <div style="display:flex;gap:8px;margin:12px 0 14px"><span class="pill on">双子座</span><span class="pill on">属龙</span></div>
+      <div class="btn pri" style="height:46px">保存信息</div>
+      <div class="muted tiny tc" style="margin-top:10px">保存后，今日运势与每日抽签会按你的生日生成</div>
+    </div>
+  </div></div><div class="pname">我的</div></div>
+
+  <!-- WHEEL -->
+  <div class="phone"><div class="screen">
+    <div style="display:flex;justify-content:flex-end;padding:6px 10px 2px"><div style="width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(58,155,214,.18);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3a9bd6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></div></div>
+    <div class="wheelwrap">
+      <div class="ptr"></div>
+      <div class="frame">
+        <div class="disc"></div>
+        <div class="ctr"><span class="ic wheel-i" style="width:22px;height:22px"></span></div>
+      </div>
+    </div>
+    <div class="btn pri" style="height:48px;margin:8px 0 14px">开始转动</div>
+    <div class="card">
+      <div class="sec"><div class="bar"></div>选项（8/12）</div>
+      <div style="font-size:13px;line-height:2.2;color:var(--ink)">
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#3a9bd6"></span>火锅<span style="margin-left:auto;color:#c4d4df">×</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#7bc4a0"></span>烧烤<span style="margin-left:auto;color:#c4d4df">×</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#f0a93b"></span>奶茶<span style="margin-left:auto;color:#c4d4df">×</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#e8756b"></span>日料<span style="margin-left:auto;color:#c4d4df">×</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="sec"><div class="bar"></div>快捷模板</div>
+      <div class="cats">
+        <span class="pill on" style="position:relative;padding-right:18px">吃什么<span style="position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:#e8756b;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">×</span></span><span class="pill" style="position:relative;padding-right:18px">周末去哪<span style="position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:#e8756b;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">×</span></span><span class="pill" style="position:relative;padding-right:18px">做不做<span style="position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:#e8756b;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">×</span></span><span class="pill" style="position:relative;padding-right:18px">运势签<span style="position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:#e8756b;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">×</span></span><span class="pill" style="border:1.5px dashed #bfe3f2">＋ 新增</span>
+      </div>
+    </div>
+  </div></div><div class="pname">幸运转盘</div></div>
+
+  <!-- FORTUNE -->
+  <div class="phone"><div class="screen">
+    <div class="hero" style="padding:20px">
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px"><span style="font-size:12px;color:var(--muted)">2026-07-19</span><span class="pill">已绑定生日</span></div>
+      <div class="ring"><i><b>80</b><span>综合</span></i></div>
+      <div style="font-size:19px;font-weight:800">今日运势</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">愿今天一切顺意</div>
+    </div>
+    <div class="card">
+      <div class="sec"><div class="bar"></div>五维运势</div>
+      <div class="dim"><div class="dimhd"><span class="nm">综合</span><span class="stars"><span class="on">★</span><span class="on">★</span><span class="on">★</span><span class="on">★</span><span>★</span></span></div><div class="dimtx">诸事顺遂，宜主动出击</div></div>
+      <div class="dim"><div class="dimhd"><span class="nm">事业</span><span class="stars"><span class="on">★</span><span class="on">★</span><span class="on">★</span><span>★</span><span>★</span></span></div><div class="dimtx">稳步推进，贵人相助</div></div>
+      <div class="dim"><div class="dimhd"><span class="nm">爱情</span><span class="stars"><span class="on">★</span><span class="on">★</span><span>★</span><span>★</span><span>★</span></span></div><div class="dimtx">多些耐心沟通</div></div>
+    </div>
+    <div class="card">
+      <div class="sec"><div class="bar"></div>幸运物</div>
+      <div class="lucky">
+        <div><div class="lab">幸运色</div><div class="sw" style="background:#5B9BD5"></div><div style="font-size:12px;font-weight:600;margin-top:7px">天蓝</div></div>
+        <div><div class="lab">幸运数字</div><div class="num">7</div><div style="font-size:12px;font-weight:600;margin-top:7px">数字</div></div>
+      </div>
+      <div style="height:1px;background:var(--line);margin:6px 0"></div>
+      <div class="yiji"><div><span class="yjtag" style="background:#2fae6b">宜</span><span style="font-size:14px;font-weight:600">出行</span></div><div><span class="yjtag" style="background:#e8756b">忌</span><span style="font-size:14px;font-weight:600">争执</span></div></div>
+    </div>
+    <div class="card"><div class="poem">「云开见月，静待花开」</div><div class="btn ghost" style="height:42px">换一签</div></div>
+    <div style="display:flex;justify-content:flex-end;padding:10px 0 0"><div style="width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(58,155,214,.18);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3a9bd6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></div></div>
+  </div></div><div class="pname">今日运势</div></div>
+
+  <!-- CONSTELLATION -->
+  <div class="phone"><div class="screen">
+    <div class="pickers">
+      <div class="pcard"><div class="av" style="font-size:28px">♊</div><div class="who">我</div><div class="pv">双子座 ›</div></div>
+      <div class="vs">VS</div>
+      <div class="pcard"><div class="av" style="font-size:28px">♏</div><div class="who">TA</div><div class="pv">天蝎座 ›</div></div>
+    </div>
+    <div class="card result">
+      <div class="scorering"><i><b>82</b><span>分</span></i></div>
+      <div class="meta"><span class="lvl">佳偶一对</span><div class="rel">关系：风象相生</div><div style="font-size:12px;color:var(--muted);margin-top:6px">风 + 水</div></div>
+    </div>
+    <div class="card"><div class="comment">你们思维契合、沟通顺畅，是能一起成长的一对，给彼此多一点空间会更甜。</div></div>
+    <div class="muted tiny tc" style="margin-top:12px">同一对生日结果固定，纯属娱乐，开心就好～</div>
+  </div></div><div class="pname">星座匹配</div></div>
+
+  <!-- ZODIAC -->
+  <div class="phone"><div class="screen">
+    <div class="pickers">
+      <div class="pcard"><div class="av g" style="background:linear-gradient(150deg,#8fd4b6,#5ac9a0);box-shadow:0 10px 24px rgba(90,201,160,.26)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" style="width:56px;height:56px"><path d="M18 42c-2-10 6-18 16-18 6 0 10-4 10-10 0-4-2-8-6-8" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M38 10l6-4-2 7" fill="#fff"/><circle cx="30" cy="28" r="13" fill="#fff"/><circle cx="26" cy="26" r="2.2" fill="#5ac9a0"/><circle cx="34" cy="26" r="2.2" fill="#5ac9a0"/><path d="M28 34q4 3 8 0" fill="none" stroke="#5ac9a0" stroke-width="2" stroke-linecap="round"/><path d="M44 44q6-2 8-8" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg></div><div class="who">我</div><div class="pv" style="color:#5ac9a0">龙 ›</div></div>
+      <div class="vs">VS</div>
+      <div class="pcard"><div class="av g" style="background:linear-gradient(150deg,#8fd4b6,#5ac9a0);box-shadow:0 10px 24px rgba(90,201,160,.26)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" style="width:56px;height:56px"><path d="M22 26c0-8 6-14 14-14h-4c-8 0-14 6-14 14v6h4v-6z" fill="#fff"/><circle cx="32" cy="34" r="16" fill="#fff"/><circle cx="24" cy="14" r="7" fill="#fff"/><circle cx="40" cy="14" r="7" fill="#fff"/><circle cx="26" cy="32" r="2.4" fill="#5ac9a0"/><circle cx="38" cy="32" r="2.4" fill="#5ac9a0"/><circle cx="32" cy="40" r="3" fill="#5ac9a0"/><path d="M46 36c6 0 10 4 10 10s-4 10-10 10" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg></div><div class="who">TA</div><div class="pv" style="color:#5ac9a0">鼠 ›</div></div>
+    </div>
+    <div class="card result">
+      <div class="scorering" style="background:conic-gradient(#2fae6b 90%,#eef3f7 0)"><i><b>90</b><span>分</span></i></div>
+      <div class="meta"><span class="lvl">天作之合</span><div class="rel">关系：三合</div><div style="font-size:12px;color:var(--muted);margin-top:6px">龙 与 鼠</div></div>
+    </div>
+    <div class="card"><div class="comment">申子辰三合，彼此助力、默契十足，是互相成就的好搭档。</div></div>
+    <div class="muted tiny tc" style="margin-top:12px">六合最合、三合相帮、相冲需包容，纯属娱乐～</div>
+  </div></div><div class="pname">生肖匹配</div></div>
+
+  <!-- MEMO -->
+  <div class="phone"><div class="screen">
+    <div class="topbar">
+      <div class="search"><span class="ic" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21 l-4.5 -4.5'/%3E%3C/svg%3E&quot;);width:15px;height:15px;background-repeat:no-repeat;background-position:center;background-size:contain"></span><input placeholder="搜索标题 / 内容"></div>
+      <div class="btn pri addbtn">+ 新建</div>
+    </div>
+    <div class="cats"><span class="pill on">全部</span><span class="pill">工作</span><span class="pill">生活</span><span class="pill">灵感</span><span class="pill">待办</span></div>
+    <div class="mitem"><div class="ac" style="background:#3a9bd6"></div><div class="mt">周会纪要</div><div class="mc">确认下周路线图，同步给设计同学。</div><div class="mf"><span class="ct" style="color:#3a9bd6;background:#eaf6fb">工作</span><span style="margin-left:auto;font-size:14px;color:var(--gold);font-weight:600">⏰ 2026-07-22</span></div></div>
+    <div class="mitem"><div class="ac" style="background:#7bc4a0"></div><div class="mt">周末爬山</div><div class="mc">香山，早 8 点出发，带水和外套。</div><div class="mf"><span class="ct" style="color:#7bc4a0;background:#e9f6ef">生活</span><span style="margin-left:auto;font-size:14px;color:var(--gold);font-weight:600">⏰ 2026-07-26</span></div></div>
+    <div class="mitem"><div class="ac" style="background:#9b8ed4"></div><div class="mt">产品灵感</div><div class="mc">做一个「每日小确幸」合集。</div><div class="mf"><span class="ct" style="color:#9b8ed4;background:#f0ecf8">灵感</span></div></div>
+    <div style="position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:34px 34px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.12);padding:20px 18px 24px;z-index:10">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span style="font-weight:700;font-size:15px">新建备忘</span><span style="font-size:20px;color:var(--muted)">×</span></div>
+      <div style="font-size:12px;color:var(--muted);margin:10px 0 6px">标题</div>
+      <div style="background:var(--primary-tint);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--ink)">输入标题</div>
+      <div style="font-size:12px;color:var(--muted);margin:10px 0 6px">内容</div>
+      <div style="background:var(--primary-tint);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--muted);min-height:54px">写点什么…</div>
+      <div style="font-size:12px;color:var(--muted);margin:14px 0 6px">分类</div>
+      <div class="cats" style="margin-top:10px"><span class="pill on">工作</span><span class="pill">生活</span><span class="pill">灵感</span><span class="pill">待办</span><span class="pill">其他</span><span class="pill" style="border:1.5px dashed #bfe3f2;color:var(--primary)"><span style="font-size:14px">+</span> 新增模板</span></div>
+      <div style="font-size:12px;color:var(--muted);margin:14px 0 6px">提醒时间</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--primary-tint);border-radius:14px;padding:12px 14px"><span style="font-size:13px;color:var(--ink-2);font-weight:500">2026-07-21</span><span style="color:var(--muted)">›</span></div>
+      <div style="display:flex;gap:12px;margin-top:24px">
+        <div class="btn ghost" style="flex:1;height:46px;border-radius:23px;font-size:15px">取消</div>
+        <div class="btn pri" style="flex:1;height:46px;border-radius:23px;font-size:15px">保存</div>
+      </div>
+    </div>
+  </div></div><div class="pname">备忘录</div></div>
+
+  <!-- COUNTDOWN -->
+  <div class="phone"><div class="screen">
+    <div class="topbar" style="justify-content:space-between"><span class="muted tiny" style="flex:1">记录重要的日子，看它还有多久到来</span><div class="btn pri addbtn">+ 新建</div></div>
+    <div class="cd"><div class="cdn">128<span class="u">天</span></div><div><div class="ct2">生日</div><div class="cdt">2026-11-24</div><div class="cdt" style="color:var(--muted)">给妈妈准备礼物</div></div></div>
+    <div class="cd"><div class="cdn" style="background:linear-gradient(150deg,#ffe9c7,#ffd79a);color:#d98a18">16<span class="u">天</span></div><div><div class="ct2">旅行</div><div class="cdt">2026-08-04</div><div class="cdt" style="color:var(--muted)">云南 7 日</div></div></div>
+    <div class="cd"><div class="cdn" style="background:#f0f2f4;color:var(--muted)">今天</div><div><div class="ct2">发版日</div><div class="cdt">2026-07-19</div></div></div>
+  </div></div><div class="pname">倒数日记</div></div>
+
+  <!-- WOODFISH -->
+  <div class="phone"><div class="screen dark">
+    <div class="wstats"><div><div class="n">1080</div><div class="l">总功德</div></div><div class="wdiv"></div><div><div class="n">36</div><div class="l">今日敲击</div></div></div>
+    <div class="warea"><div class="wglow"></div><div class="floater">功德 +1</div>
+      <img class="fish" src="images/woodfish.svg" alt="木鱼">
+    </div>
+    <div class="whint">轻触木鱼，积一份功德</div>
+    <div class="wctrls">
+      <div class="wbtn"><span class="ic" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9 v6 h4 l5 4 V5 L8 9 z'/%3E%3Cpath d='M16 9 a4 4 0 0 1 0 6'/%3E%3C/svg%3E&quot;);width:16px;height:16px;background-repeat:no-repeat;background-position:center;background-size:contain;filter:brightness(0) invert(1)"></span>声音开</div>
+      <div class="wbtn"><span class="ic" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 7 h16 M9 7 V4 h6 v3 M6 7 l1 13 h10 l1 -13'/%3E%3C/svg%3E&quot;);width:15px;height:15px;background-repeat:no-repeat;background-position:center;background-size:contain;filter:brightness(0) invert(1)"></span>重置</div>
+    </div>
+  </div></div><div class="pname">敲木鱼</div></div>
+
+  <!-- DRAW -->
+  <div class="phone"><div class="screen">
+    <div class="hero" style="padding:20px">
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px"><span style="font-size:12px;color:var(--muted)">2026-07-19</span><span class="pill">今日已抽</span></div>
+      <div style="font-size:20px;font-weight:800;letter-spacing:1px">每日抽签</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">心诚则灵，每日一签</div>
+    </div>
+    <div class="card lot">
+      <div class="seal"><div class="st">签</div><div class="sl">上上签</div></div>
+      <div class="lotp">「天开地辟结良缘，<br>日吉时良万物全。」</div>
+      <div class="lota">诸事顺遂，正是乘势而上、<br>大胆行动的好时机。</div>
+    </div>
+    <div class="btn pri" style="height:48px;margin-top:14px">再抽一次</div>
+    <div class="muted tiny tc" style="margin-top:12px">每日按生日与日期确定一签 · 可反复抽签查看动画</div>
+    <div style="display:flex;justify-content:flex-end;padding:10px 0 0"><div style="width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(58,155,214,.18);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3a9bd6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></div></div>
+  </div></div><div class="pname">每日抽签</div></div>
+
+</div>
+</body>
+</html>

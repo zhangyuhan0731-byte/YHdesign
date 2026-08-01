@@ -1,0 +1,103 @@
+<!-- pages/wheel/wheel.wxml -->
+<view class="page">
+  <view class="sound-bar">
+    <view class="sound-fab" bindtap="toggleMute">
+      <view class="ic {{muted ? 'ic-sound-off' : 'ic-sound-on'}}" style="width:38rpx;height:38rpx;"></view>
+    </view>
+  </view>
+
+  <!-- 转盘区域 -->
+  <view class="wheel-area">
+    <view class="pointer"></view>
+    <view class="wheel-frame">
+      <view class="wheel {{spinning ? 'spinning' : ''}}"
+            style="transform: rotate({{rotation}}deg); background-image: {{gradient}};"
+            bindtap="spin">
+        <view class="label" wx:for="{{options}}" wx:key="index"
+              style="transform: translate(-50%, -50%) rotate({{((index + 0.5) * sectorAngle)}}deg) translateY(-210rpx);">
+          <text class="label-text">{{item}}</text>
+        </view>
+      </view>
+      <view class="wheel-center" bindtap="spin">
+        <view class="ic ic-wheel" style="width:40rpx;height:40rpx;"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="spin-bar">
+    <button class="btn btn-primary btn-block" bindtap="spin" disabled="{{spinning || options.length < 2}}">
+      {{spinning ? '转动中…' : '开始转动'}}
+    </button>
+  </view>
+
+  <!-- 选项管理 -->
+  <view class="card options-card anim">
+    <view class="options-header">
+      <view class="section-title"><view class="bar"></view>选项（{{options.length}}/12）</view>
+    </view>
+    <view class="option-list">
+      <view class="option-item" wx:for="{{options}}" wx:key="index">
+        <view class="color-dot" style="background: {{colors[index] || '#ccc'}}"></view>
+        <text class="option-text flex-1">{{item}}</text>
+        <view class="option-delete" data-index="{{index}}" bindtap="removeOption">×</view>
+      </view>
+    </view>
+    <view class="add-row" wx:if="{{options.length < 12}}">
+      <input class="field flex-1" placeholder="输入新选项" value="{{newOption}}"
+             bindinput="onNewOptionInput" bindconfirm="addOption" maxlength="12" confirm-type="done" />
+      <button class="btn btn-ghost btn-sm" bindtap="addOption">添加</button>
+    </view>
+  </view>
+
+  <!-- 快捷模板 -->
+  <view class="card anim" style="animation-delay:80ms">
+    <view class="section-title"><view class="bar"></view>快捷模板</view>
+    <view class="templates">
+      <view class="chip {{activeTpl === tpl.name ? 'chip-active' : ''}} chip-tpl"
+            wx:for="{{templates}}" wx:key="id" wx:for-item="tpl"
+            data-id="{{tpl.id}}" bindtap="applyTemplate">
+        {{tpl.name}}
+        <view class="tpl-del" data-id="{{tpl.id}}" catchtap="deleteTemplate">
+          <view class="ic ic-close" style="width:16rpx;height:16rpx;"></view>
+        </view>
+      </view>
+      <view class="chip chip-add" bindtap="openTplSheet">＋ 新增模板</view>
+      <view class="chip chip-reset" wx:if="{{hiddenBuiltins.length > 0}}" bindtap="resetTemplates">↺ 恢复默认</view>
+    </view>
+  </view>
+
+  <!-- 结果弹层 -->
+  <view class="mask {{showResult ? 'show' : ''}}" bindtap="closeResult"></view>
+  <view class="sheet result-sheet {{showResult ? 'show' : ''}}" catchtap="stopPropagation">
+    <view class="result-badge" style="background: {{resultColor}};"></view>
+    <view class="result-title">结果揭晓</view>
+    <view class="result-label" style="color: {{resultColor}};">{{resultText}}</view>
+    <view class="result-actions">
+      <button class="btn btn-ghost flex-1" bindtap="closeResult">收下</button>
+      <button class="btn btn-primary flex-1" bindtap="drawAgain">再转一次</button>
+    </view>
+  </view>
+
+  <!-- 新增模板弹层 -->
+  <view class="mask {{showTplSheet ? 'show' : ''}}" bindtap="closeTplSheet"></view>
+  <view class="sheet {{showTplSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
+    <view class="sheet-head">
+      <text class="sheet-title">保存为自定义模板</text>
+      <text class="sheet-close" bindtap="closeTplSheet">×</text>
+    </view>
+    <view class="sheet-tip">模板会保存在本机，可随时在上方点击应用或删除</view>
+    <scroll-view scroll-y class="sheet-body sheet-scroll">
+      <view class="field-label">模板名称</view>
+      <view class="field-card">
+        <input class="field" placeholder="模板名称，如：今天喝什么" value="{{tplName}}"
+               bindinput="onTplNameInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="10" />
+      </view>
+      <view class="field-label">选项</view>
+      <view class="field-card">
+        <textarea class="field" placeholder="输入选项，用换行或逗号分隔（2~12 个）" value="{{tplItems}}"
+                  bindinput="onTplItemsInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="200" />
+      </view>
+    </scroll-view>
+    <button class="btn btn-primary btn-block" style="margin-top: 24rpx;" bindtap="saveCustomTemplate">保存并应用</button>
+  </view>
+</view>

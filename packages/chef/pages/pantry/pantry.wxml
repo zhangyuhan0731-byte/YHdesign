@@ -1,0 +1,102 @@
+<view class="page pantry-page">
+  <view class="pantry-hero anim">
+    <view class="hero-kicker">WHAT CAN I COOK?</view>
+    <view class="hero-title">我的食材</view>
+    <view class="hero-sub">勾选家中常备，也可以补充输入，为你匹配合适的菜谱</view>
+    <view class="hero-mark">配</view>
+  </view>
+
+  <view class="card input-card anim" style="animation-delay:60ms">
+    <view class="select-section">
+      <view class="field-head">
+        <view><text class="field-title">现有食材</text><text class="required">必填</text></view>
+        <view class="head-actions">
+          <view class="selected-count">已选 {{selectedFoods.length}} 项</view>
+          <button class="section-toggle" data-field="foods" bindtap="toggleSection" aria-label="{{expandedFoods ? '收起现有食材' : '展开现有食材'}}">
+            {{expandedFoods ? '收起' : '展开'}} <text class="toggle-arrow {{expandedFoods ? 'is-open' : ''}}">⌄</text>
+          </button>
+        </view>
+      </view>
+      <view class="section-body" wx:if="{{expandedFoods}}">
+        <view class="option-grid">
+          <view class="select-option {{item.selected ? 'is-selected' : ''}}" wx:for="{{foodOptions}}" wx:key="label" data-field="foods" data-label="{{item.label}}" bindtap="toggleOption">
+            <text class="check-mark">{{item.selected ? '✓' : ''}}</text><text>{{item.label}}</text>
+          </view>
+        </view>
+        <textarea class="field-input compact-input" value="{{foods}}" data-field="foods" bindinput="onFieldInput" bindblur="onFieldBlur" maxlength="160" placeholder="补充其他食材，顿号、空格或逗号分隔均可" />
+      </view>
+    </view>
+
+    <view class="select-section secondary-section">
+      <view class="field-head">
+        <view><text class="field-title">现有调料</text><text class="optional">可选</text></view>
+        <view class="head-actions">
+          <view class="selected-count">已选 {{selectedSeasonings.length}} 项</view>
+          <button class="section-toggle" data-field="seasonings" bindtap="toggleSection" aria-label="{{expandedSeasonings ? '收起现有调料' : '展开现有调料'}}">
+            {{expandedSeasonings ? '收起' : '展开'}} <text class="toggle-arrow {{expandedSeasonings ? 'is-open' : ''}}">⌄</text>
+          </button>
+        </view>
+      </view>
+      <view class="section-body" wx:if="{{expandedSeasonings}}">
+        <view class="option-grid">
+          <view class="select-option seasoning-option {{item.selected ? 'is-selected' : ''}}" wx:for="{{seasoningOptions}}" wx:key="label" data-field="seasonings" data-label="{{item.label}}" bindtap="toggleOption">
+            <text class="check-mark">{{item.selected ? '✓' : ''}}</text><text>{{item.label}}</text>
+          </view>
+        </view>
+        <textarea class="field-input compact-input" value="{{seasonings}}" data-field="seasonings" bindinput="onFieldInput" bindblur="onFieldBlur" maxlength="160" placeholder="补充其他调料，顿号、空格或逗号分隔均可" />
+      </view>
+    </view>
+
+    <view class="select-section secondary-section">
+      <view class="field-head">
+        <view><text class="field-title">可用厨具</text><text class="optional">可选</text></view>
+        <view class="head-actions">
+          <view class="selected-count">已选 {{selectedTools.length}} 项</view>
+          <button class="section-toggle" data-field="tools" bindtap="toggleSection" aria-label="{{expandedTools ? '收起可用厨具' : '展开可用厨具'}}">
+            {{expandedTools ? '收起' : '展开'}} <text class="toggle-arrow {{expandedTools ? 'is-open' : ''}}">⌄</text>
+          </button>
+        </view>
+      </view>
+      <view class="section-body" wx:if="{{expandedTools}}">
+        <view class="option-grid">
+          <view class="select-option tool-option {{item.selected ? 'is-selected' : ''}}" wx:for="{{toolOptions}}" wx:key="label" data-field="tools" data-label="{{item.label}}" bindtap="toggleOption">
+            <text class="check-mark">{{item.selected ? '✓' : ''}}</text><text>{{item.label}}</text>
+          </view>
+        </view>
+        <textarea class="field-input compact-input" value="{{tools}}" data-field="tools" bindinput="onFieldInput" bindblur="onFieldBlur" maxlength="120" placeholder="补充其他厨具，顿号、空格或逗号分隔均可" />
+      </view>
+    </view>
+
+    <button class="btn btn-primary btn-block match-button" bindtap="startMatch">看看能做什么</button>
+    <button class="clear-button" bindtap="clearAll">清空全部选择和输入</button>
+  </view>
+
+  <view wx:if="{{hasMatched}}">
+    <view class="result-head">
+      <view>
+        <view class="result-kicker">MATCHED RECIPES</view>
+        <view class="result-title">推荐 {{results.length}} 道</view>
+      </view>
+      <view class="result-tip">按主食材匹配度排序</view>
+    </view>
+
+    <view class="result-list" wx:if="{{results.length}}">
+      <view class="card result-card" wx:for="{{results}}" wx:key="id" bindtap="openRecipe" data-id="{{item.id}}">
+        <view class="card-top"><view class="category-badge">{{item.categoryLabel}}</view><view class="match-score">{{item.matchPercent}}%</view></view>
+        <view class="recipe-name">{{item.name}}</view>
+        <view class="meta-row"><view class="meta-pill">{{item.levelLabel}}</view><view class="difficulty">{{item.difficultyText}}</view><view class="meta-pill calorie">{{item.calories}}</view></view>
+        <view class="match-line"><text class="line-label have">已有</text><text>{{item.haveText}}</text></view>
+        <view class="match-line"><text class="line-label need">还缺</text><text>{{item.missingText}}</text></view>
+        <view class="support-row"><view>调料 {{item.seasoningText}}</view><view>厨具 {{item.toolText}}</view></view>
+        <view class="open-detail">查看完整做法 ›</view>
+      </view>
+    </view>
+
+    <view class="card empty" wx:else>
+      <view class="empty-mark">?</view><view class="tip">暂时没有匹配的菜谱</view>
+      <view class="tip-sub">换一种常见食材试试，例如鸡蛋、土豆或猪肉</view>
+    </view>
+  </view>
+
+  <view class="privacy-note">所选内容仅保存在本机，不会上传</view>
+</view>

@@ -1,0 +1,32 @@
+.today-page { padding: 28rpx 24rpx 58rpx; }
+.today-toolbar { position: sticky; top: 0; z-index: 12; min-height: 92rpx; margin: -28rpx -24rpx 20rpx; padding: 14rpx 24rpx; display: flex; align-items: center; justify-content: space-between; gap: 20rpx; border-bottom: 1rpx solid rgba(32,37,50,.06); background: rgba(255,248,237,.96); box-shadow: 0 8rpx 22rpx rgba(48,42,35,.08); }
+.toolbar-copy { flex: 1; min-width: 0; }
+.toolbar-label { color: var(--muted); font-size: 19rpx; font-weight: 800; letter-spacing: 1rpx; }
+.toolbar-name { max-width: 420rpx; overflow: hidden; color: var(--ink); font-size: 25rpx; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+.change-top { width: 148rpx; height: 60rpx; margin: 0; padding: 0; flex-shrink: 0; border: 0; border-radius: 30rpx; color: #fff; background: linear-gradient(135deg,#25a974,#2d7dd2); box-shadow: 0 8rpx 18rpx rgba(37,169,116,.2); font-size: 24rpx; font-weight: 800; line-height: 60rpx; }
+.change-top::after { border: 0; }
+.change-top-active { transform: scale(.96); opacity: .9; }
+.today-hero { position: relative; overflow: hidden; display: flex; justify-content: space-between; padding: 36rpx 34rpx; border-radius: 34rpx; color: #fff; background: linear-gradient(135deg,#22573f,#25a974 64%,#65c89e); box-shadow: 0 20rpx 48rpx rgba(37,169,116,.23); }
+.hero-kicker { color: rgba(255,255,255,.65); font-size: 20rpx; font-weight: 800; letter-spacing: 1rpx; }
+.hero-title { margin-top: 6rpx; font-size: 48rpx; font-weight: 900; }
+.hero-sub { margin-top: 10rpx; color: rgba(255,255,255,.8); font-size: 24rpx; }
+.hero-mark { width: 88rpx; height: 88rpx; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 28rpx; border: 1rpx solid rgba(255,255,255,.2); background: rgba(255,255,255,.14); font-size: 39rpx; font-weight: 900; }
+.recipe-card { margin-top: 22rpx; padding: 30rpx; }
+.recipe-top { display: flex; align-items: center; justify-content: space-between; }
+.category-badge { padding: 8rpx 16rpx; border-radius: 999rpx; color: #19875d; background: #eaf8f2; font-size: 22rpx; font-weight: 800; }
+.difficulty { color: var(--gold); font-size: 25rpx; letter-spacing: 1rpx; }
+.recipe-name { margin-top: 20rpx; color: var(--ink); font-size: 44rpx; line-height: 1.2; font-weight: 900; }
+.recipe-summary { margin-top: 13rpx; color: var(--ink-2); font-size: 25rpx; line-height: 1.68; }
+.meta-row { display: flex; flex-wrap: wrap; gap: 10rpx; margin-top: 20rpx; }
+.meta-pill,.tag-pill { padding: 7rpx 14rpx; border-radius: 999rpx; color: #39735e; background: #eff8f4; font-size: 21rpx; font-weight: 700; }
+.meta-pill.calorie { color: #c8791a; background: #fff7e8; }
+.tag-pill { color: #b45243; background: #fff0ed; }
+.section-title { margin: 30rpx 0 15rpx; color: var(--ink); font-size: 29rpx; font-weight: 900; }
+.group-label { margin: 15rpx 0 10rpx; color: var(--muted); font-size: 21rpx; font-weight: 800; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 10rpx; }
+.requirement-tag { padding: 10rpx 15rpx; border-radius: 14rpx; color: var(--ink-2); background: #f5f7fa; font-size: 23rpx; font-weight: 700; }
+.step-row { display: flex; align-items: flex-start; gap: 15rpx; margin-bottom: 17rpx; }
+.step-number { width: 44rpx; height: 44rpx; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 14rpx; color: #fff; background: linear-gradient(135deg,#54bd97,#25a974); font-size: 22rpx; font-weight: 900; }
+.step-text { flex: 1; color: var(--ink-2); font-size: 25rpx; line-height: 1.67; }
+.detail-button { margin-top: 30rpx; }
+.source-note { padding-top: 32rpx; text-align: center; color: var(--muted); font-size: 20rpx; }
