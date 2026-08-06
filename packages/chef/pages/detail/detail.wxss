@@ -10,6 +10,25 @@
 }
 .hero-row { display: flex; align-items: center; justify-content: space-between; }
 .category-badge { padding: 8rpx 17rpx; border-radius: 999rpx; background: rgba(255,255,255,.16); border: 1rpx solid rgba(255,255,255,.18); font-size: 22rpx; font-weight: 800; }
+
+.fav-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .18);
+  border: 1rpx solid rgba(255, 255, 255, .28);
+  transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+}
+.fav-btn:active { transform: scale(.9); }
+.fav-btn .ic { width: 34rpx; height: 34rpx; }
+.fav-btn.on {
+  background: linear-gradient(135deg, #ff8aa0, #e25d5d);
+  border-color: transparent;
+  box-shadow: 0 8rpx 18rpx rgba(226, 93, 93, .42);
+}
 .difficulty { color: #ffd777; font-size: 26rpx; letter-spacing: 2rpx; }
 .recipe-title { margin-top: 22rpx; font-size: 48rpx; line-height: 1.2; font-weight: 900; }
 .recipe-summary { margin-top: 16rpx; color: rgba(255,255,255,.82); font-size: 25rpx; line-height: 1.7; }

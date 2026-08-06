@@ -29,4 +29,7 @@
 .step-number { width: 44rpx; height: 44rpx; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 14rpx; color: #fff; background: linear-gradient(135deg,#54bd97,#25a974); font-size: 22rpx; font-weight: 900; }
 .step-text { flex: 1; color: var(--ink-2); font-size: 25rpx; line-height: 1.67; }
 .detail-button { margin-top: 30rpx; }
+.detail-button-row { display: flex; gap: 18rpx; margin-top: 30rpx; }
+.detail-button-half { flex: 1; margin-top: 0; }
+.ck-launch { display: inline-flex; align-items: center; gap: 8rpx; }
 .source-note { padding-top: 32rpx; text-align: center; color: var(--muted); font-size: 20rpx; }

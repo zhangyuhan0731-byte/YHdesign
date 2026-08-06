@@ -40,19 +40,23 @@
   </view>
 
   <view class="mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
-  <view class="sheet {{showSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;">
+  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;">
     <view class="sheet-head">
       <text class="sheet-title">{{editingId ? '编辑倒数' : '新建倒数'}}</text>
       <text class="sheet-close" bindtap="closeSheet">×</text>
     </view>
     <scroll-view scroll-y class="sheet-body sheet-scroll">
-      <input class="field" placeholder="事件名称，如：生日、旅行" value="{{form.title}}" data-field="title" bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="30" />
+      <input class="field" placeholder="事件名称，如：生日、旅行" value="{{form.title}}" data-field="title"
+             adjust-position="{{false}}"
+             bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="30" />
       <view class="label muted tiny">目标日期</view>
       <picker mode="date" value="{{form.date}}" bindchange="onDate">
         <view class="field pick">{{form.date}}</view>
       </picker>
       <view class="label muted tiny">备注（可选）</view>
-      <input class="field" placeholder="写点什么" value="{{form.note}}" data-field="note" bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="60" />
+      <input class="field" placeholder="写点什么" value="{{form.note}}" data-field="note"
+             adjust-position="{{false}}"
+             bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="60" />
     </scroll-view>
     <view class="sheet-actions">
       <button class="btn btn-ghost flex-1" bindtap="closeSheet">取消</button>

@@ -43,7 +43,10 @@
       <view class="step-text">{{item.text}}</view>
     </view>
 
-    <button class="btn btn-primary btn-block detail-button" bindtap="openDetail">查看完整做法</button>
+    <view class="detail-button-row">
+      <button class="btn btn-ghost detail-button-half" bindtap="openDetail">查看完整做法</button>
+      <button class="btn btn-primary detail-button-half" bindtap="openCooking">烹饪模式</button>
+    </view>
   </view>
 
   <view class="source-note">推荐来自厨神的 {{total}} 道 HowToCook 菜谱</view>

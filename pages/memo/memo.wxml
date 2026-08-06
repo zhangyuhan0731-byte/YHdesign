@@ -1,5 +1,5 @@
 <!-- pages/memo/memo.wxml -->
-<view class="page">
+<view class="page memo-page">
   <view class="memo-head">
     <view>
       <view class="memo-kicker">MEMO</view>
@@ -12,7 +12,8 @@
     <view class="search-wrap">
       <view class="ic ic-search" style="width:30rpx;height:30rpx;"></view>
       <input class="search-input" placeholder="搜索标题 / 内容"
-             value="{{keyword}}" bindinput="onSearch" confirm-type="search" />
+             value="{{keyword}}" bindinput="onSearch" confirm-type="search"
+             adjust-position="{{false}}" />
     </view>
     <button class="btn btn-primary btn-sm add-btn" bindtap="openAdd">+ 新建</button>
   </view>
@@ -52,20 +53,22 @@
 
   <!-- 编辑弹层 -->
   <view class="mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
-  <view class="sheet {{showSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;">
+  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;">
     <view class="sheet-head">
       <text class="sheet-title">{{editingId ? '编辑备忘' : '新建备忘'}}</text>
       <text class="sheet-close" bindtap="closeSheet">×</text>
     </view>
-    <scroll-view scroll-y class="sheet-body">
+    <scroll-view scroll-y class="sheet-body sheet-scroll">
       <view class="field-label">标题</view>
       <view class="field-card">
-        <input class="field" placeholder="输入标题" value="{{form.title}}" data-field="title" bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="40" />
+        <input class="field" placeholder="输入标题" value="{{form.title}}" data-field="title"
+               adjust-position="{{false}}"
+               bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="40" />
       </view>
       <view class="field-label">内容</view>
-      <view class="field-card">
-        <textarea class="field" placeholder="写点什么…" value="{{form.content}}" data-field="content" bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="500" />
-      </view>
+      <textarea class="auto-area" placeholder="写点什么…" value="{{form.content}}" data-field="content"
+                adjust-position="{{false}}"
+                bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="500" auto-height placeholder-class="ph" />
 
       <view class="field-label">分类</view>
       <view class="cats wrap">

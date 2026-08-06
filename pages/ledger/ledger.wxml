@@ -73,8 +73,9 @@
     </view>
   </view>
 
+  <!-- 添加账单弹层 -->
   <view class="mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
-  <view class="sheet {{showSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
+  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
     <view class="sheet-head">
       <text class="sheet-title">添加账单</text>
       <text class="sheet-close" bindtap="closeSheet">×</text>
@@ -85,6 +86,7 @@
       <view class="amount-card">
         <text class="currency">¥</text>
         <input class="amount-input" type="digit" placeholder="0.00" value="{{form.amount}}"
+               adjust-position="{{false}}"
                bindinput="onAmountInput" bindfocus="onKbFocus" bindblur="onKbBlur" />
       </view>
 
@@ -100,6 +102,10 @@
         <view class="category-chip {{form.category === item ? 'active' : ''}}"
               wx:for="{{categories}}" wx:key="*this"
               data-category="{{item}}" bindtap="onCategoryPick">{{item}}</view>
+        <view class="category-chip category-add" bindtap="openCateManage">
+          <text class="add-icon">+</text>
+          <text>新增分类</text>
+        </view>
       </view>
 
       <view class="field-label">日期</view>
@@ -113,10 +119,54 @@
       <view class="field-label">备注</view>
       <view class="field-card">
         <input class="field" placeholder="写点备注，可不填" value="{{form.note}}"
+               adjust-position="{{false}}"
                bindinput="onNoteInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="40" />
       </view>
     </scroll-view>
 
     <button class="btn btn-primary btn-block save-btn" bindtap="saveBill">保存账单</button>
+  </view>
+
+  <!-- 分类管理弹层 -->
+  <view class="mask cate-mask {{showCateSheet ? 'show' : ''}}" bindtap="closeCateSheet"></view>
+  <view class="sheet input-sheet cate-sheet {{showCateSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
+    <view class="sheet-head">
+      <text class="sheet-title">管理分类</text>
+      <text class="sheet-close" bindtap="closeCateSheet">×</text>
+    </view>
+
+    <scroll-view scroll-y class="sheet-body sheet-scroll">
+      <view class="type-tabs cate-type-tabs">
+        <view class="type-tab {{cateForm.type === 'expense' ? 'active' : ''}}"
+              data-type="expense" bindtap="onCateTypePick">支出</view>
+        <view class="type-tab {{cateForm.type === 'income' ? 'active' : ''}}"
+              data-type="income" bindtap="onCateTypePick">收入</view>
+      </view>
+
+      <view class="cate-chip-grid">
+        <view class="cate-manage-chip {{item.isBuiltin ? 'builtin' : 'custom'}}"
+              wx:for="{{manageCategories}}" wx:key="name"
+              style="color:{{item.meta.color}};background:{{item.meta.bg}};border-color:{{item.meta.color}}33">
+          <text class="chip-text">{{item.name}}</text>
+          <view class="chip-del {{item.isBuiltin ? 'hidden' : ''}}" bindtap="deleteCustomCategory" data-name="{{item.name}}">
+            <text class="chip-del-x">×</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="cate-add-box">
+        <view class="field-label">新增分类</view>
+        <view class="cate-add-row">
+          <input class="cate-add-input" placeholder="输入分类名称（最多6字）" value="{{cateForm.name}}"
+                 adjust-position="{{false}}"
+                 bindinput="onCateNameInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="6" />
+          <view class="cate-add-btn" bindtap="addCustomCategory">添加</view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="cate-sheet-foot">
+      <button class="btn btn-ghost btn-block" bindtap="resetCategories">恢复默认</button>
+    </view>
   </view>
 </view>

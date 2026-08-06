@@ -1,4 +1,4 @@
-<view class="page">
+<view class="page mood-page">
   <view class="mood-head anim">
     <view>
       <view class="mood-kicker">MOOD NOTE</view>
@@ -8,7 +8,7 @@
   </view>
 
   <view class="card today-card anim" style="animation-delay:60ms;">
-    <view class="section-title"><view class="bar"></view>今日记录</view>
+    <view class="section-title"><view class="bar"></view>{{isToday ? '今日记录' : selectedDate + ' 记录'}}</view>
     <view class="today-preview" style="background:{{selectedMood.soft}};">
       <view class="mood-face big-face mood-{{selectedMood.id}}" style="--face-color:{{selectedMood.color}};">
         <image class="mood-img" wx:if="{{selectedMood.id === 'normal'}}" src="/images/mood-heart.png" mode="aspectFit" />
@@ -31,7 +31,7 @@
     </view>
 
     <view class="mood-grid">
-      <view class="mood-option {{selectedMood.id === item.id ? 'active' : ''}}"
+      <view class="mood-option {{selectedMood.id === item.id ? 'active' : ''}} {{!isToday ? 'disabled' : ''}}"
             wx:for="{{moods}}" wx:key="id" bindtap="chooseMood" data-id="{{item.id}}"
             style="--mood-color:{{item.color}};--mood-soft:{{item.soft}};">
         <view class="mood-face option-face mood-{{item.id}}" style="--face-color:{{item.color}};">
@@ -53,13 +53,14 @@
     </view>
 
     <view class="field-label">一句话日记</view>
-    <textarea class="field note-field" maxlength="80" value="{{note}}" bindinput="onNoteInput"
-              placeholder="写一句今天发生的小事或此刻感受" />
+    <textarea class="auto-area" maxlength="80" value="{{note}}" bindinput="onNoteInput"
+              placeholder="{{isToday ? '写一句今天发生的小事或此刻感受' : '这一天没有写日记'}}"
+              disabled="{{!isToday}}" auto-height placeholder-class="ph" />
     <view class="note-count">{{note.length}}/80</view>
 
-    <button class="btn btn-primary btn-block save-btn" bindtap="saveToday">
+    <button class="btn btn-primary btn-block save-btn" bindtap="saveToday" disabled="{{!isToday}}">
       <view class="ic ic-check ic-w" style="width:32rpx;height:32rpx;margin-right:10rpx;"></view>
-      保存今日心情
+      {{isToday ? '保存今日心情' : '仅当天可保存'}}
     </button>
   </view>
 
@@ -73,6 +74,9 @@
         <view class="ic ic-back" style="width:24rpx;height:24rpx;"></view>
       </button>
       <view class="month-text">{{monthText}}</view>
+      <button class="month-btn today-round" bindtap="backToday" aria-label="回到今天">
+        <view class="ic ic-calendar" style="width:24rpx;height:24rpx;"></view>
+      </button>
       <button class="month-btn next" bindtap="nextMonth">
         <view class="ic ic-back" style="width:24rpx;height:24rpx;"></view>
       </button>

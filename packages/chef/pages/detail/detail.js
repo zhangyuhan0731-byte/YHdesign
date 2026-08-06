@@ -1,19 +1,36 @@
 const { getRecipe } = require('../../data/index');
+const favorite = require('../../utils/favorite');
 
 Page({
   data: {
     loading: true,
-    recipe: null
+    recipe: null,
+    favorited: false
   },
 
   onLoad(options) {
     const recipe = getRecipe(options.id || '');
     if (recipe) {
       wx.setNavigationBarTitle({ title: recipe.name });
-      this.setData({ loading: false, recipe });
+      this.setData({ loading: false, recipe, favorited: favorite.isFavorite(recipe.id) });
       return;
     }
     this.setData({ loading: false, recipe: null });
+  },
+
+  // 从收藏列表返回时，保证收藏状态最新
+  onShow() {
+    if (this.data.recipe) {
+      this.setData({ favorited: favorite.isFavorite(this.data.recipe.id) });
+    }
+  },
+
+  toggleFavorite() {
+    if (!this.data.recipe) return;
+    const id = this.data.recipe.id;
+    const nowFav = favorite.toggleFavorite(id);
+    this.setData({ favorited: nowFav });
+    wx.showToast({ title: nowFav ? '已收藏' : '已取消收藏', icon: 'none', duration: 800 });
   },
 
   goBack() {

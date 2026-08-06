@@ -34,13 +34,46 @@
       <view class="section-kicker">TOOLS</view>
       <view class="section-name">今天的小工具</view>
     </view>
-    <view class="section-count">{{tools.length}}个</view>
+    <view class="edit-btn {{editing ? 'on' : ''}}" bindtap="toggleEdit" hover-class="none">
+      <view class="ic {{editing ? 'ic-check' : 'ic-grip'}}" style="width:22rpx;height:22rpx;{{editing ? 'filter:brightness(0) invert(1);' : ''}}"></view>
+      <text class="edit-btn-text">{{editing ? '完成' : '调整顺序'}}</text>
+    </view>
   </view>
 
-  <view class="grid">
-    <view class="grid-item anim" wx:for="{{tools}}" wx:key="key"
-          style="animation-delay:{{index * 60}}ms"
-          bindtap="onTap" data-path="{{item.path}}">
+  <!-- 调整顺序：列表视图 + 上移/下移 -->
+  <block wx:if="{{editing}}">
+    <view class="edit-tip">
+      <view class="ic ic-tips" style="width:26rpx;height:26rpx;margin-right:6rpx;"></view>
+      点右侧「↑ 上移 / ↓ 下移」调整顺序，改动自动保存到本机
+    </view>
+
+    <view class="order-list">
+      <view wx:for="{{tools}}" wx:key="key" class="order-row anim" style="animation-delay:{{index * 40}}ms;">
+        <view class="order-idx">{{index + 1}}</view>
+        <view class="icon-tile tone-{{item.tone}}">
+          <view class="ic {{item.icon}}" style="width:40rpx;height:40rpx;"></view>
+        </view>
+        <view class="order-copy">
+          <view class="name">{{item.name}}</view>
+          <view class="desc">{{item.desc}}</view>
+        </view>
+        <view class="order-actions">
+          <view class="move-btn {{index === 0 ? 'is-disabled' : ''}}"
+                data-index="{{index}}" bindtap="moveUp" hover-class="none">↑ 上移</view>
+          <view class="move-btn {{index === tools.length - 1 ? 'is-disabled' : ''}}"
+                data-index="{{index}}" bindtap="moveDown" hover-class="none">↓ 下移</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 正常态：两列宫格，点卡片进入工具 -->
+  <view wx:else class="grid">
+    <view wx:for="{{tools}}" wx:key="key"
+          class="grid-item anim"
+          style="animation-delay:{{index * 60}}ms;"
+          bindtap="onTap" data-path="{{item.path}}" data-key="{{item.key}}"
+          hover-stay-time="0" hover-class="none">
       <view class="icon-tile tone-{{item.tone}}">
         <view class="ic {{item.icon}}" style="width:52rpx;height:52rpx;"></view>
       </view>

@@ -1,0 +1,84 @@
+<wxs module="fmt">
+function pad(n) {
+  n = Math.floor(n);
+  return n < 10 ? '0' + n : '' + n;
+}
+function time(sec) {
+  if (!sec || sec < 0) sec = 0;
+  var m = Math.floor(sec / 60);
+  var s = sec % 60;
+  return pad(m) + ':' + pad(s);
+}
+function percent(remaining, total) {
+  if (!total) return 0;
+  var p = Math.round(remaining * 100 / total);
+  return p < 0 ? 0 : (p > 100 ? 100 : p);
+}
+module.exports = { pad: pad, time: time, percent: percent };
+</wxs>
+
+<view class="cooking-page" wx:if="{{steps.length}}">
+  <!-- 顶部：进度 + 菜品名 + 退出 -->
+  <view class="ck-top">
+    <view class="ck-top-row">
+      <view class="ck-exit" bindtap="exit" aria-label="退出烹饪">
+        <view class="ic ic-close-w"></view>
+      </view>
+      <view class="ck-recipe-name">{{recipe.name}}</view>
+      <view class="ck-top-spacer"></view>
+    </view>
+    <view class="ck-progress-text">步骤 {{currentIndex + 1}} / {{steps.length}}</view>
+    <view class="ck-progress-bar">
+      <view class="ck-progress-fill" style="width: {{progressPercent}}%"></view>
+    </view>
+  </view>
+
+  <!-- 中间内容：步骤卡片 + 倒计时（可选） -->
+  <view class="ck-content">
+    <view class="ck-step-card">
+      <view class="ck-step-num">{{steps[currentIndex].number}}</view>
+      <view class="ck-step-text">{{steps[currentIndex].text}}</view>
+    </view>
+
+    <block wx:if="{{hasTimer}}">
+      <view class="ck-timer-card">
+        <view class="ck-timer-ring" style="--ring:{{ringDeg}}deg">
+          <view class="ck-timer-ring-inner">
+            <view class="ck-timer-time {{finished ? 'finished' : ''}}">
+              {{finished ? '✓ 时间到' : fmt.time(remaining)}}
+            </view>
+            <view class="ck-timer-label">{{steps[currentIndex].timer.label}}</view>
+          </view>
+        </view>
+
+        <view class="ck-timer-bar">
+          <view class="ck-timer-bar-fill" style="width: {{fmt.percent(remaining, totalTimer)}}%"></view>
+        </view>
+
+        <view class="ck-timer-actions">
+        <button class="ck-timer-btn primary {{running ? 'is-pause' : 'is-start'}}"
+                bindtap="toggleTimer">
+          <text wx:if="{{running}}">暂停计时</text>
+          <text wx:elif="{{finished}}">重新开始</text>
+          <text wx:else>开始 {{steps[currentIndex].timer.label}} 计时</text>
+        </button>
+          <button class="ck-timer-btn ghost" bindtap="resetTimer" wx:if="{{remaining > 0 || finished}}">重置</button>
+        </view>
+      </view>
+    </block>
+
+    <view class="ck-tip" wx:else>
+      <view class="ck-tip-icon">⏱</view>
+      <view class="ck-tip-text">本步骤未识别到计时需求，按节奏手动操作即可。</view>
+    </view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="ck-bottom">
+    <button class="ck-nav-btn prev {{currentIndex === 0 ? 'disabled' : ''}}" bindtap="prev">‹ 上一步</button>
+    <button class="ck-nav-btn next {{currentIndex === steps.length - 1 ? 'finish' : ''}}" bindtap="next">
+      <text wx:if="{{currentIndex === steps.length - 1}}">完成烹饪 ›</text>
+      <text wx:else>下一步 ›</text>
+    </button>
+  </view>
+</view>

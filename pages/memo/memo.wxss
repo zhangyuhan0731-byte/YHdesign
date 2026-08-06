@@ -167,3 +167,11 @@
   gap: 20rpx;
   margin-top: 40rpx;
 }
+
+/* 内容输入框：带边框背景 + 文字垂直居中 */
+.memo-page .auto-area {
+  background: #faf8f4;
+  border: 2rpx solid rgba(32, 37, 50, 0.08);
+  border-radius: 18rpx;
+  padding: 22rpx 24rpx;
+}

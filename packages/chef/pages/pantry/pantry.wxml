@@ -23,7 +23,7 @@
             <text class="check-mark">{{item.selected ? '✓' : ''}}</text><text>{{item.label}}</text>
           </view>
         </view>
-        <textarea class="field-input compact-input" value="{{foods}}" data-field="foods" bindinput="onFieldInput" bindblur="onFieldBlur" maxlength="160" placeholder="补充其他食材，顿号、空格或逗号分隔均可" />
+        <textarea class="auto-area" value="{{foods}}" data-field="foods" bindinput="onFieldInput" bindblur="onFieldBlur" maxlength="160" placeholder="补充其他食材，顿号、空格或逗号分隔均可" auto-height placeholder-class="ph" style="margin-top:14rpx;" />
       </view>
     </view>
 
@@ -43,7 +43,7 @@
             <text class="check-mark">{{item.selected ? '✓' : ''}}</text><text>{{item.label}}</text>
           </view>
         </view>
-        <textarea class="field-input compact-input" value="{{seasonings}}" data-field="seasonings" bindinput="onFieldInput" bindblur="onFieldBlur" maxlength="160" placeholder="补充其他调料，顿号、空格或逗号分隔均可" />
+        <textarea class="auto-area" value="{{seasonings}}" data-field="seasonings" bindinput="onFieldInput" bindblur="onFieldBlur" maxlength="160" placeholder="补充其他调料，顿号、空格或逗号分隔均可" auto-height placeholder-class="ph" style="margin-top:14rpx;" />
       </view>
     </view>
 
@@ -63,7 +63,7 @@
             <text class="check-mark">{{item.selected ? '✓' : ''}}</text><text>{{item.label}}</text>
           </view>
         </view>
-        <textarea class="field-input compact-input" value="{{tools}}" data-field="tools" bindinput="onFieldInput" bindblur="onFieldBlur" maxlength="120" placeholder="补充其他厨具，顿号、空格或逗号分隔均可" />
+        <textarea class="auto-area" value="{{tools}}" data-field="tools" bindinput="onFieldInput" bindblur="onFieldBlur" maxlength="120" placeholder="补充其他厨具，顿号、空格或逗号分隔均可" auto-height placeholder-class="ph" style="margin-top:14rpx;" />
       </view>
     </view>
 

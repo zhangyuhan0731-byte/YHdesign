@@ -39,5 +39,10 @@ Page({
   openDetail() {
     if (!this.data.recipe) return;
     wx.navigateTo({ url: `/packages/chef/pages/detail/detail?id=${this.data.recipe.id}` });
+  },
+
+  openCooking() {
+    if (!this.data.recipe) return;
+    wx.navigateTo({ url: `/packages/chef/pages/cooking/cooking?id=${this.data.recipe.id}` });
   }
 });

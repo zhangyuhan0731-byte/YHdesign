@@ -5,7 +5,9 @@
     <view class="detail-hero anim">
       <view class="hero-row">
         <view class="category-badge">{{recipe.categoryLabel}}</view>
-        <view class="difficulty">{{recipe.difficultyText}}</view>
+        <view class="fav-btn {{favorited ? 'on' : ''}}" bindtap="toggleFavorite" aria-label="收藏">
+          <view class="ic {{favorited ? 'ic-heart-fill-w' : 'ic-heart-line-w'}}"></view>
+        </view>
       </view>
       <view class="recipe-title">{{recipe.name}}</view>
       <view class="recipe-summary" wx:if="{{recipe.summary}}">{{recipe.summary}}</view>

@@ -1,0 +1,34 @@
+<view class="page tips-page">
+  <view class="tips-hero">
+    <view class="hero-title">厨房小贴士</view>
+    <view class="hero-sub">18 篇厨房准备 · 烹饪技巧 · 食品安全</view>
+  </view>
+
+  <view class="search-sticky">
+    <view class="search-box">
+      <view class="ic ic-search search-icon"></view>
+      <input class="search-input" value="{{keyword}}" placeholder="搜索小贴士…" confirm-type="search" bindinput="onSearchInput" />
+      <button class="clear-search" wx:if="{{keyword}}" bindtap="clearSearch" aria-label="清空搜索">×</button>
+    </view>
+  </view>
+
+  <view class="tips-list" wx:if="{{list.length}}">
+    <view class="tip-card card" wx:for="{{list}}" wx:key="id">
+      <view class="tip-head" bindtap="toggle" data-id="{{item.id}}">
+        <view class="tip-badge tip-{{item.groupKey}}">{{item.group}}</view>
+        <view class="tip-name">{{item.title}}</view>
+        <view class="tip-arrow {{expandedId === item.id ? 'up' : ''}}">⌄</view>
+      </view>
+      <view class="tip-body" wx:if="{{expandedId === item.id}}">
+        <view class="tip-para" wx:for="{{item.body}}" wx:for-item="para" wx:key="*this">{{para}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty card" wx:else>
+    <view class="empty-symbol">?</view>
+    <view class="tip">没有找到相关小贴士</view>
+    <view class="tip-sub">换个关键词试试</view>
+    <button class="btn btn-ghost empty-reset" bindtap="clearSearch">查看全部</button>
+  </view>
+</view>

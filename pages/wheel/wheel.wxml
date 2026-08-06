@@ -1,5 +1,5 @@
 <!-- pages/wheel/wheel.wxml -->
-<view class="page">
+<view class="page wheel-page">
   <view class="sound-bar">
     <view class="sound-fab" bindtap="toggleMute">
       <view class="ic {{muted ? 'ic-sound-off' : 'ic-sound-on'}}" style="width:38rpx;height:38rpx;"></view>
@@ -43,9 +43,10 @@
       </view>
     </view>
     <view class="add-row" wx:if="{{options.length < 12}}">
-      <input class="field flex-1" placeholder="输入新选项" value="{{newOption}}"
+      <input class="option-add-input" placeholder="输入新选项" value="{{newOption}}"
+             adjust-position="{{false}}"
              bindinput="onNewOptionInput" bindconfirm="addOption" maxlength="12" confirm-type="done" />
-      <button class="btn btn-ghost btn-sm" bindtap="addOption">添加</button>
+      <view class="option-add-btn" bindtap="addOption">添加</view>
     </view>
   </view>
 
@@ -80,7 +81,7 @@
 
   <!-- 新增模板弹层 -->
   <view class="mask {{showTplSheet ? 'show' : ''}}" bindtap="closeTplSheet"></view>
-  <view class="sheet {{showTplSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
+  <view class="sheet input-sheet {{showTplSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
     <view class="sheet-head">
       <text class="sheet-title">保存为自定义模板</text>
       <text class="sheet-close" bindtap="closeTplSheet">×</text>
@@ -90,13 +91,13 @@
       <view class="field-label">模板名称</view>
       <view class="field-card">
         <input class="field" placeholder="模板名称，如：今天喝什么" value="{{tplName}}"
+               adjust-position="{{false}}"
                bindinput="onTplNameInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="10" />
       </view>
       <view class="field-label">选项</view>
-      <view class="field-card">
-        <textarea class="field" placeholder="输入选项，用换行或逗号分隔（2~12 个）" value="{{tplItems}}"
-                  bindinput="onTplItemsInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="200" />
-      </view>
+      <textarea class="auto-area" placeholder="输入选项，用换行或逗号分隔（2~12 个）" value="{{tplItems}}"
+                adjust-position="{{false}}"
+                bindinput="onTplItemsInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="200" auto-height placeholder-class="ph" />
     </scroll-view>
     <button class="btn btn-primary btn-block" style="margin-top: 24rpx;" bindtap="saveCustomTemplate">保存并应用</button>
   </view>

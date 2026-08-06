@@ -91,6 +91,8 @@ page {
 }
 .weight-input {
   flex: 1;
+  width: auto;      /* 覆盖 .field { width: 100% }，避免在 flex 行内占满整行 */
+  min-width: 0;
   background: #fff;
 }
 .kg {

@@ -50,7 +50,8 @@ Page({
     monthText: '',
     weekHeads: ['日', '一', '二', '三', '四', '五', '六'],
     calendarDays: [],
-    selectedEntry: null
+    selectedEntry: null,
+    isToday: true
   },
 
   onLoad() {
@@ -66,22 +67,29 @@ Page({
       selectedMood,
       note: entry.note || '',
       currentYear: now.getFullYear(),
-      currentMonth: now.getMonth()
+      currentMonth: now.getMonth(),
+      isToday: true
     });
     this.refreshCalendar();
     this.refreshSelectedEntry(todayKey);
   },
 
   chooseMood(e) {
+    if (!this.data.isToday) return;
     const mood = findMood(e.currentTarget.dataset.id);
     this.setData({ selectedMood: mood });
   },
 
   onNoteInput(e) {
+    if (!this.data.isToday) return;
     this.setData({ note: e.detail.value || '' });
   },
 
   saveToday() {
+    if (!this.data.isToday) {
+      wx.showToast({ title: '仅当天可保存', icon: 'none' });
+      return;
+    }
     const note = String(this.data.note || '').trim();
     const mood = this.data.selectedMood || MOODS[0];
     const entries = Object.assign({}, this.data.entries);
@@ -125,16 +133,16 @@ Page({
   tapDay(e) {
     const key = e.currentTarget.dataset.date;
     if (!key) return;
-    this.setData({ selectedDate: key });
+    const isToday = key === this.data.todayKey;
+    const entry = this.data.entries[key] || {};
+    this.setData({
+      selectedDate: key,
+      isToday,
+      selectedMood: findMood(entry.moodId || (isToday ? this.data.selectedMood.id : MOODS[0].id)),
+      note: entry.note || ''
+    });
+    this.refreshCalendar();
     this.refreshSelectedEntry(key);
-
-    if (key === this.data.todayKey) {
-      const entry = this.data.entries[key] || {};
-      this.setData({
-        selectedMood: findMood(entry.moodId || this.data.selectedMood.id),
-        note: entry.note || ''
-      });
-    }
   },
 
   backToday() {
@@ -144,6 +152,7 @@ Page({
       currentYear: now.getFullYear(),
       currentMonth: now.getMonth(),
       selectedDate: this.data.todayKey,
+      isToday: true,
       selectedMood: findMood(entry.moodId || MOODS[0].id),
       note: entry.note || ''
     });

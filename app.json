@@ -22,7 +22,9 @@
         "pages/index/index",
         "pages/detail/detail",
         "pages/today/today",
-        "pages/pantry/pantry"
+        "pages/pantry/pantry",
+        "pages/tips/tips",
+        "pages/cooking/cooking"
       ]
     }
   ],

@@ -56,3 +56,13 @@
 .empty { padding: 50rpx 25rpx; }
 .empty-mark { width: 82rpx; height: 82rpx; margin: 0 auto 18rpx; display: flex; align-items: center; justify-content: center; border-radius: 26rpx; color: #d98a18; background: #fff5e8; font-size: 40rpx; font-weight: 900; }
 .privacy-note { padding-top: 32rpx; text-align: center; color: var(--muted); font-size: 20rpx; }
+
+/* 补充输入框：带边框背景 + 文字垂直居中 */
+.pantry-page .auto-area {
+  background: #faf8f4;
+  border: 2rpx solid rgba(32, 37, 50, 0.08);
+  border-radius: 18rpx;
+  padding: 22rpx 24rpx;
+  min-height: 80rpx;
+  line-height: 1.5;
+}

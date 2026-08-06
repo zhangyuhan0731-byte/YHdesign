@@ -251,6 +251,20 @@
   border-color: #9cc8f5;
   color: var(--primary);
 }
+.category-add {
+  color: var(--primary);
+  background: #fff;
+  border: 2rpx dashed #b8d4f0;
+}
+.category-add:active {
+  background: var(--primary-tint);
+}
+.add-icon {
+  font-size: 28rpx;
+  font-weight: 700;
+  margin-right: 6rpx;
+  line-height: 1;
+}
 .date-field {
   display: flex;
   align-items: center;
@@ -269,3 +283,98 @@
   transform: rotate(90deg);
 }
 .save-btn { margin-top: 24rpx; }
+
+/* 分类管理弹层（层叠在添加账单弹层之上） */
+.cate-mask { z-index: 60; }
+.cate-sheet { z-index: 61; }
+.cate-type-tabs { margin-bottom: 10rpx; }
+
+.cate-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18rpx;
+  padding: 10rpx 0 24rpx;
+}
+.cate-manage-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 68rpx;
+  padding: 0 18rpx;
+  border-radius: 34rpx;
+  font-size: 26rpx;
+  font-weight: 700;
+  border: 2rpx solid transparent;
+}
+.cate-manage-chip.builtin {
+  padding-right: 18rpx;
+}
+.chip-text {
+  line-height: 1;
+}
+.chip-del {
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10rpx;
+  background: rgba(226, 93, 93, 0.9);
+  color: #fff;
+}
+.chip-del.hidden {
+  display: none;
+}
+.chip-del-x {
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 1;
+  transform: translateY(-1rpx);
+}
+
+.cate-add-box {
+  background: #faf8f4;
+  border-radius: 24rpx;
+  padding: 22rpx 24rpx 26rpx;
+  margin-bottom: 20rpx;
+}
+.cate-add-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.cate-add-input {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+  background: #fff;
+  border: 2rpx solid rgba(32, 37, 50, 0.06);
+  border-radius: 20rpx;
+  height: 80rpx;
+  padding: 0 24rpx;
+  font-size: 27rpx;
+  line-height: 80rpx;
+  box-sizing: border-box;
+}
+.cate-add-btn {
+  width: 132rpx;
+  height: 68rpx;
+  border-radius: 34rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #ff9f43, #2d7dd2);
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: 700;
+  box-shadow: 0 10rpx 22rpx rgba(45, 125, 210, 0.22);
+}
+.cate-add-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 6rpx 14rpx rgba(58, 155, 214, 0.30);
+}
+.cate-sheet-foot {
+  padding-top: 18rpx;
+}

@@ -225,6 +225,31 @@ textarea.field { height: 200rpx; line-height: 1.6; }
   margin: 6rpx 0 4rpx;
 }
 
+/* 自适应输入区：透明背景、随内容增长/收缩，无大白框（微信/ChatGPT 风）
+   - min-height 保证空态只占一行，placeholder 不撑开输入框
+   - max-height 限制后超长内容在 textarea 内部滚动（auto-height 设的是 height，
+     样式表的 max-height 仍作为盒模型上界生效）
+   - 必须配合标签 auto-height + placeholder-class="ph" */
+.auto-area {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 10rpx 0;
+  font-size: 30rpx;
+  line-height: 1.5;
+  color: var(--ink);
+  min-height: 56rpx;
+  max-height: 460rpx;
+  box-sizing: border-box;
+}
+.auto-area[disabled] {
+  color: var(--ink-2);
+  opacity: 0.72;
+}
+.ph {
+  color: var(--muted);
+}
+
 /* ---------- 弹层通用（底部） ---------- */
 .mask {
   position: fixed;
@@ -249,6 +274,7 @@ textarea.field { height: 200rpx; line-height: 1.6; }
   max-height: 90vh;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   transform: translateY(100%);
   transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.2s ease;
   box-shadow: 0 -12rpx 44rpx rgba(58, 155, 214, 0.18);
@@ -286,6 +312,17 @@ textarea.field { height: 200rpx; line-height: 1.6; }
   padding: 24rpx 24rpx 0;
 }
 .sheet.show { transform: translateY(0); }
+/* 输入型弹层：高度自适应内容，不强制撑满屏幕 */
+.sheet.input-sheet {
+  min-height: auto;
+  max-height: 85vh;
+  padding-bottom: 16rpx;
+}
+.input-sheet .sheet-scroll {
+  flex: 1;
+  max-height: calc(85vh - 180rpx);
+  min-height: 0;
+}
 .sheet-head {
   display: flex;
   align-items: center;
@@ -336,6 +373,7 @@ textarea.field { height: 200rpx; line-height: 1.6; }
 .ic-water { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 C12 3 6 10 6 15 a6 6 0 0 0 12 0 C18 10 12 3 12 3 Z'/%3E%3Cpath d='M9 16 c1.4 1.4 4.6 1.4 6 0'/%3E%3C/svg%3E"); }
 
 .ic-close { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 6 L18 18 M18 6 L6 18'/%3E%3C/svg%3E"); }
+.ic-close-w { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 6 L18 18 M18 6 L6 18'/%3E%3C/svg%3E"); }
 .ic-plus { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5 v14 M5 12 h14'/%3E%3C/svg%3E"); }
 .ic-search { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21 l-4.5 -4.5'/%3E%3C/svg%3E"); }
 .ic-trash { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 7 h16 M9 7 V4 h6 v3 M6 7 l1 13 h10 l1 -13'/%3E%3C/svg%3E"); }
@@ -346,7 +384,14 @@ textarea.field { height: 200rpx; line-height: 1.6; }
 .ic-calendar { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='5' width='16' height='15' rx='2'/%3E%3Cpath d='M4 9 h16 M8 3 v4 M16 3 v4'/%3E%3C/svg%3E"); }
 .ic-user { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20 a8 8 0 0 1 16 0'/%3E%3C/svg%3E"); }
 .ic-heart { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20 C12 20 4 14.5 4 9 a4 4 0 0 1 8 -1.5 A4 4 0 0 1 20 9 c0 5.5 -8 11 -8 11 z'/%3E%3C/svg%3E"); }
+.ic-heart-fill { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e25d5d' stroke='%23e25d5d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20 C12 20 4 14.5 4 9 a4 4 0 0 1 8 -1.5 A4 4 0 0 1 20 9 c0 5.5 -8 11 -8 11 z'/%3E%3C/svg%3E"); }
+.ic-heart-line-w { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20 C12 20 4 14.5 4 9 a4 4 0 0 1 8 -1.5 A4 4 0 0 1 20 9 c0 5.5 -8 11 -8 11 z'/%3E%3C/svg%3E"); }
+.ic-heart-fill-w { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20 C12 20 4 14.5 4 9 a4 4 0 0 1 8 -1.5 A4 4 0 0 1 20 9 c0 5.5 -8 11 -8 11 z'/%3E%3C/svg%3E"); }
+.ic-shuffle { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232d7dd2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='16 3 21 3 21 8'/%3E%3Cline x1='4' y1='20' x2='21' y2='3'/%3E%3Cpolyline points='21 16 21 21 16 21'/%3E%3Cline x1='15' y1='15' x2='21' y2='21'/%3E%3Cline x1='4' y1='4' x2='9' y2='9'/%3E%3C/svg%3E"); }
+.ic-tips { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cc6f1c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 22h4'/%3E%3Cpath d='M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z'/%3E%3C/svg%3E"); }
 .ic-edit { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20 h4 l11 -11 -4 -4 L4 16 z'/%3E%3Cpath d='M14 6 l4 4'/%3E%3C/svg%3E"); }
+.ic-grip { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a0a7b3'%3E%3Ccircle cx='9' cy='6' r='1.6'/%3E%3Ccircle cx='15' cy='6' r='1.6'/%3E%3Ccircle cx='9' cy='12' r='1.6'/%3E%3Ccircle cx='15' cy='12' r='1.6'/%3E%3Ccircle cx='9' cy='18' r='1.6'/%3E%3Ccircle cx='15' cy='18' r='1.6'/%3E%3C/svg%3E"); }
+.ic-check-w { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12 l5 5 L20 6'/%3E%3C/svg%3E"); }
 .ic-empty { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233a9bd6' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='8' width='14' height='12' rx='2.5'/%3E%3Cpath d='M9 8 V6 a1 1 0 0 1 1 -1 h4 a1 1 0 0 1 1 1 v2'/%3E%3C/svg%3E"); }
 
 /* ---------- 生肖图标 ---------- */
