@@ -29,7 +29,9 @@ Page({
   onShow() { this.refresh(); },
 
   // 键盘高度跟踪：弹层随键盘上移，保证输入框完整可见
+  // Android 上 focus 事件的 height 常为 0，键盘高度以 keyboardheightchange 为准
   onKbFocus(e) { this.setData({ kbHeight: e.detail.height || 0 }); },
+  onKbChange(e) { this.setData({ kbHeight: e.detail.height || 0 }); },
   onKbBlur() { this.setData({ kbHeight: 0 }); },
 
   refresh() { this.setData({ events: decorate(load()) }); },

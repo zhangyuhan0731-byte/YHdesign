@@ -2,7 +2,7 @@
   <view class="search-sticky">
     <view class="search-box">
       <view class="ic ic-search search-icon"></view>
-      <input class="search-input" value="{{keyword}}" placeholder="搜索菜名、食材…" confirm-type="search" bindinput="onSearchInput" />
+      <input class="search-input" value="{{keyword}}" placeholder="搜索菜名、食材…" confirm-type="search" adjust-position="{{false}}" bindinput="onSearchInput" />
       <button class="clear-search" wx:if="{{keyword}}" bindtap="clearSearch" aria-label="清空搜索">×</button>
     </view>
   </view>

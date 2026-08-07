@@ -63,12 +63,12 @@
       <view class="field-card">
         <input class="field" placeholder="输入标题" value="{{form.title}}" data-field="title"
                adjust-position="{{false}}"
-               bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="40" />
+               bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="40" />
       </view>
       <view class="field-label">内容</view>
       <textarea class="auto-area" placeholder="写点什么…" value="{{form.content}}" data-field="content"
                 adjust-position="{{false}}"
-                bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="500" auto-height placeholder-class="ph" />
+                bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="500" auto-height placeholder-class="ph" />
 
       <view class="field-label">分类</view>
       <view class="cats wrap">

@@ -147,6 +147,11 @@ Page({
     this.setData({ kbHeight: e.detail.height || 0 });
   },
 
+  // Android 上 focus 事件的 height 常为 0，键盘高度以 keyboardheightchange 为准
+  onKbChange(e) {
+    this.setData({ kbHeight: e.detail.height || 0 });
+  },
+
   onKbBlur() {
     this.setData({ kbHeight: 0 });
   },

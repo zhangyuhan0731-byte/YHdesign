@@ -44,7 +44,7 @@
     </view>
     <view class="add-row" wx:if="{{options.length < 12}}">
       <input class="option-add-input" placeholder="输入新选项" value="{{newOption}}"
-             adjust-position="{{false}}"
+             cursor-spacing="20"
              bindinput="onNewOptionInput" bindconfirm="addOption" maxlength="12" confirm-type="done" />
       <view class="option-add-btn" bindtap="addOption">添加</view>
     </view>
@@ -92,12 +92,12 @@
       <view class="field-card">
         <input class="field" placeholder="模板名称，如：今天喝什么" value="{{tplName}}"
                adjust-position="{{false}}"
-               bindinput="onTplNameInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="10" />
+               bindinput="onTplNameInput" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="10" />
       </view>
       <view class="field-label">选项</view>
       <textarea class="auto-area" placeholder="输入选项，用换行或逗号分隔（2~12 个）" value="{{tplItems}}"
                 adjust-position="{{false}}"
-                bindinput="onTplItemsInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="200" auto-height placeholder-class="ph" />
+                bindinput="onTplItemsInput" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="200" auto-height placeholder-class="ph" />
     </scroll-view>
     <button class="btn btn-primary btn-block" style="margin-top: 24rpx;" bindtap="saveCustomTemplate">保存并应用</button>
   </view>

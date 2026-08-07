@@ -87,7 +87,7 @@
         <text class="currency">¥</text>
         <input class="amount-input" type="digit" placeholder="0.00" value="{{form.amount}}"
                adjust-position="{{false}}"
-               bindinput="onAmountInput" bindfocus="onKbFocus" bindblur="onKbBlur" />
+               bindinput="onAmountInput" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" />
       </view>
 
       <view class="field-label">类型</view>
@@ -120,7 +120,7 @@
       <view class="field-card">
         <input class="field" placeholder="写点备注，可不填" value="{{form.note}}"
                adjust-position="{{false}}"
-               bindinput="onNoteInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="40" />
+               bindinput="onNoteInput" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="40" />
       </view>
     </scroll-view>
 
@@ -159,7 +159,7 @@
         <view class="cate-add-row">
           <input class="cate-add-input" placeholder="输入分类名称（最多6字）" value="{{cateForm.name}}"
                  adjust-position="{{false}}"
-                 bindinput="onCateNameInput" bindfocus="onKbFocus" bindblur="onKbBlur" maxlength="6" />
+                 bindinput="onCateNameInput" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="6" />
           <view class="cate-add-btn" bindtap="addCustomCategory">添加</view>
         </view>
       </view>
