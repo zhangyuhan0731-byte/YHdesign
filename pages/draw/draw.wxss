@@ -1,0 +1,114 @@
+/* pages/draw/draw.wxss */
+.page { padding: 28rpx 24rpx 60rpx; }
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  background: linear-gradient(145deg, #fff0f2 0%, #ffffff 58%, #fffaf2 100%);
+  margin-bottom: 26rpx;
+  padding: 36rpx 32rpx 38rpx;
+}
+.hero.card {
+  border: 1rpx solid rgba(230, 106, 122, 0.14);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  right: -40rpx;
+  top: -40rpx;
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 50%;
+  background: rgba(230, 106, 122, 0.14);
+}
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+.hero-date { font-size: 25rpx; color: var(--muted); }
+.badge {
+  font-size: 21rpx;
+  color: #e66a7a;
+  background: #fff0f2;
+  padding: 6rpx 18rpx;
+  border-radius: 999rpx;
+  font-weight: 600;
+}
+.hero-title { font-size: 40rpx; font-weight: 800; color: var(--ink); letter-spacing: 2rpx; }
+.hero-sub { font-size: 24rpx; color: var(--muted); margin-top: 8rpx; }
+
+.lot-card {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 52rpx 32rpx;
+  min-height: 340rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.lot-card.card {
+  background: linear-gradient(180deg, #ffffff, #fffaf2);
+}
+.lot-card::before {
+  content: '';
+  position: absolute;
+  left: 30rpx;
+  right: 30rpx;
+  top: 30rpx;
+  bottom: 30rpx;
+  border: 2rpx dashed #f3d7d2;
+  border-radius: 22rpx;
+  pointer-events: none;
+}
+.lot-seal {
+  position: relative;
+  z-index: 1;
+  width: 148rpx;
+  height: 148rpx;
+  border-radius: 34rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 4rpx solid;
+  margin-bottom: 30rpx;
+  box-shadow: 0 12rpx 24rpx rgba(32, 37, 50, 0.10);
+}
+.lot-seal.good { color: #2fae6b; border-color: #2fae6b; background: #e6f7ee; }
+.lot-seal.mid  { color: #d98a18; border-color: #e0992b; background: #fff4e0; }
+.lot-seal.low  { color: #e8756b; border-color: #e8756b; background: #fdecec; }
+.seal-top { font-size: 22rpx; opacity: 0.8; }
+.seal-level { font-size: 34rpx; font-weight: 800; margin-top: 6rpx; letter-spacing: 1rpx; }
+
+.lot-poem {
+  position: relative;
+  z-index: 1;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.9;
+}
+.lot-advice {
+  position: relative;
+  z-index: 1;
+  font-size: 25rpx;
+  line-height: 1.7;
+  margin-top: 22rpx;
+  max-width: 520rpx;
+}
+
+/* 洗签动画：轻微呼吸 + 微抖，配合文字快速切换 */
+.lot-card.drawing { animation: drawPulse 0.6s ease-in-out infinite; }
+@keyframes drawPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.015); }
+}
+
+.draw-btn { margin-top: 28rpx; }
+.tip { margin-top: 20rpx; line-height: 1.5; }

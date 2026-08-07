@@ -1,0 +1,104 @@
+/* pages/about/about.wxss */
+.page { padding: 28rpx 24rpx 60rpx; }
+
+.profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 26rpx;
+  padding: 40rpx 32rpx;
+  border-radius: 32rpx;
+  background: linear-gradient(135deg, #202532 0%, #2d7dd2 70%, #25a974 100%);
+  box-shadow: 0 18rpx 44rpx rgba(32, 37, 50, 0.22);
+  color: #fff;
+}
+.avatar {
+  position: relative;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 34rpx;
+  background: rgba(255, 255, 255, 0.20);
+  border: 2rpx solid rgba(255,255,255,0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 30rpx;
+  display: block;
+}
+.avatar-badge {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 18rpx;
+  line-height: 1.4;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.42);
+  padding: 4rpx 12rpx;
+  border-top-left-radius: 16rpx;
+}
+.info { flex: 1; min-width: 0; }
+.info .name { font-size: 36rpx; font-weight: 700; color: #fff; }
+.info .ver { margin-top: 8rpx; color: rgba(255, 255, 255, 0.82); }
+
+/* 表单行 */
+.form-row {
+  display: flex;
+  align-items: center;
+  min-height: 92rpx;
+}
+.form-label {
+  width: 120rpx;
+  font-size: 28rpx;
+  color: var(--ink);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.field-in {
+  flex: 1;
+  height: 80rpx;
+  background: #f7f4ee;
+  border-radius: var(--radius-sm);
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  color: var(--ink);
+  text-align: right;
+}
+.ph { color: #a9bccb; }
+.field-picker {
+  flex: 1;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 28rpx;
+  color: var(--ink);
+}
+.picker-val {
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+}
+.picker-arrow {
+  margin-left: 10rpx;
+  color: #b8c8d4;
+  font-size: 32rpx;
+  line-height: 1;
+}
+
+.derive {
+  display: flex;
+  gap: 16rpx;
+  margin: 22rpx 0 26rpx;
+}
+.card {
+  background: linear-gradient(135deg, #ffffff, #fffaf2);
+}
+.tip { margin-top: 18rpx; line-height: 1.5; }
+
+.foot { margin-top: 40rpx; }

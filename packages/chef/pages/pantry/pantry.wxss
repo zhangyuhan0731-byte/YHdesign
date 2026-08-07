@@ -1,0 +1,68 @@
+.pantry-page { padding: 28rpx 24rpx 58rpx; }
+.pantry-hero { position: relative; overflow: hidden; padding: 36rpx 34rpx; border-radius: 34rpx; color: #fff; background: linear-gradient(135deg,#4d341b,#d98a18 66%,#f0b754); box-shadow: 0 20rpx 48rpx rgba(217,138,24,.22); }
+.hero-kicker { color: rgba(255,255,255,.64); font-size: 20rpx; font-weight: 800; letter-spacing: 2rpx; }
+.hero-title { margin-top: 6rpx; font-size: 48rpx; font-weight: 900; }
+.hero-sub { width: 78%; margin-top: 10rpx; color: rgba(255,255,255,.82); font-size: 24rpx; line-height: 1.55; }
+.hero-mark { position: absolute; right: 28rpx; top: 28rpx; width: 90rpx; height: 90rpx; display: flex; align-items: center; justify-content: center; border-radius: 28rpx; border: 1rpx solid rgba(255,255,255,.2); background: rgba(255,255,255,.14); font-size: 40rpx; font-weight: 900; }
+.input-card { margin-top: 22rpx; padding: 28rpx; }
+.field-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12rpx; }
+.select-section { padding-bottom: 4rpx; }
+.secondary-section { margin-top: 30rpx; padding-top: 28rpx; border-top: 1rpx solid var(--hairline); }
+.field-title { color: var(--ink); font-size: 27rpx; font-weight: 900; }
+.required,.optional { margin-left: 10rpx; padding: 4rpx 9rpx; border-radius: 8rpx; color: #c75d50; background: #fff0ed; font-size: 18rpx; font-weight: 800; }
+.optional { color: #8a7153; background: #f6f1e9; }
+.selected-count { color: var(--muted); font-size: 20rpx; }
+.head-actions { display: flex; align-items: center; gap: 10rpx; }
+.section-toggle { min-width: 102rpx; height: 50rpx; margin: 0; padding: 0 13rpx; border: 0; border-radius: 25rpx; color: var(--primary); background: var(--primary-tint); font-size: 21rpx; font-weight: 800; line-height: 50rpx; }
+.section-toggle::after { border: 0; }
+.toggle-arrow { display: inline-block; margin-left: 3rpx; color: currentColor; font-size: 22rpx; transform: rotate(-90deg); transition: transform .18s ease; }
+.toggle-arrow.is-open { transform: rotate(0); }
+.section-body { padding-top: 2rpx; }
+.option-grid { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.select-option { min-width: 112rpx; height: 62rpx; padding: 0 16rpx; display: flex; align-items: center; justify-content: center; gap: 7rpx; border: 2rpx solid rgba(217,138,24,.12); border-radius: 16rpx; background: #fffaf1; color: var(--ink-2); font-size: 23rpx; font-weight: 700; transition: transform .12s ease, background .18s ease, color .18s ease; }
+.select-option:active { transform: scale(.96); }
+.select-option.is-selected { border-color: transparent; color: #fff; background: linear-gradient(135deg,#d98a18,#f0aa3e); box-shadow: 0 8rpx 18rpx rgba(217,138,24,.2); }
+.seasoning-option { border-color: rgba(45,125,210,.12); background: #f4f8fe; }
+.seasoning-option.is-selected { background: linear-gradient(135deg,#2d7dd2,#4e9be7); box-shadow: 0 8rpx 18rpx rgba(45,125,210,.2); }
+.tool-option { border-color: rgba(37,169,116,.12); background: #f0faf6; }
+.tool-option.is-selected { background: linear-gradient(135deg,#258a65,#35b887); box-shadow: 0 8rpx 18rpx rgba(37,169,116,.2); }
+.check-mark { width: 20rpx; min-height: 1rpx; text-align: center; font-size: 21rpx; font-weight: 900; }
+.field-input { width: 100%; height: 104rpx; padding: 18rpx; border-radius: 18rpx; border: 2rpx solid rgba(32,37,50,.06); background: #f8f9fb; color: var(--ink); font-size: 25rpx; line-height: 1.55; }
+.compact-input { height: 86rpx; margin-top: 14rpx; background: #f8f9fb; }
+.match-button { margin-top: 28rpx; }
+.clear-button { width: 100%; margin: 14rpx 0 0; padding: 10rpx; border: 0; background: transparent; color: var(--muted); font-size: 22rpx; line-height: 1.4; }
+.clear-button::after { border: 0; }
+.result-head { display: flex; align-items: flex-end; justify-content: space-between; margin: 32rpx 5rpx 18rpx; }
+.result-kicker { color: var(--muted); font-size: 19rpx; font-weight: 800; letter-spacing: 1rpx; }
+.result-title { margin-top: 4rpx; color: var(--ink); font-size: 34rpx; font-weight: 900; }
+.result-tip { color: var(--muted); font-size: 20rpx; }
+.result-card { padding: 26rpx; }
+.result-card + .result-card { margin-top: 18rpx; }
+.result-card:active { transform: scale(.985); }
+.card-top { display: flex; align-items: center; justify-content: space-between; }
+.category-badge { padding: 7rpx 14rpx; border-radius: 999rpx; color: var(--primary); background: var(--primary-tint); font-size: 21rpx; font-weight: 800; }
+.match-score { color: var(--mint); font-size: 31rpx; font-weight: 900; }
+.recipe-name { margin-top: 14rpx; color: var(--ink); font-size: 36rpx; line-height: 1.25; font-weight: 900; }
+.meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10rpx; margin-top: 14rpx; }
+.meta-pill { padding: 6rpx 12rpx; border-radius: 999rpx; color: var(--ink-2); background: #f5f7fa; font-size: 20rpx; font-weight: 700; }
+.calorie { color: #c8791a; background: #fff7e8; }
+.difficulty { color: var(--gold); font-size: 21rpx; }
+.match-line { display: flex; align-items: flex-start; gap: 12rpx; margin-top: 15rpx; color: var(--ink-2); font-size: 23rpx; line-height: 1.55; }
+.line-label { flex-shrink: 0; padding: 3rpx 9rpx; border-radius: 8rpx; font-size: 18rpx; font-weight: 800; }
+.line-label.have { color: #1c8a61; background: #eaf8f2; }
+.line-label.need { color: #c76b30; background: #fff3e9; }
+.support-row { display: flex; flex-wrap: wrap; gap: 12rpx 22rpx; margin-top: 16rpx; padding-top: 14rpx; border-top: 1rpx solid var(--hairline); color: var(--muted); font-size: 20rpx; }
+.open-detail { margin-top: 18rpx; text-align: right; color: var(--primary); font-size: 23rpx; font-weight: 800; }
+.empty { padding: 50rpx 25rpx; }
+.empty-mark { width: 82rpx; height: 82rpx; margin: 0 auto 18rpx; display: flex; align-items: center; justify-content: center; border-radius: 26rpx; color: #d98a18; background: #fff5e8; font-size: 40rpx; font-weight: 900; }
+.privacy-note { padding-top: 32rpx; text-align: center; color: var(--muted); font-size: 20rpx; }
+
+/* 补充输入框：带边框背景 + 文字垂直居中 */
+.pantry-page .auto-area {
+  background: #faf8f4;
+  border: 2rpx solid rgba(32, 37, 50, 0.08);
+  border-radius: 18rpx;
+  padding: 22rpx 24rpx;
+  min-height: 80rpx;
+  line-height: 1.5;
+}

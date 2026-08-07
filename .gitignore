@@ -1,0 +1,20 @@
+# Windows
+[Dd]esktop.ini
+Thumbs.db
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+
+# Node.js
+node_modules/
+
+# WorkBuddy workspace memory (not project code)
+.workbuddy/
+
+# 微信开发者工具个人本地配置
+project.private.config.json

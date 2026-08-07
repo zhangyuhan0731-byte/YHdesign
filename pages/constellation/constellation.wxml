@@ -1,0 +1,53 @@
+<!-- pages/constellation/constellation.wxml -->
+<view class="page">
+  <view class="tool-head anim">
+    <view>
+      <view class="tool-kicker">STAR MATCH</view>
+      <view class="tool-title">星座匹配</view>
+      <view class="tool-sub">用星座元素快速看看两个人的契合度。</view>
+    </view>
+    <view class="head-mark">星</view>
+  </view>
+
+  <view class="pickers">
+    <view class="picker-card card anim">
+      <view class="avatar"><view class="ic cons-icon cons-{{idxA}}"></view></view>
+      <view class="who">我</view>
+      <picker mode="selector" range="{{constellations}}" value="{{idxA}}" bindchange="onPickA">
+        <view class="pick-val">{{consA}} ›</view>
+      </picker>
+    </view>
+    <view class="vs-badge">VS</view>
+    <view class="picker-card card anim" style="animation-delay:80ms">
+      <view class="avatar"><view class="ic cons-icon cons-{{idxB}}"></view></view>
+      <view class="who">TA</view>
+      <picker mode="selector" range="{{constellations}}" value="{{idxB}}" bindchange="onPickB">
+        <view class="pick-val">{{consB}} ›</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="card result anim" wx:if="{{result}}">
+    <view class="score-ring" style="--p:{{result.score}};--c:{{result.levelColor}}">
+      <view class="score-ring-inner">
+        <view class="score">{{result.score}}</view>
+        <view class="score-unit">分</view>
+      </view>
+    </view>
+    <view class="meta">
+      <view class="level" style="background:{{result.levelColor}}">{{result.levelLabel}}</view>
+      <view class="relation">关系：{{result.relation}}</view>
+      <view class="elems">
+        <text class="elem">{{result.element1}}</text>
+        <text class="plus">+</text>
+        <text class="elem">{{result.element2}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card anim" style="animation-delay:160ms">
+    <view class="comment">{{result.comment}}</view>
+  </view>
+
+  <view class="muted tiny tc foot">同一对生日结果固定，纯属娱乐，开心就好～</view>
+</view>

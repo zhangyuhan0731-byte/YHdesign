@@ -1,0 +1,53 @@
+<view class="page today-page" wx:if="{{recipe}}">
+  <view class="today-toolbar">
+    <view class="toolbar-copy">
+      <view class="toolbar-label">今日推荐</view>
+      <view class="toolbar-name">{{recipe.name}}</view>
+    </view>
+    <button class="change-top" bindtap="changeRecipe" hover-class="change-top-active">换一换</button>
+  </view>
+
+  <view class="today-hero anim">
+    <view>
+      <view class="hero-kicker">TODAY MENU · {{total}} 道候选</view>
+      <view class="hero-title">今日菜谱</view>
+      <view class="hero-sub">每天固定推荐一道，也可以换个口味</view>
+    </view>
+    <view class="hero-mark">荐</view>
+  </view>
+
+  <view class="card recipe-card anim" style="animation-delay:60ms">
+    <view class="recipe-top">
+      <view class="category-badge">{{recipe.categoryLabel}}</view>
+      <view class="difficulty">{{recipe.difficultyText}}</view>
+    </view>
+    <view class="recipe-name">{{recipe.name}}</view>
+    <view class="recipe-summary">{{recipe.summary}}</view>
+    <view class="meta-row">
+      <view class="meta-pill">{{recipe.levelLabel}}</view>
+      <view class="meta-pill calorie">{{recipe.calories}}</view>
+      <view class="tag-pill" wx:for="{{recipe.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</view>
+    </view>
+
+    <view class="section-title">准备这些</view>
+    <view class="requirement-group" wx:for="{{recipe.requirementGroups}}" wx:key="key">
+      <view class="group-label">{{item.title}}</view>
+      <view class="tag-list">
+        <view class="requirement-tag" wx:for="{{item.items}}" wx:for-item="requirement" wx:key="key">{{requirement.name}}</view>
+      </view>
+    </view>
+
+    <view class="section-title">步骤预览</view>
+    <view class="step-row" wx:for="{{recipe.previewSteps}}" wx:key="key">
+      <view class="step-number">{{index + 1}}</view>
+      <view class="step-text">{{item.text}}</view>
+    </view>
+
+    <view class="detail-button-row">
+      <button class="btn btn-ghost detail-button-half" bindtap="openDetail">查看完整做法</button>
+      <button class="btn btn-primary detail-button-half" bindtap="openCooking">烹饪模式</button>
+    </view>
+  </view>
+
+  <view class="source-note">推荐来自厨神的 {{total}} 道 HowToCook 菜谱</view>
+</view>

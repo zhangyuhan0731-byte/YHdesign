@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none">
+  <!-- 真实木鱼：团鱼形，腹部中空，头部正中开口，背部斜坡敲击面 -->
+  <path d="M100 24
+           C 140 24, 172 50, 172 88
+           C 172 120, 142 146, 100 146
+           C 58 146, 28 120, 28 88
+           C 28 50, 60 24, 100 24 Z" fill="#ffffff"/>
+  <!-- 头部开口：长条鱼嘴/出声缝 -->
+  <path d="M62 76 C 78 92, 110 94, 136 82" stroke="#07080c" stroke-width="16" stroke-linecap="round" fill="none"/>
+  <!-- 背部斜坡敲击线 -->
+  <path d="M80 26 C 110 28, 138 48, 154 74" stroke="#d6e8f0" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.5"/>
+</svg>

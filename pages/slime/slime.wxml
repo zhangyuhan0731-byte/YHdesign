@@ -1,0 +1,81 @@
+<view class="page">
+  <view class="topbar">
+    <view>
+      <view class="kicker">RELAX</view>
+      <view class="title">彩泥解压</view>
+    </view>
+    <button class="sound-toggle {{soundOn ? 'on' : ''}}" bindtap="toggleSound">
+      <view class="ic {{soundOn ? 'ic-sound-on' : 'ic-sound-off'}}" style="width:34rpx;height:34rpx;"></view>
+      <text>{{soundOn ? '声音开' : '静音'}}</text>
+    </button>
+  </view>
+
+  <view class="stage card anim"
+        bindtouchstart="pressStart"
+        bindtouchmove="pressMove"
+        bindtouchend="pressEnd"
+        bindtouchcancel="pressEnd"
+        bindlongpress="pressHold">
+    <view class="stage-glow"></view>
+    <view class="slime-wrap">
+      <view class="slime {{slime.shape}} {{slime.texture}} {{pressing ? 'pressing' : ''}}" style="{{slimeStyle}}">
+        <view class="bubble" wx:for="{{bubbles}}" wx:key="x"
+              style="left:{{item.x}}%;top:{{item.y}}%;width:{{item.s}}rpx;height:{{item.s}}rpx;"></view>
+        <view class="shine"></view>
+        <view class="face">
+          <view class="eye"></view>
+          <view class="mouth"></view>
+          <view class="eye"></view>
+        </view>
+        <view class="dent" wx:for="{{pressMarks}}" wx:key="id"
+              style="left:{{item.x}}%;top:{{item.y}}%;width:{{item.size}}rpx;height:{{item.size}}rpx;"></view>
+        <view class="stretch-line" wx:for="{{stretchLines}}" wx:key="id"
+              style="left:{{item.x}}%;top:{{item.y}}%;width:{{item.w}}rpx;transform:translate(-50%, -50%) rotate({{item.r}}deg);"></view>
+      </view>
+    </view>
+    <view class="stage-hint">点击、长按或滑动来按压彩泥</view>
+  </view>
+
+  <view class="section">
+    <view class="section-title"><view class="bar"></view>选择彩泥</view>
+    <scroll-view scroll-x class="preset-scroll" enable-flex>
+      <view class="preset-row">
+        <view class="preset {{selectedId === item.id ? 'active' : ''}}" wx:for="{{presets}}" wx:key="id"
+              bindtap="selectPreset" data-id="{{item.id}}">
+          <view class="mini-slime {{item.shape}} {{item.texture}}" style="--slime-color:{{item.color}};--slime-shine:{{item.shine}};"></view>
+          <view class="preset-name">{{item.name}}</view>
+          <view class="preset-meta">{{item.textureName}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="card custom-card">
+    <view class="section-title"><view class="bar"></view>自制彩泥</view>
+
+    <view class="label">颜色</view>
+    <view class="choice-row">
+      <view class="color-choice {{custom.colorIndex === index ? 'chosen' : ''}}" wx:for="{{colors}}" wx:key="name"
+            bindtap="chooseColor" data-index="{{index}}" style="background:{{item.value}};">
+        <view class="color-check" wx:if="{{custom.colorIndex === index}}"></view>
+      </view>
+    </view>
+
+    <view class="label">形状</view>
+    <view class="seg-row">
+      <view class="seg {{custom.shapeIndex === index ? 'chosen' : ''}}" wx:for="{{shapes}}" wx:key="id"
+            bindtap="chooseShape" data-index="{{index}}">{{item.name}}</view>
+    </view>
+
+    <view class="label">质感</view>
+    <view class="seg-row">
+      <view class="seg {{custom.textureIndex === index ? 'chosen' : ''}}" wx:for="{{textures}}" wx:key="id"
+            bindtap="chooseTexture" data-index="{{index}}">{{item.name}}</view>
+    </view>
+
+    <button class="btn btn-primary btn-block make-btn" bindtap="makeCustom">
+      <view class="ic ic-check ic-w" style="width:32rpx;height:32rpx;margin-right:10rpx;"></view>
+      生成我的彩泥
+    </button>
+  </view>
+</view>

@@ -1,0 +1,172 @@
+<!-- pages/ledger/ledger.wxml -->
+<view class="page">
+  <view class="ledger-head anim">
+    <view>
+      <view class="head-kicker">LEDGER</view>
+      <view class="head-title">记账本</view>
+      <view class="head-sub">快速记录每一笔收入和支出</view>
+    </view>
+    <view class="head-icon">
+      <view class="ic ic-ledger ic-w" style="width:48rpx;height:48rpx;"></view>
+    </view>
+  </view>
+
+  <view class="summary card anim" style="animation-delay:60ms">
+    <view class="summary-top">
+      <view>
+        <view class="summary-label">本月结余</view>
+        <view class="summary-month">{{monthText}}</view>
+      </view>
+      <view class="balance">¥{{stats.balance}}</view>
+    </view>
+    <view class="summary-grid">
+      <view class="summary-item">
+        <view class="item-label">总收入</view>
+        <view class="item-value income">¥{{stats.income}}</view>
+      </view>
+      <view class="summary-item">
+        <view class="item-label">总支出</view>
+        <view class="item-value expense">¥{{stats.expense}}</view>
+      </view>
+    </view>
+  </view>
+
+  <button class="btn btn-primary btn-block add-main anim" style="animation-delay:100ms" bindtap="openAdd">
+    记一笔
+  </button>
+
+  <view class="list-head">
+    <view>
+      <view class="list-kicker">RECORDS</view>
+      <view class="list-title">账单列表</view>
+    </view>
+    <view class="list-count">{{bills.length}} 条</view>
+  </view>
+
+  <view class="bill-list">
+    <view class="bill-card card anim" wx:for="{{bills}}" wx:key="id"
+          style="animation-delay:{{index * 35}}ms">
+      <view class="cate-avatar" style="color:{{item.cateColor}};background:{{item.cateBg}}">
+        {{item.cateIcon}}
+      </view>
+      <view class="bill-main">
+        <view class="bill-row">
+          <view class="bill-title">{{item.category}}</view>
+          <view class="bill-amount {{item.cls}}">{{item.amountText}}</view>
+        </view>
+        <view class="bill-meta">
+          <text>{{item.typeName}}</text>
+          <text class="dot">·</text>
+          <text>{{item.date}}</text>
+        </view>
+        <view class="bill-note" wx:if="{{item.note}}">{{item.note}}</view>
+      </view>
+      <view class="bill-delete" bindtap="removeBill" data-id="{{item.id}}">
+        <view class="ic ic-close" style="width:24rpx;height:24rpx;"></view>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{bills.length === 0}}">
+      <view class="empty-ic ic ic-ledger" style="width:150rpx;height:150rpx;"></view>
+      <view class="tip">还没有账单</view>
+      <view class="tip-sub">点「记一笔」开始记录今天的收支</view>
+    </view>
+  </view>
+
+  <!-- 添加账单弹层 -->
+  <view class="mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
+  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
+    <view class="sheet-head">
+      <text class="sheet-title">添加账单</text>
+      <text class="sheet-close" bindtap="closeSheet">×</text>
+    </view>
+
+    <scroll-view scroll-y class="sheet-body sheet-scroll">
+      <view class="field-label">金额</view>
+      <view class="amount-card">
+        <text class="currency">¥</text>
+        <input class="amount-input" type="digit" placeholder="0.00" value="{{form.amount}}"
+               adjust-position="{{false}}"
+               bindinput="onAmountInput" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" />
+      </view>
+
+      <view class="field-label">类型</view>
+      <view class="type-tabs">
+        <view class="type-tab {{typeIndex === index ? 'active' : ''}}"
+              wx:for="{{types}}" wx:key="key"
+              data-index="{{index}}" bindtap="onTypePick">{{item.name}}</view>
+      </view>
+
+      <view class="field-label">分类</view>
+      <view class="category-grid">
+        <view class="category-chip {{form.category === item ? 'active' : ''}}"
+              wx:for="{{categories}}" wx:key="*this"
+              data-category="{{item}}" bindtap="onCategoryPick">{{item}}</view>
+        <view class="category-chip category-add" bindtap="openCateManage">
+          <text class="add-icon">+</text>
+          <text>新增分类</text>
+        </view>
+      </view>
+
+      <view class="field-label">日期</view>
+      <picker mode="date" value="{{form.date}}" bindchange="onDateChange">
+        <view class="date-field">
+          <text>{{form.date}}</text>
+          <text class="date-arrow">›</text>
+        </view>
+      </picker>
+
+      <view class="field-label">备注</view>
+      <view class="field-card">
+        <input class="field" placeholder="写点备注，可不填" value="{{form.note}}"
+               adjust-position="{{false}}"
+               bindinput="onNoteInput" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="40" />
+      </view>
+    </scroll-view>
+
+    <button class="btn btn-primary btn-block save-btn" bindtap="saveBill">保存账单</button>
+  </view>
+
+  <!-- 分类管理弹层 -->
+  <view class="mask cate-mask {{showCateSheet ? 'show' : ''}}" bindtap="closeCateSheet"></view>
+  <view class="sheet input-sheet cate-sheet {{showCateSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
+    <view class="sheet-head">
+      <text class="sheet-title">管理分类</text>
+      <text class="sheet-close" bindtap="closeCateSheet">×</text>
+    </view>
+
+    <scroll-view scroll-y class="sheet-body sheet-scroll">
+      <view class="type-tabs cate-type-tabs">
+        <view class="type-tab {{cateForm.type === 'expense' ? 'active' : ''}}"
+              data-type="expense" bindtap="onCateTypePick">支出</view>
+        <view class="type-tab {{cateForm.type === 'income' ? 'active' : ''}}"
+              data-type="income" bindtap="onCateTypePick">收入</view>
+      </view>
+
+      <view class="cate-chip-grid">
+        <view class="cate-manage-chip {{item.isBuiltin ? 'builtin' : 'custom'}}"
+              wx:for="{{manageCategories}}" wx:key="name"
+              style="color:{{item.meta.color}};background:{{item.meta.bg}};border-color:{{item.meta.color}}33">
+          <text class="chip-text">{{item.name}}</text>
+          <view class="chip-del {{item.isBuiltin ? 'hidden' : ''}}" bindtap="deleteCustomCategory" data-name="{{item.name}}">
+            <text class="chip-del-x">×</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="cate-add-box">
+        <view class="field-label">新增分类</view>
+        <view class="cate-add-row">
+          <input class="cate-add-input" placeholder="输入分类名称（最多6字）" value="{{cateForm.name}}"
+                 adjust-position="{{false}}"
+                 bindinput="onCateNameInput" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="6" />
+          <view class="cate-add-btn" bindtap="addCustomCategory">添加</view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="cate-sheet-foot">
+      <button class="btn btn-ghost btn-block" bindtap="resetCategories">恢复默认</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,97 @@
+<!-- pages/memo/memo.wxml -->
+<view class="page memo-page">
+  <view class="memo-head">
+    <view>
+      <view class="memo-kicker">MEMO</view>
+      <view class="memo-heading">备忘录</view>
+    </view>
+    <view class="memo-total">{{memos.length}} 条</view>
+  </view>
+
+  <view class="topbar">
+    <view class="search-wrap">
+      <view class="ic ic-search" style="width:30rpx;height:30rpx;"></view>
+      <input class="search-input" placeholder="搜索标题 / 内容"
+             value="{{keyword}}" bindinput="onSearch" confirm-type="search"
+             adjust-position="{{false}}" />
+    </view>
+    <button class="btn btn-primary btn-sm add-btn" bindtap="openAdd">+ 新建</button>
+  </view>
+
+  <scroll-view scroll-x class="cat-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="cats">
+      <view class="chip {{activeCat === c ? 'chip-active' : ''}}"
+            wx:for="{{cats}}" wx:key="*this" wx:for-item="c"
+            bindtap="onCat" data-cat="{{c}}">{{c}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="list">
+    <view class="memo-item card anim" wx:for="{{memos}}" wx:key="id"
+          style="animation-delay:{{index * 40}}ms"
+          bindtap="openEdit" data-id="{{item.id}}">
+      <view class="accent" style="background:{{item.accent}}"></view>
+      <view class="memo-top">
+        <text class="memo-title">{{item.title || '无标题'}}</text>
+        <view class="memo-del" catchtap="remove" data-id="{{item.id}}">
+          <view class="ic ic-close" style="width:26rpx;height:26rpx;"></view>
+        </view>
+      </view>
+      <view class="memo-content muted" wx:if="{{item.content}}">{{item.content}}</view>
+      <view class="memo-foot">
+        <text class="cat-tag" style="color:{{item.accent}};background:{{item.accentBg}}">{{item.category}}</text>
+        <text class="remind" wx:if="{{item.remindText}}">{{item.remindText}}</text>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{memos.length === 0}}">
+      <view class="empty-ic ic ic-empty" style="width:150rpx;height:150rpx;"></view>
+      <view class="tip">还没有备忘</view>
+      <view class="tip-sub">点「+ 新建」记下一笔吧</view>
+    </view>
+  </view>
+
+  <!-- 编辑弹层 -->
+  <view class="mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
+  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;">
+    <view class="sheet-head">
+      <text class="sheet-title">{{editingId ? '编辑备忘' : '新建备忘'}}</text>
+      <text class="sheet-close" bindtap="closeSheet">×</text>
+    </view>
+    <scroll-view scroll-y class="sheet-body sheet-scroll">
+      <view class="field-label">标题</view>
+      <view class="field-card">
+        <input class="field" placeholder="输入标题" value="{{form.title}}" data-field="title"
+               adjust-position="{{false}}"
+               bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="40" />
+      </view>
+      <view class="field-label">内容</view>
+      <textarea class="auto-area" placeholder="写点什么…" value="{{form.content}}" data-field="content"
+                adjust-position="{{false}}"
+                bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="500" auto-height placeholder-class="ph" />
+
+      <view class="field-label">分类</view>
+      <view class="cats wrap">
+        <view class="chip {{form.category === c ? 'chip-active' : ''}}"
+              wx:for="{{categories}}" wx:key="*this" wx:for-item="c"
+              bindtap="onCatPick" data-cat="{{c}}">{{c}}</view>
+        <view class="chip chip-add" bindtap="addTemplate">
+          <view class="ic ic-plus" style="width:22rpx;height:22rpx;"></view>
+          <text>新增模板</text>
+        </view>
+      </view>
+
+      <view class="field-label time-label">提醒时间</view>
+      <picker class="date-picker" mode="date" value="{{form.remindDate}}" data-field="remindDate" bindchange="onDateChange">
+        <view class="time-pick">
+          <text class="time-val">{{form.remindDate}}</text>
+          <text class="time-arrow">›</text>
+        </view>
+      </picker>
+    </scroll-view>
+    <view class="sheet-actions">
+      <button class="btn btn-ghost flex-1" bindtap="closeSheet">取消</button>
+      <button class="btn btn-primary flex-1" bindtap="save">保存</button>
+    </view>
+  </view>
+</view>

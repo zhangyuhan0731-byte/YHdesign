@@ -1,0 +1,114 @@
+<view class="page chef-page">
+  <view class="search-sticky">
+    <view class="search-box">
+      <view class="ic ic-search search-icon"></view>
+      <input class="search-input" value="{{keyword}}" placeholder="搜索菜名、食材…" confirm-type="search" adjust-position="{{false}}" bindinput="onSearchInput" />
+      <button class="clear-search" wx:if="{{keyword}}" bindtap="clearSearch" aria-label="清空搜索">×</button>
+    </view>
+  </view>
+
+  <view class="quick-bar">
+    <button class="quick-pill" bindtap="goTips">
+      <view class="ic ic-tips"></view>
+      <text class="quick-text">厨房小贴士</text>
+      <text class="quick-sub">18 篇</text>
+    </button>
+  </view>
+
+  <view class="browse-layout">
+    <scroll-view class="category-column" scroll-y enhanced show-scrollbar="{{false}}">
+      <view class="category-item fav-item {{viewMode === 'favorites' ? 'active' : ''}}"
+            bindtap="chooseFavorites">
+        <view class="cat-fav-row">
+          <view class="ic {{viewMode === 'favorites' ? 'ic-heart-fill' : 'ic-heart'}} fav-ic"></view>
+          <view class="category-name">我的收藏</view>
+        </view>
+        <view class="category-count">{{favoriteCount}} 道</view>
+      </view>
+
+      <view wx:for="{{categories}}" wx:key="key"
+            class="category-item {{viewMode === 'browse' && activeCategory === item.key ? 'active' : ''}}"
+            bindtap="chooseCategory" data-key="{{item.key}}">
+        <view class="category-name">{{item.label}}</view>
+        <view class="category-count">{{item.count}} 道</view>
+      </view>
+    </scroll-view>
+
+    <view class="recipe-column">
+      <view class="result-head">
+        <view class="head-left">
+          <button wx:if="{{viewMode === 'favorites'}}" class="back-link" bindtap="backToBrowse">‹ 全部</button>
+          <view class="result-title">{{viewMode === 'favorites' ? '我的收藏' : activeCategoryLabel}}</view>
+        </view>
+        <view class="head-right">
+          <button wx:if="{{viewMode === 'browse'}}" class="shuffle-btn" catchtap="shuffleCurrent">
+            <view class="ic ic-shuffle"></view>换一批
+          </button>
+          <view class="result-count">{{viewMode === 'favorites' ? favoriteCount : resultCount}} 道</view>
+        </view>
+      </view>
+
+      <!-- 浏览视图（随机列表） -->
+      <block wx:if="{{viewMode === 'browse'}}">
+        <view class="recipe-list" wx:if="{{visibleRecipes.length}}">
+          <view class="recipe-card card" wx:for="{{visibleRecipes}}" wx:key="id" bindtap="openRecipe" data-id="{{item.id}}">
+            <view class="fav-badge {{item.favorited ? 'on' : ''}}" catchtap="toggleFavOnCard" data-id="{{item.id}}" aria-label="收藏">
+              <view class="ic {{item.favorited ? 'ic-heart-fill' : 'ic-heart'}}"></view>
+            </view>
+            <view class="recipe-card-top">
+              <view class="category-badge">{{item.categoryLabel}}</view>
+              <view class="difficulty-stars">{{item.difficultyText}}</view>
+            </view>
+            <view class="recipe-name">{{item.name}}</view>
+            <view class="ingredient-preview">{{item.ingredientsText}}</view>
+            <view class="recipe-meta">
+              <view class="meta-pill">{{item.levelLabel}}</view>
+              <view class="meta-pill calorie">{{item.calories}}</view>
+            </view>
+            <view class="open-copy">查看做法 ›</view>
+          </view>
+          <view class="load-tip">{{hasMore ? '继续上滑查看更多' : '共 ' + resultCount + ' 道'}}</view>
+        </view>
+
+        <view class="empty card" wx:else>
+          <view class="empty-symbol">?</view>
+          <view class="tip">没有找到菜谱</view>
+          <view class="tip-sub">换个关键词试试</view>
+          <button class="btn btn-ghost empty-reset" bindtap="showAll">查看全部</button>
+        </view>
+      </block>
+
+      <!-- 收藏视图 -->
+      <block wx:else>
+        <view class="recipe-list" wx:if="{{favoriteRecipes.length}}">
+          <view class="recipe-card card" wx:for="{{favoriteRecipes}}" wx:key="id" bindtap="openRecipe" data-id="{{item.id}}">
+            <view class="fav-badge on" catchtap="toggleFavOnCard" data-id="{{item.id}}" aria-label="取消收藏">
+              <view class="ic ic-heart-fill"></view>
+            </view>
+            <view class="recipe-card-top">
+              <view class="category-badge">{{item.categoryLabel}}</view>
+              <view class="difficulty-stars">{{item.difficultyText}}</view>
+            </view>
+            <view class="recipe-name">{{item.name}}</view>
+            <view class="ingredient-preview">{{item.ingredientsText}}</view>
+            <view class="recipe-meta">
+              <view class="meta-pill">{{item.levelLabel}}</view>
+              <view class="meta-pill calorie">{{item.calories}}</view>
+            </view>
+            <view class="open-copy">查看做法 ›</view>
+          </view>
+          <view class="load-tip">收藏的 {{favoriteCount}} 道菜谱</view>
+        </view>
+
+        <view class="empty card" wx:else>
+          <view class="empty-symbol ic ic-heart"></view>
+          <view class="tip">还没有收藏的菜谱</view>
+          <view class="tip-sub">去菜谱里点亮 ♥ 收藏喜欢的菜吧</view>
+          <button class="btn btn-ghost empty-reset" bindtap="backToBrowse">去逛逛</button>
+        </view>
+      </block>
+
+      <view class="source-note">数据来自 {{sourceName}} v{{sourceVersion}}</view>
+    </view>
+  </view>
+</view>

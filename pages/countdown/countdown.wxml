@@ -1,0 +1,66 @@
+<!-- pages/countdown/countdown.wxml -->
+<view class="page">
+  <view class="count-head anim">
+    <view>
+      <view class="count-kicker">COUNTDOWN</view>
+      <view class="count-title">倒数日记</view>
+    </view>
+    <view class="count-mark">{{events.length}}</view>
+  </view>
+
+  <view class="topbar">
+    <view class="tip muted small">记录重要的日子，看它还有多久到来</view>
+    <button class="btn btn-primary btn-sm add-btn" bindtap="openAdd">+ 新建</button>
+  </view>
+
+  <view class="list">
+    <view class="cd-item card anim" wx:for="{{events}}" wx:key="id"
+          style="animation-delay:{{index * 40}}ms"
+          bindtap="openEdit" data-id="{{item.id}}">
+      <view class="cd-num {{item.cls}}">
+        <view class="num" wx:if="{{item.days !== 0}}">{{item.num}}</view>
+        <view class="num" wx:else>今天</view>
+        <view class="num-unit" wx:if="{{item.days !== 0}}">天</view>
+      </view>
+      <view class="cd-main">
+        <view class="cd-title">{{item.title}}</view>
+        <view class="cd-date muted tiny">{{item.date}}</view>
+        <view class="cd-note muted tiny" wx:if="{{item.note}}">{{item.note}}</view>
+      </view>
+      <view class="cd-del" catchtap="remove" data-id="{{item.id}}">
+        <view class="ic ic-close" style="width:26rpx;height:26rpx;"></view>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{events.length === 0}}">
+      <view class="empty-ic ic ic-empty" style="width:150rpx;height:150rpx;"></view>
+      <view class="tip">还没有倒数</view>
+      <view class="tip-sub">点「+ 新建」加一个日子</view>
+    </view>
+  </view>
+
+  <view class="mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
+  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;">
+    <view class="sheet-head">
+      <text class="sheet-title">{{editingId ? '编辑倒数' : '新建倒数'}}</text>
+      <text class="sheet-close" bindtap="closeSheet">×</text>
+    </view>
+    <scroll-view scroll-y class="sheet-body sheet-scroll">
+      <input class="field" placeholder="事件名称，如：生日、旅行" value="{{form.title}}" data-field="title"
+             adjust-position="{{false}}"
+             bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="30" />
+      <view class="label muted tiny">目标日期</view>
+      <picker mode="date" value="{{form.date}}" bindchange="onDate">
+        <view class="field pick">{{form.date}}</view>
+      </picker>
+      <view class="label muted tiny">备注（可选）</view>
+      <input class="field" placeholder="写点什么" value="{{form.note}}" data-field="note"
+             adjust-position="{{false}}"
+             bindinput="onField" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="60" />
+    </scroll-view>
+    <view class="sheet-actions">
+      <button class="btn btn-ghost flex-1" bindtap="closeSheet">取消</button>
+      <button class="btn btn-primary flex-1" bindtap="save">保存</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/about/about",
+    "pages/wheel/wheel",
+    "pages/mood/mood",
+    "pages/weight/weight",
+    "pages/water/water",
+    "pages/draw/draw",
+    "pages/constellation/constellation",
+    "pages/zodiac/zodiac",
+    "pages/memo/memo",
+    "pages/ledger/ledger",
+    "pages/countdown/countdown",
+    "pages/woodfish/woodfish"
+  ],
+  "subPackages": [
+    {
+      "root": "packages/chef",
+      "name": "chef",
+      "pages": [
+        "pages/index/index",
+        "pages/detail/detail",
+        "pages/today/today",
+        "pages/pantry/pantry",
+        "pages/tips/tips",
+        "pages/cooking/cooking"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#fff8ed",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "趣玩小工具",
+    "backgroundColor": "#f4f0e8",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#7e8796",
+    "selectedColor": "#2d7dd2",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/home/home", "text": "首页" },
+      { "pagePath": "pages/about/about", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
