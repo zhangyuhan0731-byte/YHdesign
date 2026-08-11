@@ -42,7 +42,8 @@
         <view class="option-delete" data-index="{{index}}" bindtap="removeOption">×</view>
       </view>
     </view>
-    <view class="add-row" wx:if="{{options.length < 12}}">
+    <!-- Android 原生 input 可能穿透 fixed 弹层；弹层显示时卸载底层输入节点 -->
+    <view class="add-row" wx:if="{{options.length < 12 && !showTplSheet && !showResult}}">
       <input class="option-add-input" placeholder="输入新选项" value="{{newOption}}"
              cursor-spacing="20"
              bindinput="onNewOptionInput" bindconfirm="addOption" maxlength="12" confirm-type="done" />
