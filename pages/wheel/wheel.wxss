@@ -175,8 +175,8 @@
   width: auto;
   min-width: 0;
   height: 80rpx;
-  line-height: 1.2;
-  padding: 22rpx 24rpx;
+  line-height: 76rpx;
+  padding: 0 24rpx;
   border-radius: 20rpx;
   background: #fff;
   border: 2rpx solid rgba(32, 37, 50, 0.06);
