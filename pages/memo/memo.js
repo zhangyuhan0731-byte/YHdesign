@@ -204,5 +204,16 @@ Page({
         }
       }
     });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '备忘录 - 随手保存小事情',
+      path: '/pages/memo/memo'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '备忘录 - 随手保存小事情' };
   }
 });

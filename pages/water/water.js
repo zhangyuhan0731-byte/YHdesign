@@ -286,5 +286,16 @@ Page({
 
   closeHistory() {
     this.setData({ selectedHistoryVisible: false });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '喝水提醒 - 今天喝够了吗',
+      path: '/pages/water/water'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '喝水提醒 - 今天喝够了吗' };
   }
 });

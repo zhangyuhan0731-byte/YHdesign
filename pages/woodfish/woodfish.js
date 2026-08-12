@@ -68,5 +68,16 @@ Page({
         }
       }
     });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '敲木鱼 - 安静敲一敲木鱼',
+      path: '/pages/woodfish/woodfish'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '敲木鱼 - 安静敲一敲木鱼' };
   }
 });

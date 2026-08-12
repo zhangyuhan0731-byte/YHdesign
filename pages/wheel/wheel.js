@@ -313,5 +313,16 @@ Page({
         this.setData({ templates: BUILTIN_TEMPLATES.concat(list), hiddenBuiltins: [] });
       }
     });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '幸运转盘 - 选择困难症救星',
+      path: '/pages/wheel/wheel'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '幸运转盘 - 选择困难症救星' };
   }
 });

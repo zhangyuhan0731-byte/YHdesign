@@ -44,5 +44,16 @@ Page({
   openCooking() {
     if (!this.data.recipe) return;
     wx.navigateTo({ url: `/packages/chef/pages/cooking/cooking?id=${this.data.recipe.id}` });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '今日菜谱 - 从368道菜里推荐',
+      path: '/packages/chef/pages/today/today'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '今日菜谱 - 从368道菜里推荐' };
   }
 });

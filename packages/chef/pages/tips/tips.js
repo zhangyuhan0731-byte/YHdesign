@@ -40,5 +40,16 @@ Page({
   toggle(e) {
     const id = e.currentTarget.dataset.id;
     this.setData({ expandedId: this.data.expandedId === id ? '' : id });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '厨房小贴士 - 烹饪技巧与安全知识',
+      path: '/packages/chef/pages/tips/tips'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '厨房小贴士 - 烹饪技巧与安全知识' };
   }
 });

@@ -33,5 +33,16 @@ Page({
     this.setData({
       result: Object.assign({}, m, { levelLabel: LEVEL_LABEL[m.level], levelColor: LEVEL_COLOR[m.level] })
     });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '生肖匹配 - 属相关系轻松查',
+      path: '/pages/zodiac/zodiac'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '生肖匹配 - 属相关系轻松查' };
   }
 });

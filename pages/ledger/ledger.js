@@ -434,7 +434,18 @@ Page({
     });
   },
 
-  stopPropagation() {}
+  stopPropagation() {},
+
+  onShareAppMessage() {
+    return {
+      title: '记账本 - 收入支出轻松记',
+      path: '/pages/ledger/ledger'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '记账本 - 收入支出轻松记' };
+  }
 });
 
 function isBuiltinCategory(type, name) {

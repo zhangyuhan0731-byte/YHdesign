@@ -399,5 +399,16 @@ Page({
         ctx.draw();
       })
       .exec();
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '体重记录 - 轻松追踪变化',
+      path: '/pages/weight/weight'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '体重记录 - 轻松追踪变化' };
   }
 });

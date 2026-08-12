@@ -37,5 +37,18 @@ Page({
     const pages = getCurrentPages();
     if (pages.length > 1) wx.navigateBack();
     else wx.redirectTo({ url: '/packages/chef/pages/index/index' });
+  },
+
+  onShareAppMessage() {
+    var recipe = this.data.recipe;
+    return {
+      title: recipe ? recipe.name + ' - 厨神' : '厨神 - 368道菜照着做',
+      path: '/packages/chef/pages/detail/detail?id=' + (recipe ? recipe.id : '')
+    };
+  },
+
+  onShareTimeline() {
+    var recipe = this.data.recipe;
+    return { title: recipe ? recipe.name + ' - 厨神' : '厨神 - 368道菜照着做' };
   }
 });

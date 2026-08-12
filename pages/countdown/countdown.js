@@ -96,5 +96,16 @@ Page({
         }
       }
     });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '倒数日记 - 重要日子不忘记',
+      path: '/pages/countdown/countdown'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '倒数日记 - 重要日子不忘记' };
   }
 });

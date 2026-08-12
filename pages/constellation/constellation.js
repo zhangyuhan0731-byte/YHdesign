@@ -40,5 +40,16 @@ Page({
         element2: CONSTELLATIONS[consB].element
       })
     });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '星座匹配 - 看看你们的契合度',
+      path: '/pages/constellation/constellation'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '星座匹配 - 看看你们的契合度' };
   }
 });

@@ -200,5 +200,16 @@ Page({
       monthText: monthTitle(year, month),
       calendarDays: days
     });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '心情日记 - 每天记一句心情',
+      path: '/pages/mood/mood'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '心情日记 - 每天记一句心情' };
   }
 });

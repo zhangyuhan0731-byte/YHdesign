@@ -28,13 +28,11 @@ Page({
     endDate: '',
     constellation: '',
     zodiac: '',
-    avatar: '',
     saved: false
   },
 
   onLoad() {
     this.setData({ endDate: today() });
-    this.setData({ avatar: getStorage('avatar', '') });
     const p = getStorage('profile', null);
     if (p) {
       const d = derive(p.birthday);
@@ -74,34 +72,14 @@ Page({
     this.setData({ saved: true });
   },
 
-  // 选择并保存头像（仅存本机，不上传服务器）
-  chooseAvatar() {
-    wx.chooseMedia({
-      count: 1,
-      mediaType: ['image'],
-      sourceType: ['album', 'camera'],
-      sizeType: ['compressed'],
-      success: (res) => {
-        const temp = res.tempFiles[0].tempFilePath;
-        const fs = wx.getFileSystemManager();
-        fs.saveFile({
-          tempFilePath: temp,
-          success: (r) => {
-            const saved = r.savedFilePath;
-            const old = getStorage('avatar', '');
-            if (old && old !== saved) {
-              try { fs.removeSavedFile({ filePath: old }); } catch (e) {}
-            }
-            setStorage('avatar', saved);
-            this.setData({ avatar: saved });
-          },
-          fail: () => {
-            // 保存失败则退回临时路径
-            setStorage('avatar', temp);
-            this.setData({ avatar: temp });
-          }
-        });
-      }
-    });
+  onShareAppMessage() {
+    return {
+      title: '趣玩小工具 - 实用小工具合集',
+      path: '/pages/home/home'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '趣玩小工具 - 实用小工具合集' };
   }
 });

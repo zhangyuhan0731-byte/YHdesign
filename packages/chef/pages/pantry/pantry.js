@@ -168,5 +168,16 @@ Page({
 
   openRecipe(e) {
     wx.navigateTo({ url: `/packages/chef/pages/detail/detail?id=${e.currentTarget.dataset.id}` });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '我的食材 - 看看现有食材能做什么',
+      path: '/packages/chef/pages/pantry/pantry'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '我的食材 - 看看现有食材能做什么' };
   }
 });

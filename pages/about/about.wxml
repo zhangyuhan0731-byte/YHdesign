@@ -1,10 +1,8 @@
 <!-- pages/about/about.wxml - 我的信息 -->
 <view class="page">
   <view class="profile anim">
-    <view class="avatar" bindtap="chooseAvatar">
-      <image wx:if="{{avatar}}" class="avatar-img" src="{{avatar}}" mode="aspectFill"/>
-      <view wx:else class="ic ic-user ic-w" style="width:46rpx;height:46rpx;"></view>
-      <view class="avatar-badge">换头像</view>
+    <view class="avatar">
+      <view class="ic ic-user ic-w" style="width:46rpx;height:46rpx;"></view>
     </view>
     <view class="info">
       <view class="name">{{nickname || '未命名小伙伴'}}</view>

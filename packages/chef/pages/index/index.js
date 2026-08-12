@@ -191,5 +191,16 @@ Page({
       patch.visibleRecipes = tagFavorited(this.filteredRecipes.slice(0, len), favIds);
     }
     this.setData(patch);
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '厨神 - 368道菜照着做',
+      path: '/packages/chef/pages/index/index'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '厨神 - 368道菜照着做' };
   }
 });

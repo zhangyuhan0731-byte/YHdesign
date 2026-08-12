@@ -73,5 +73,16 @@ Page({
     const muted = !this.data.muted;
     sound.setMuted(muted);
     this.setData({ muted });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '每日抽签 - 抽一支今日灵感签',
+      path: '/pages/draw/draw'
+    };
+  },
+
+  onShareTimeline() {
+    return { title: '每日抽签 - 抽一支今日灵感签' };
   }
 });
