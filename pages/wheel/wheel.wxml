@@ -82,7 +82,7 @@
 
   <!-- 新增模板弹层 -->
   <view class="mask {{showTplSheet ? 'show' : ''}}" bindtap="closeTplSheet"></view>
-  <view class="sheet input-sheet {{showTplSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
+  <view class="sheet input-sheet {{showTplSheet ? 'show' : ''}}" style="{{showTplSheet ? 'bottom:' + kbHeight + 'px' : ''}}" catchtap="stopPropagation">
     <view class="sheet-head">
       <text class="sheet-title">保存为自定义模板</text>
       <text class="sheet-close" bindtap="closeTplSheet">×</text>

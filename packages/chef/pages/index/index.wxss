@@ -65,7 +65,7 @@
 
 .recipe-column { flex: 1; min-width: 0; }
 .result-head { display: flex; align-items: center; justify-content: space-between; min-height: 58rpx; padding: 0 4rpx 10rpx; }
-.result-title { color: var(--ink); font-size: 28rpx; font-weight: 900; }
+.result-title { color: var(--ink); font-size: 28rpx; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .result-count { color: var(--muted); font-size: 21rpx; font-weight: 700; }
 
 .recipe-card { position: relative; padding: 20rpx; }
@@ -139,7 +139,12 @@
 .shuffle-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 7rpx;
+  width: auto;
+  min-width: 0;
+  flex: none;
+  white-space: nowrap;
   height: 52rpx;
   margin: 0;
   padding: 0 18rpx;

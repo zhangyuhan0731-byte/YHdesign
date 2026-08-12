@@ -312,12 +312,18 @@ textarea.field { height: 200rpx; line-height: 1.6; }
   padding: 24rpx 24rpx 0;
 }
 .sheet.show { transform: translateY(0); }
-/* 输入型弹层：高度自适应内容，不强制撑满屏幕 */
+/* 输入型弹层：高度自适应内容，不强制撑满屏幕
+   安卓上 transform 祖先会导致原生 input/textarea 定位错乱（键盘弹起时输入框错位/穿透），
+   故输入型弹层改用 bottom 定位与滑入动画，彻底不使用 transform */
 .sheet.input-sheet {
   min-height: auto;
   max-height: 85vh;
   padding-bottom: 16rpx;
+  transform: none;
+  bottom: -110%;
+  transition: bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.sheet.input-sheet.show { transform: none; bottom: 0; }
 .input-sheet .sheet-scroll {
   flex: 1;
   max-height: calc(85vh - 180rpx);
