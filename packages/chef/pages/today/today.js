@@ -48,12 +48,16 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '今日菜谱 - 从368道菜里推荐',
+      title: '日常琐事，交给这个小工具集就对了',
+      imageUrl: '/images/share-cover.png',
       path: '/packages/chef/pages/today/today'
     };
   },
 
   onShareTimeline() {
-    return { title: '今日菜谱 - 从368道菜里推荐' };
+    return {
+      title: '日常琐事，交给这个小工具集就对了',
+      imageUrl: '/images/share-cover.png'
+    };
   }
 });

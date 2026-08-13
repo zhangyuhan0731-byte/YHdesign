@@ -72,12 +72,16 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '敲木鱼 - 安静敲一敲木鱼',
+      title: '日常琐事，交给这个小工具集就对了',
+      imageUrl: '/images/share-cover.png',
       path: '/pages/woodfish/woodfish'
     };
   },
 
   onShareTimeline() {
-    return { title: '敲木鱼 - 安静敲一敲木鱼' };
+    return {
+      title: '日常琐事，交给这个小工具集就对了',
+      imageUrl: '/images/share-cover.png'
+    };
   }
 });

@@ -317,12 +317,16 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '幸运转盘 - 选择困难症救星',
+      title: '日常琐事，交给这个小工具集就对了',
+      imageUrl: '/images/share-cover.png',
       path: '/pages/wheel/wheel'
     };
   },
 
   onShareTimeline() {
-    return { title: '幸运转盘 - 选择困难症救星' };
+    return {
+      title: '日常琐事，交给这个小工具集就对了',
+      imageUrl: '/images/share-cover.png'
+    };
   }
 });

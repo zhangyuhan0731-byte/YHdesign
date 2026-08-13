@@ -403,12 +403,16 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '体重记录 - 轻松追踪变化',
+      title: '日常琐事，交给这个小工具集就对了',
+      imageUrl: '/images/share-cover.png',
       path: '/pages/weight/weight'
     };
   },
 
   onShareTimeline() {
-    return { title: '体重记录 - 轻松追踪变化' };
+    return {
+      title: '日常琐事，交给这个小工具集就对了',
+      imageUrl: '/images/share-cover.png'
+    };
   }
 });

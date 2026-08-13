@@ -204,12 +204,16 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '心情日记 - 每天记一句心情',
+      title: '日常琐事，交给这个小工具集就对了',
+      imageUrl: '/images/share-cover.png',
       path: '/pages/mood/mood'
     };
   },
 
   onShareTimeline() {
-    return { title: '心情日记 - 每天记一句心情' };
+    return {
+      title: '日常琐事，交给这个小工具集就对了',
+      imageUrl: '/images/share-cover.png'
+    };
   }
 });
