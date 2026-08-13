@@ -49,7 +49,7 @@ Page({
   onShareAppMessage() {
     return {
       title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png',
+      imageUrl: '/images/share-cover.jpg',
       path: '/packages/chef/pages/today/today'
     };
   },
@@ -57,7 +57,7 @@ Page({
   onShareTimeline() {
     return {
       title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png'
+      imageUrl: '/images/share-cover.jpg'
     };
   }
 });

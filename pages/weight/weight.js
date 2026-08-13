@@ -404,7 +404,7 @@ Page({
   onShareAppMessage() {
     return {
       title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png',
+      imageUrl: '/images/share-cover.jpg',
       path: '/pages/weight/weight'
     };
   },
@@ -412,7 +412,7 @@ Page({
   onShareTimeline() {
     return {
       title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png'
+      imageUrl: '/images/share-cover.jpg'
     };
   }
 });
