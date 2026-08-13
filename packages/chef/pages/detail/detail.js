@@ -43,7 +43,7 @@ Page({
     var recipe = this.data.recipe;
     return {
       title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.jpg',
+      imageUrl: '/images/share-cover.png',
       path: '/packages/chef/pages/detail/detail?id=' + (recipe ? recipe.id : '')
     };
   },
@@ -52,7 +52,7 @@ Page({
     var recipe = this.data.recipe;
     return {
       title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.jpg'
+      imageUrl: '/images/share-cover.png'
     };
   }
 });
