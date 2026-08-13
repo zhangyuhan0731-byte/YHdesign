@@ -195,12 +195,13 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '厨神 - 368道菜照着做',
-      path: '/packages/chef/pages/index/index'
+      title: '日常琐事，交给这个小工具集就对了',
+      path: '/packages/chef/pages/index/index',
+      imageUrl: '/images/share-cover.jpg'
     };
   },
 
   onShareTimeline() {
-    return { title: '厨神 - 368道菜照着做' };
+    return { title: '日常琐事，交给这个小工具集就对了', imageUrl: '/images/share-cover.jpg' };
   }
 });

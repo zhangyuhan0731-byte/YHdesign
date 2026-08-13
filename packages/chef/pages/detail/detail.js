@@ -42,13 +42,14 @@ Page({
   onShareAppMessage() {
     var recipe = this.data.recipe;
     return {
-      title: recipe ? recipe.name + ' - 厨神' : '厨神 - 368道菜照着做',
-      path: '/packages/chef/pages/detail/detail?id=' + (recipe ? recipe.id : '')
+      title: '日常琐事，交给这个小工具集就对了',
+      path: '/packages/chef/pages/detail/detail?id=' + (recipe ? recipe.id : ''),
+      imageUrl: '/images/share-cover.jpg'
     };
   },
 
   onShareTimeline() {
     var recipe = this.data.recipe;
-    return { title: recipe ? recipe.name + ' - 厨神' : '厨神 - 368道菜照着做' };
+    return { title: '日常琐事，交给这个小工具集就对了', imageUrl: '/images/share-cover.jpg' };
   }
 });

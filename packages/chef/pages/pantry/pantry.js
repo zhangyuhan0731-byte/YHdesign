@@ -172,12 +172,13 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '我的食材 - 看看现有食材能做什么',
-      path: '/packages/chef/pages/pantry/pantry'
+      title: '日常琐事，交给这个小工具集就对了',
+      path: '/packages/chef/pages/pantry/pantry',
+      imageUrl: '/images/share-cover.jpg'
     };
   },
 
   onShareTimeline() {
-    return { title: '我的食材 - 看看现有食材能做什么' };
+    return { title: '日常琐事，交给这个小工具集就对了', imageUrl: '/images/share-cover.jpg' };
   }
 });

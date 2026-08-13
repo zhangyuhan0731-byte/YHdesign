@@ -44,12 +44,13 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '星座匹配 - 看看你们的契合度',
-      path: '/pages/constellation/constellation'
+      title: '日常琐事，交给这个小工具集就对了',
+      path: '/pages/constellation/constellation',
+      imageUrl: '/images/share-cover.jpg'
     };
   },
 
   onShareTimeline() {
-    return { title: '星座匹配 - 看看你们的契合度' };
+    return { title: '日常琐事，交给这个小工具集就对了', imageUrl: '/images/share-cover.jpg' };
   }
 });

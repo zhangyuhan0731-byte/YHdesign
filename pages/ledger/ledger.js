@@ -438,13 +438,14 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '记账本 - 收入支出轻松记',
-      path: '/pages/ledger/ledger'
+      title: '日常琐事，交给这个小工具集就对了',
+      path: '/pages/ledger/ledger',
+      imageUrl: '/images/share-cover.jpg'
     };
   },
 
   onShareTimeline() {
-    return { title: '记账本 - 收入支出轻松记' };
+    return { title: '日常琐事，交给这个小工具集就对了', imageUrl: '/images/share-cover.jpg' };
   }
 });
 

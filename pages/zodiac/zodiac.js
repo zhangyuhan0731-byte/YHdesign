@@ -37,12 +37,13 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '生肖匹配 - 属相关系轻松查',
-      path: '/pages/zodiac/zodiac'
+      title: '日常琐事，交给这个小工具集就对了',
+      path: '/pages/zodiac/zodiac',
+      imageUrl: '/images/share-cover.jpg'
     };
   },
 
   onShareTimeline() {
-    return { title: '生肖匹配 - 属相关系轻松查' };
+    return { title: '日常琐事，交给这个小工具集就对了', imageUrl: '/images/share-cover.jpg' };
   }
 });

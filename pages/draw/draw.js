@@ -77,12 +77,13 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '每日抽签 - 抽一支今日灵感签',
-      path: '/pages/draw/draw'
+      title: '日常琐事，交给这个小工具集就对了',
+      path: '/pages/draw/draw',
+      imageUrl: '/images/share-cover.jpg'
     };
   },
 
   onShareTimeline() {
-    return { title: '每日抽签 - 抽一支今日灵感签' };
+    return { title: '日常琐事，交给这个小工具集就对了', imageUrl: '/images/share-cover.jpg' };
   }
 });

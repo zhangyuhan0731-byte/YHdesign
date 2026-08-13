@@ -290,12 +290,13 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '喝水提醒 - 今天喝够了吗',
-      path: '/pages/water/water'
+      title: '日常琐事，交给这个小工具集就对了',
+      path: '/pages/water/water',
+      imageUrl: '/images/share-cover.jpg'
     };
   },
 
   onShareTimeline() {
-    return { title: '喝水提醒 - 今天喝够了吗' };
+    return { title: '日常琐事，交给这个小工具集就对了', imageUrl: '/images/share-cover.jpg' };
   }
 });
