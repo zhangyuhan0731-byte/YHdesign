@@ -208,16 +208,12 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png',
+      title: '备忘录 - 随手保存小事情',
       path: '/pages/memo/memo'
     };
   },
 
   onShareTimeline() {
-    return {
-      title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png'
-    };
+    return { title: '备忘录 - 随手保存小事情' };
   }
 });

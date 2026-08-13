@@ -100,16 +100,12 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png',
+      title: '倒数日记 - 重要日子不忘记',
       path: '/pages/countdown/countdown'
     };
   },
 
   onShareTimeline() {
-    return {
-      title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png'
-    };
+    return { title: '倒数日记 - 重要日子不忘记' };
   }
 });

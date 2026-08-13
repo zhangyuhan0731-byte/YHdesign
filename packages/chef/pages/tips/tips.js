@@ -44,16 +44,12 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png',
+      title: '厨房小贴士 - 烹饪技巧与安全知识',
       path: '/packages/chef/pages/tips/tips'
     };
   },
 
   onShareTimeline() {
-    return {
-      title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png'
-    };
+    return { title: '厨房小贴士 - 烹饪技巧与安全知识' };
   }
 });

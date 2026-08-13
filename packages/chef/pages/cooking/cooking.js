@@ -202,17 +202,13 @@ Page({
   onShareAppMessage() {
     var recipe = this.data.recipe;
     return {
-      title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png',
+      title: recipe ? '正在做' + recipe.name + ' - 厨神' : '厨神 - 368道菜照着做',
       path: '/packages/chef/pages/cooking/cooking?id=' + (recipe ? recipe.id : '')
     };
   },
 
   onShareTimeline() {
     var recipe = this.data.recipe;
-    return {
-      title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png'
-    };
+    return { title: recipe ? '正在做' + recipe.name + ' - 厨神' : '厨神 - 368道菜照着做' };
   }
 });

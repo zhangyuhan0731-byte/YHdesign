@@ -97,16 +97,12 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png',
-      path: '/pages/home/home',
+      title: '趣玩小工具 - 实用小工具合集',
+      path: '/pages/home/home'
     };
   },
 
   onShareTimeline() {
-    return {
-      title: '日常琐事，交给这个小工具集就对了',
-      imageUrl: '/images/share-cover.png'
-    };
+    return { title: '趣玩小工具 - 实用小工具合集' };
   }
 });
