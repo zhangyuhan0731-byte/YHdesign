@@ -323,7 +323,7 @@ textarea.field { height: 200rpx; line-height: 1.6; }
   bottom: -110%;
   transition: bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.sheet.input-sheet.show { transform: none; bottom: 0; }
+.sheet.input-sheet.show { transform: none; bottom: var(--kb, 0px); }
 .input-sheet .sheet-scroll {
   flex: 1;
   max-height: calc(85vh - 180rpx);

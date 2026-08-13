@@ -75,7 +75,7 @@
 
   <!-- 添加账单弹层 -->
   <view class="mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
-  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
+  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="--kb: {{kbHeight}}px;" catchtap="stopPropagation">
     <view class="sheet-head">
       <text class="sheet-title">添加账单</text>
       <text class="sheet-close" bindtap="closeSheet">×</text>
@@ -129,7 +129,7 @@
 
   <!-- 分类管理弹层 -->
   <view class="mask cate-mask {{showCateSheet ? 'show' : ''}}" bindtap="closeCateSheet"></view>
-  <view class="sheet input-sheet cate-sheet {{showCateSheet ? 'show' : ''}}" style="bottom: {{kbHeight}}px;" catchtap="stopPropagation">
+  <view class="sheet input-sheet cate-sheet {{showCateSheet ? 'show' : ''}}" style="--kb: {{kbHeight}}px;" catchtap="stopPropagation">
     <view class="sheet-head">
       <text class="sheet-title">管理分类</text>
       <text class="sheet-close" bindtap="closeCateSheet">×</text>
