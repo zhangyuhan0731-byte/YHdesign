@@ -59,7 +59,12 @@
           <text class="dot">·</text>
           <text>{{item.date}}</text>
         </view>
-        <view class="bill-note" wx:if="{{item.note}}">{{item.note}}</view>
+        <view class="bill-eval" wx:if="{{item.evalLabel}}"
+              style="color:{{item.evalColor}};background:{{item.evalBg}};">
+          <view class="bill-eval-dot" style="background:{{item.evalColor}};"></view>
+          <text>{{item.evalLabel}}</text>
+        </view>
+        <view class="bill-note" wx:elif="{{item.note}}">{{item.note}}</view>
       </view>
       <view class="bill-delete" bindtap="removeBill" data-id="{{item.id}}">
         <view class="ic ic-close" style="width:24rpx;height:24rpx;"></view>
@@ -75,7 +80,7 @@
 
   <!-- 添加账单弹层 -->
   <view class="mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
-  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="--kb: {{kbHeight}}px;" catchtap="stopPropagation">
+  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="{{showSheet ? 'bottom:' + kbHeight + 'px' : ''}}">
     <view class="sheet-head">
       <text class="sheet-title">添加账单</text>
       <text class="sheet-close" bindtap="closeSheet">×</text>
@@ -116,20 +121,47 @@
         </view>
       </picker>
 
-      <view class="field-label">备注</view>
-      <view class="field-card">
-        <input class="field" placeholder="写点备注，可不填" value="{{form.note}}"
-               adjust-position="{{false}}"
-               bindinput="onNoteInput" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" maxlength="40" />
+      <view class="field-label">评价</view>
+      <view class="eval-entry {{form.note ? 'has-value' : ''}}" bindtap="openEvalPicker">
+        <block wx:if="{{evalMeta}}">
+          <view class="eval-entry-dot" style="background:{{evalMeta.color}};box-shadow:0 0 0 6rpx {{evalMeta.bg}};"></view>
+          <text class="eval-entry-name" style="color:{{evalMeta.color}}">{{evalMeta.name}}</text>
+          <text class="eval-entry-sub">{{evalMeta.sub}}</text>
+        </block>
+        <block wx:else>
+          <text class="eval-entry-placeholder">为这次消费打个标签</text>
+        </block>
+        <text class="eval-entry-arrow">›</text>
       </view>
     </scroll-view>
 
     <button class="btn btn-primary btn-block save-btn" bindtap="saveBill">保存账单</button>
   </view>
 
+  <!-- 评价选择弹层 -->
+  <view class="mask eval-mask {{showEvalSheet ? 'show' : ''}}" bindtap="closeEvalSheet"></view>
+  <view class="sheet eval-sheet {{showEvalSheet ? 'show' : ''}}">
+    <view class="sheet-head">
+      <text class="sheet-title">你认为这次消费</text>
+      <text class="sheet-close" bindtap="closeEvalSheet">×</text>
+    </view>
+    <view class="eval-list">
+      <view class="eval-card {{form.note === item.key ? 'active' : ''}}"
+            wx:for="{{evaluationOptions}}" wx:key="key"
+            data-key="{{item.key}}" bindtap="onEvalPick">
+        <view class="eval-dot" style="background:{{item.color}};box-shadow:0 0 0 8rpx {{item.bg}};"></view>
+        <view class="eval-text">
+          <view class="eval-name" style="color:{{item.color}}">{{item.name}}</view>
+          <view class="eval-sub">{{item.sub}}</view>
+        </view>
+        <view wx:if="{{form.note === item.key}}" class="eval-check" style="color:{{item.color}}">✓</view>
+      </view>
+    </view>
+  </view>
+
   <!-- 分类管理弹层 -->
   <view class="mask cate-mask {{showCateSheet ? 'show' : ''}}" bindtap="closeCateSheet"></view>
-  <view class="sheet input-sheet cate-sheet {{showCateSheet ? 'show' : ''}}" style="--kb: {{kbHeight}}px;" catchtap="stopPropagation">
+  <view class="sheet input-sheet cate-sheet {{showCateSheet ? 'show' : ''}}" style="{{showCateSheet ? 'bottom:' + kbHeight + 'px' : ''}}">
     <view class="sheet-head">
       <text class="sheet-title">管理分类</text>
       <text class="sheet-close" bindtap="closeCateSheet">×</text>

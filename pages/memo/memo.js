@@ -88,6 +88,7 @@ Page({
     const now = Date.now();
     this.setData({
       showSheet: true,
+      kbHeight: 0,
       editingId: '',
       form: {
         title: '',
@@ -105,6 +106,7 @@ Page({
     const remindAt = m.remindAt || Date.now();
     this.setData({
       showSheet: true,
+      kbHeight: 0,
       editingId: id,
       form: {
         title: m.title,
@@ -115,7 +117,7 @@ Page({
     });
   },
 
-  closeSheet() { this.setData({ showSheet: false }); },
+  closeSheet() { this.setData({ showSheet: false, kbHeight: 0 }); },
 
   onField(e) {
     const f = e.currentTarget.dataset.field;
@@ -186,7 +188,7 @@ Page({
       });
     }
     save(list);
-    this.setData({ showSheet: false });
+    this.setData({ showSheet: false, kbHeight: 0 });
     this.refresh();
     wx.showToast({ title: '已保存', icon: 'success' });
   },

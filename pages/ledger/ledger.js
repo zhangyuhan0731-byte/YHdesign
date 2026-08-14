@@ -37,6 +37,19 @@ const CUSTOM_PALETTE = [
   { color: '#4caf7d', bg: '#e8f5ed' }
 ];
 
+// 评价四档（消费观），从"超值"到"亏损"，颜色按情感语义
+const EVALUATION_OPTIONS = [
+  { key: 'great',   name: '超值消费', sub: '物超所值', color: '#25a974', bg: '#eefbf4' },
+  { key: 'worth',   name: '合理消费', sub: '物有所值', color: '#2d7dd2', bg: '#edf5ff' },
+  { key: 'impulse', name: '冲动消费', sub: '可有可无', color: '#f4a62a', bg: '#fff5df' },
+  { key: 'loss',    name: '亏损消费', sub: '不太值得', color: '#e25d5d', bg: '#fdecea' }
+];
+
+function getEvalMeta(note) {
+  if (!note) return null;
+  return EVALUATION_OPTIONS.find((opt) => opt.key === note) || null;
+}
+
 function loadBills() {
   const list = getStorage(STORAGE_KEY, []);
   return Array.isArray(list) ? list : [];
@@ -120,10 +133,13 @@ Page({
     monthText: '',
     showSheet: false,
     showCateSheet: false,
+    showEvalSheet: false,
     kbHeight: 0,
     typeIndex: 0,
     types: TYPES,
     categories: EXPENSE_CATEGORIES,
+    evaluationOptions: EVALUATION_OPTIONS,
+    evalMeta: null,
     form: {
       amount: '',
       type: 'expense',
@@ -167,13 +183,18 @@ Page({
         const meta = getCategoryMeta(bill.category);
         const typeName = bill.type === 'income' ? '收入' : '支出';
         const sign = bill.type === 'income' ? '+' : '-';
+        const evalMeta = getEvalMeta(bill.note);
         return Object.assign({}, bill, {
           typeName,
           amountText: sign + money(bill.amount),
           cls: bill.type === 'income' ? 'income' : 'expense',
           cateIcon: meta.icon,
           cateColor: meta.color,
-          cateBg: meta.bg
+          cateBg: meta.bg,
+          evalLabel: evalMeta ? evalMeta.name : '',
+          evalColor: evalMeta ? evalMeta.color : '',
+          evalBg: evalMeta ? evalMeta.bg : '',
+          evalSub: evalMeta ? evalMeta.sub : ''
         });
       });
 
@@ -208,6 +229,7 @@ Page({
       kbHeight: 0,
       typeIndex: 0,
       categories,
+      evalMeta: null,
       form: {
         amount: '',
         type: 'expense',
@@ -220,6 +242,25 @@ Page({
 
   closeSheet() {
     this.setData({ showSheet: false, kbHeight: 0 });
+  },
+
+  // ---------- 评价 ----------
+  openEvalPicker() {
+    this.setData({ showEvalSheet: true });
+  },
+
+  closeEvalSheet() {
+    this.setData({ showEvalSheet: false });
+  },
+
+  onEvalPick(e) {
+    const key = e.currentTarget.dataset.key;
+    const meta = getEvalMeta(key);
+    this.setData({
+      'form.note': key,
+      evalMeta: meta,
+      showEvalSheet: false
+    });
   },
 
   onTypePick(e) {
@@ -240,10 +281,6 @@ Page({
 
   onAmountInput(e) {
     this.setData({ 'form.amount': e.detail.value });
-  },
-
-  onNoteInput(e) {
-    this.setData({ 'form.note': e.detail.value });
   },
 
   onDateChange(e) {

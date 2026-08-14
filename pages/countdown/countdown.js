@@ -39,6 +39,7 @@ Page({
   openAdd() {
     this.setData({
       showSheet: true,
+      kbHeight: 0,
       editingId: '',
       form: { title: '', date: today(), note: '' }
     });
@@ -50,12 +51,13 @@ Page({
     if (!m) return;
     this.setData({
       showSheet: true,
+      kbHeight: 0,
       editingId: id,
       form: { title: m.title, date: m.date, note: m.note || '' }
     });
   },
 
-  closeSheet() { this.setData({ showSheet: false }); },
+  closeSheet() { this.setData({ showSheet: false, kbHeight: 0 }); },
 
   onField(e) {
     const f = e.currentTarget.dataset.field;
@@ -79,7 +81,7 @@ Page({
       list.push({ id: genId(), title: f.title.trim(), date: f.date, note: f.note.trim() });
     }
     save(list);
-    this.setData({ showSheet: false });
+    this.setData({ showSheet: false, kbHeight: 0 });
     this.refresh();
   },
 

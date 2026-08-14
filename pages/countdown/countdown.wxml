@@ -40,7 +40,7 @@
   </view>
 
   <view class="mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
-  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="--kb: {{kbHeight}}px;">
+  <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="{{showSheet ? 'bottom:' + kbHeight + 'px' : ''}}">
     <view class="sheet-head">
       <text class="sheet-title">{{editingId ? '编辑倒数' : '新建倒数'}}</text>
       <text class="sheet-close" bindtap="closeSheet">×</text>

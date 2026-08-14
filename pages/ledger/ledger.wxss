@@ -378,3 +378,141 @@
 .cate-sheet-foot {
   padding-top: 18rpx;
 }
+
+/* ---------- 评价入口（添加账单弹层里） ---------- */
+.eval-entry {
+  display: flex;
+  align-items: center;
+  height: 88rpx;
+  padding: 0 22rpx;
+  border-radius: 20rpx;
+  background: #f7f4ee;
+  gap: 14rpx;
+}
+.eval-entry.has-value {
+  background: #fafbfd;
+  border: 2rpx solid rgba(45, 125, 210, 0.08);
+}
+.eval-entry-dot {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.eval-entry-name {
+  font-size: 28rpx;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.eval-entry-sub {
+  font-size: 23rpx;
+  color: var(--muted);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-left: 6rpx;
+}
+.eval-entry-placeholder {
+  flex: 1;
+  font-size: 26rpx;
+  color: var(--muted);
+}
+.eval-entry-arrow {
+  color: var(--muted);
+  font-size: 32rpx;
+  transform: rotate(90deg);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.eval-entry:active {
+  background: #efeae0;
+}
+
+/* ---------- 评价弹层 ---------- */
+.eval-mask { z-index: 55; }
+.eval-sheet {
+  z-index: 56;
+}
+.eval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  padding: 8rpx 0 10rpx;
+}
+.eval-card {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 22rpx 22rpx 22rpx 24rpx;
+  border-radius: 22rpx;
+  background: #faf8f4;
+  border: 2rpx solid transparent;
+  transition: transform 0.18s ease;
+}
+.eval-card.active {
+  background: #ffffff;
+  border-color: rgba(45, 125, 210, 0.18);
+  box-shadow: 0 8rpx 18rpx rgba(32, 37, 50, 0.05);
+}
+.eval-card:active {
+  transform: scale(0.98);
+}
+.eval-dot {
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.eval-text {
+  flex: 1;
+  min-width: 0;
+}
+.eval-name {
+  font-size: 28rpx;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.eval-sub {
+  margin-top: 6rpx;
+  font-size: 23rpx;
+  color: var(--muted);
+}
+.eval-check {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.85);
+  flex-shrink: 0;
+}
+
+/* ---------- 账单列表里的评价彩色标签 ---------- */
+.bill-eval {
+  display: inline-flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-top: 10rpx;
+  padding: 6rpx 14rpx 6rpx 8rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 700;
+  max-width: 100%;
+}
+.bill-eval-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.bill-eval text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
