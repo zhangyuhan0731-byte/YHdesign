@@ -1,21 +1,32 @@
 <!-- pages/ledger/ledger.wxml -->
 <view class="page">
-  <view class="ledger-head anim">
-    <view>
-      <view class="head-kicker">LEDGER</view>
-      <view class="head-title">记账本</view>
-      <view class="head-sub">快速记录每一笔收入和支出</view>
+  <view class="summary card anim">
+    <view class="month-nav">
+      <view class="month-group">
+        <view class="month-arrow {{canPrev ? '' : 'disabled'}}" bindtap="prevMonth">‹</view>
+        <picker mode="date" fields="month" value="{{viewMonth}}" start="2000-01" end="{{maxMonth}}"
+                bindchange="onMonthChange">
+          <view class="month-current">
+            <text>{{monthText}}</text>
+            <text class="month-caret">▾</text>
+          </view>
+        </picker>
+        <view class="month-arrow {{canNext ? '' : 'disabled'}}" bindtap="nextMonth">›</view>
+      </view>
+      <view class="balance-chip {{balanceOn ? (balanceNeg ? 'neg' : 'on') : 'off'}}" bindtap="goBalance">
+        <block wx:if="{{balanceOn}}">
+          <text class="balance-chip-label">余额</text>
+          <text class="balance-chip-value">¥{{balanceText}}</text>
+        </block>
+        <block wx:else>
+          <text class="balance-chip-plus">＋</text>
+          <text class="balance-chip-off-text">余额</text>
+        </block>
+      </view>
     </view>
-    <view class="head-icon">
-      <view class="ic ic-ledger ic-w" style="width:48rpx;height:48rpx;"></view>
-    </view>
-  </view>
-
-  <view class="summary card anim" style="animation-delay:60ms">
     <view class="summary-top">
       <view>
-        <view class="summary-label">本月结余</view>
-        <view class="summary-month">{{monthText}}</view>
+        <view class="summary-label">结余</view>
       </view>
       <view class="balance">¥{{stats.balance}}</view>
     </view>
@@ -29,6 +40,30 @@
         <view class="item-value expense">¥{{stats.expense}}</view>
       </view>
     </view>
+    <!-- 月预算（弱化：一行轻提示，点击设置） -->
+    <view class="budget-lite" wx:if="{{budget > 0}}" catchtap="openBudgetSetting">
+      <view class="budget-lite-track">
+        <view class="budget-lite-bar {{budgetOver ? 'over' : ''}}" style="width:{{budgetPct}}%;"></view>
+      </view>
+      <view class="budget-lite-text {{budgetOver ? 'over' : ''}}">
+        月预算 ¥{{budgetText}} · {{budgetOver ? '已超支' : '剩余'}} ¥{{budgetLeftText}}（{{budgetPct}}%）
+      </view>
+      <view class="budget-lite-edit">修改</view>
+    </view>
+    <view class="budget-hint" wx:else bindtap="openBudgetSetting">设置月预算，守住钱包 ›</view>
+
+    <view class="stats-entry" bindtap="goStats">
+      <view class="stats-entry-icon">
+        <view class="mini-bar b1"></view>
+        <view class="mini-bar b2"></view>
+        <view class="mini-bar b3"></view>
+      </view>
+      <view class="stats-entry-text">
+        <view class="stats-entry-title">收支统计</view>
+        <view class="stats-entry-sub">月度趋势 · 分类构成 · 年度账单</view>
+      </view>
+      <text class="stats-entry-arrow">›</text>
+    </view>
   </view>
 
   <button class="btn btn-primary btn-block add-main anim" style="animation-delay:100ms" bindtap="openAdd">
@@ -40,41 +75,89 @@
       <view class="list-kicker">RECORDS</view>
       <view class="list-title">账单列表</view>
     </view>
-    <view class="list-count">{{bills.length}} 条</view>
+    <view class="list-tools">
+      <view class="list-count">{{stats.count}} 条</view>
+      <view class="search-btn {{searchOpen ? 'active' : ''}}" bindtap="openSearch">
+        <view class="ic ic-search" style="width:30rpx;height:30rpx;"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="search-row" wx:if="{{searchOpen}}">
+    <view class="search-box">
+      <view class="ic ic-search" style="width:26rpx;height:26rpx;"></view>
+      <input class="search-input" placeholder="搜索分类 / 备注 / 金额" value="{{keyword}}"
+             confirm-type="search" bindinput="onKeywordInput" />
+      <view class="search-clear" wx:if="{{keyword}}" catchtap="clearKeyword">×</view>
+    </view>
+    <view class="search-cancel" bindtap="closeSearch">取消</view>
+  </view>
+
+  <view class="filter-tabs" wx:else>
+    <view class="filter-tab {{filterType === 'all' ? 'active' : ''}}" data-type="all" bindtap="setFilter">
+      全部 {{stats.count}}
+    </view>
+    <view class="filter-tab {{filterType === 'expense' ? 'active' : ''}}" data-type="expense" bindtap="setFilter">
+      支出 {{stats.expenseCount}}
+    </view>
+    <view class="filter-tab {{filterType === 'income' ? 'active' : ''}}" data-type="income" bindtap="setFilter">
+      收入 {{stats.incomeCount}}
+    </view>
   </view>
 
   <view class="bill-list">
-    <view class="bill-card card anim" wx:for="{{bills}}" wx:key="id"
-          style="animation-delay:{{index * 35}}ms">
-      <view class="cate-avatar" style="color:{{item.cateColor}};background:{{item.cateBg}}">
-        {{item.cateIcon}}
+    <block wx:for="{{renderedGroups}}" wx:for-item="group" wx:for-index="groupIndex" wx:key="date">
+      <view class="day-head">
+        <text class="day-label">{{group.label}}</text>
+        <text class="day-sum" wx:if="{{group.sumText}}">{{group.sumText}}</text>
       </view>
-      <view class="bill-main">
-        <view class="bill-row">
-          <view class="bill-title">{{item.category}}</view>
-          <view class="bill-amount {{item.cls}}">{{item.amountText}}</view>
+      <view class="bill-card card anim" wx:for="{{group.items}}" wx:for-item="item" wx:key="id"
+            style="animation-delay:{{(groupIndex * 3 + index) * 30}}ms"
+            data-id="{{item.id}}" bindtap="onBillTap">
+        <view class="cate-avatar" style="color:{{item.cateColor}};background:{{item.cateBg}}">
+          {{item.cateIcon}}
         </view>
-        <view class="bill-meta">
-          <text>{{item.typeName}}</text>
-          <text class="dot">·</text>
-          <text>{{item.date}}</text>
+        <view class="bill-main">
+          <view class="bill-row">
+            <view class="bill-title">{{item.category}}</view>
+            <view class="bill-amount {{item.cls}}">{{item.amountText}}</view>
+          </view>
+          <view class="bill-meta">
+            <text>{{item.typeName}}</text>
+            <text class="dot">·</text>
+            <text>{{item.date}}</text>
+          </view>
+          <view class="bill-eval" wx:if="{{item.evalLabel}}"
+                style="color:{{item.evalColor}};background:{{item.evalBg}};">
+            <view class="bill-eval-dot" style="background:{{item.evalColor}};"></view>
+            <text>{{item.evalLabel}}</text>
+          </view>
+          <view class="bill-note" wx:if="{{item.remarkText}}">{{item.remarkText}}</view>
         </view>
-        <view class="bill-eval" wx:if="{{item.evalLabel}}"
-              style="color:{{item.evalColor}};background:{{item.evalBg}};">
-          <view class="bill-eval-dot" style="background:{{item.evalColor}};"></view>
-          <text>{{item.evalLabel}}</text>
+        <view class="bill-delete" catchtap="removeBill" data-id="{{item.id}}">
+          <view class="ic ic-close" style="width:24rpx;height:24rpx;"></view>
         </view>
-        <view class="bill-note" wx:elif="{{item.note}}">{{item.note}}</view>
       </view>
-      <view class="bill-delete" bindtap="removeBill" data-id="{{item.id}}">
-        <view class="ic ic-close" style="width:24rpx;height:24rpx;"></view>
-      </view>
+    </block>
+
+    <view class="load-more" wx:if="{{renderedGroups.length > 0 && hasMore}}">
+      <view class="load-dot"></view><view class="load-dot"></view><view class="load-dot"></view>
+      <text>上拉加载更多</text>
+    </view>
+    <view class="load-done" wx:elif="{{renderedGroups.length > 0}}">
+      已加载全部 · 共 {{renderedCount}} 条
     </view>
 
-    <view class="empty" wx:if="{{bills.length === 0}}">
+    <view class="empty" wx:if="{{renderedGroups.length === 0}}">
       <view class="empty-ic ic ic-ledger" style="width:150rpx;height:150rpx;"></view>
-      <view class="tip">还没有账单</view>
-      <view class="tip-sub">点「记一笔」开始记录今天的收支</view>
+      <block wx:if="{{keyword}}">
+        <view class="tip">没有找到「{{keyword}}」相关账单</view>
+        <view class="tip-sub">换个关键词试试，或清空搜索看看全部账单</view>
+      </block>
+      <block wx:else>
+        <view class="tip">{{monthText}}暂无账单</view>
+        <view class="tip-sub">点「记一笔」开始记录收支，或切换月份看看</view>
+      </block>
     </view>
   </view>
 
@@ -82,7 +165,7 @@
   <view class="mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
   <view class="sheet input-sheet {{showSheet ? 'show' : ''}}" style="{{showSheet ? 'bottom:' + kbHeight + 'px' : ''}}">
     <view class="sheet-head">
-      <text class="sheet-title">添加账单</text>
+      <text class="sheet-title">{{formTitle}}</text>
       <text class="sheet-close" bindtap="closeSheet">×</text>
     </view>
 
@@ -121,6 +204,11 @@
         </view>
       </picker>
 
+      <view class="field-label">备注</view>
+      <input class="remark-input" placeholder="选填，最多50字" value="{{form.remark}}" maxlength="50"
+             adjust-position="{{false}}"
+             bindinput="onRemarkInput" bindfocus="onKbFocus" bindblur="onKbBlur" bindkeyboardheightchange="onKbChange" />
+
       <view class="field-label">评价</view>
       <view class="eval-entry {{form.note ? 'has-value' : ''}}" bindtap="openEvalPicker">
         <block wx:if="{{evalMeta}}">
@@ -135,14 +223,14 @@
       </view>
     </scroll-view>
 
-    <button class="btn btn-primary btn-block save-btn" bindtap="saveBill">保存账单</button>
+    <button class="btn btn-primary btn-block save-btn" bindtap="saveBill">{{saveText}}</button>
   </view>
 
   <!-- 评价选择弹层 -->
   <view class="mask eval-mask {{showEvalSheet ? 'show' : ''}}" bindtap="closeEvalSheet"></view>
   <view class="sheet eval-sheet {{showEvalSheet ? 'show' : ''}}">
     <view class="sheet-head">
-      <text class="sheet-title">你认为这次消费</text>
+      <text class="sheet-title">{{form.type === 'income' ? '这笔收入的来历' : '你认为这次消费'}}</text>
       <text class="sheet-close" bindtap="closeEvalSheet">×</text>
     </view>
     <view class="eval-list">
@@ -157,6 +245,25 @@
         <view wx:if="{{form.note === item.key}}" class="eval-check" style="color:{{item.color}}">✓</view>
       </view>
     </view>
+
+    <block wx:if="{{customEvals.length > 0}}">
+      <view class="eval-section">自定义</view>
+      <view class="eval-list">
+        <view class="eval-card {{form.note === item.key ? 'active' : ''}}"
+              wx:for="{{customEvals}}" wx:key="key"
+              data-key="{{item.key}}" bindtap="onEvalPick">
+          <view class="eval-dot" style="background:{{item.color}};box-shadow:0 0 0 8rpx {{item.bg}};"></view>
+          <view class="eval-text">
+            <view class="eval-name" style="color:{{item.color}}">{{item.name}}</view>
+          </view>
+          <view wx:if="{{form.note === item.key}}" class="eval-check" style="color:{{item.color}}">✓</view>
+          <view class="eval-del" catchtap="deleteEval" data-name="{{item.key}}">×</view>
+        </view>
+      </view>
+    </block>
+
+    <view class="eval-add" bindtap="addEval">＋ 新增评价</view>
+    <view class="eval-clear" wx:if="{{form.note}}" bindtap="clearEval">清除评价</view>
   </view>
 
   <!-- 分类管理弹层 -->
@@ -175,12 +282,14 @@
               data-type="income" bindtap="onCateTypePick">收入</view>
       </view>
 
+      <view class="cate-tip">点 × 删除分类 · 已被账单使用的分类无法删除 · 「恢复默认」可找回默认分类</view>
+
       <view class="cate-chip-grid">
         <view class="cate-manage-chip {{item.isBuiltin ? 'builtin' : 'custom'}}"
               wx:for="{{manageCategories}}" wx:key="name"
               style="color:{{item.meta.color}};background:{{item.meta.bg}};border-color:{{item.meta.color}}33">
           <text class="chip-text">{{item.name}}</text>
-          <view class="chip-del {{item.isBuiltin ? 'hidden' : ''}}" bindtap="deleteCustomCategory" data-name="{{item.name}}">
+          <view class="chip-del" catchtap="deleteCustomCategory" data-name="{{item.name}}">
             <text class="chip-del-x">×</text>
           </view>
         </view>

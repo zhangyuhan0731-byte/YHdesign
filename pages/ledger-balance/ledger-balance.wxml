@@ -1,0 +1,110 @@
+<!-- pages/ledger-balance/ledger-balance.wxml -->
+<view class="page">
+  <!-- 已开启：余额总览 + 明细流水 -->
+  <block wx:if="{{opened}}">
+    <view class="bal-head anim">
+      <view class="bal-label">当前余额</view>
+      <view class="bal-amount {{balanceNeg ? 'neg' : ''}}">¥{{balanceText}}</view>
+      <view class="bal-today {{todayNetCls}}" wx:if="{{todayNetText}}">{{todayNetText}}</view>
+      <view class="bal-btns">
+        <view class="bal-btn main" bindtap="showAdjustDialog">调整余额</view>
+        <view class="bal-btn ghost" bindtap="closeBalance">关闭余额</view>
+      </view>
+    </view>
+
+    <view class="flow-card card anim" style="animation-delay:60ms">
+      <view class="flow-head">
+        <view class="flow-title">余额明细</view>
+        <view class="flow-note">{{totalCount}} 条 · 新的在上</view>
+      </view>
+
+      <view class="flow-list" wx:if="{{rendered.length > 0}}">
+        <view class="flow-item {{item.kind}}" wx:for="{{rendered}}" wx:key="key">
+          <view class="flow-avatar" style="{{item.avatarStyle}}">{{item.icon}}</view>
+          <view class="flow-main">
+            <view class="flow-line1">
+              <text class="flow-name">{{item.title}}</text>
+              <text class="flow-amount {{item.cls}}">{{item.amountText}}</text>
+            </view>
+            <view class="flow-line2">
+              <text class="flow-sub">{{item.subText}}</text>
+              <text class="flow-after">余额 ¥{{item.afterText}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="load-more" wx:if="{{hasMore}}">上拉加载更多</view>
+      <view class="load-done" wx:elif="{{rendered.length > 0}}">已加载全部</view>
+
+      <view class="empty" wx:if="{{rendered.length === 0}}">
+        <view class="empty-ic ic ic-ledger" style="width:130rpx;height:130rpx;"></view>
+        <view class="tip">还没有余额变动</view>
+        <view class="tip-sub">校准之后记的每一笔账，都会自动出现在这里</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 未开启：引导页 -->
+  <block wx:else>
+    <view class="bal-head anim">
+      <view class="bal-title">钱包余额</view>
+      <view class="bal-desc">开启后，每记一笔账余额自动联动</view>
+      <view class="bal-btns">
+        <view class="bal-btn main" bindtap="showAdjustDialog">开启余额</view>
+      </view>
+    </view>
+
+    <view class="card intro-card anim" style="animation-delay:60ms">
+      <view class="intro-item">
+        <view class="intro-ic">↻</view>
+        <view class="intro-text">
+          <view class="intro-title">自动联动</view>
+          <view class="intro-sub">记支出余额减、记收入余额加，删改账单实时更新</view>
+        </view>
+      </view>
+      <view class="intro-item">
+        <view class="intro-ic">⚖</view>
+        <view class="intro-text">
+          <view class="intro-title">随时校准</view>
+          <view class="intro-sub">零碎账想不起来？直接输入实际余额一键校准</view>
+        </view>
+      </view>
+      <view class="intro-item">
+        <view class="intro-ic">≡</view>
+        <view class="intro-text">
+          <view class="intro-title">明细可回溯</view>
+          <view class="intro-sub">每一笔怎么加、怎么减，校准历史一目了然</view>
+        </view>
+      </view>
+      <view class="intro-item last">
+        <view class="intro-ic">✕</view>
+        <view class="intro-text">
+          <view class="intro-title">不想用随时关</view>
+          <view class="intro-sub">关闭只清除余额，账单和统计完全不受影响</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 校准弹层 -->
+  <view class="mask {{showAdjust ? 'show' : ''}}" bindtap="cancelAdjust"></view>
+  <view class="sheet adjust-sheet {{showAdjust ? 'show' : ''}}">
+    <view class="sheet-head">
+      <text class="sheet-title">{{adjustTitle}}</text>
+      <text class="sheet-close" bindtap="cancelAdjust">×</text>
+    </view>
+    <view class="adjust-tip">
+      输入当前实际余额，支持负数（如 -120）。开启后每记一笔账自动联动，想不起来的零碎账随时再来校准。
+    </view>
+    <view class="adjust-input-card">
+      <text class="adjust-currency">¥</text>
+      <input class="adjust-input" type="text" value="{{adjustAmount}}"
+             placeholder="如 3500 或 -120" bindinput="onAdjustInput" />
+    </view>
+    <view class="adjust-btns">
+      <view class="adjust-btn cancel" bindtap="cancelAdjust">取消</view>
+      <view class="adjust-btn confirm" bindtap="confirmAdjust">确认</view>
+    </view>
+  </view>
+</view>

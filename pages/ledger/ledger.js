@@ -1,122 +1,16 @@
 // pages/ledger/ledger.js - 记账本（本地存储）
-const { getStorage, setStorage, today, genId } = require('../../utils/util');
-
-const STORAGE_KEY = 'ledger_bills';
-const CUSTOM_EXPENSE_KEY = 'ledger_categories_expense';
-const CUSTOM_INCOME_KEY = 'ledger_categories_income';
-const TYPES = [
-  { key: 'expense', name: '支出' },
-  { key: 'income', name: '收入' }
-];
-const EXPENSE_CATEGORIES = ['餐饮', '购物', '交通', '娱乐', '学习', '生活', '其他'];
-const INCOME_CATEGORIES = ['工资', '兼职', '红包', '其他'];
-const CATEGORY_META = {
-  餐饮: { icon: '食', color: '#f06f38', bg: '#fff1e8' },
-  购物: { icon: '购', color: '#e66a7a', bg: '#fff0f2' },
-  交通: { icon: '行', color: '#2d7dd2', bg: '#edf5ff' },
-  娱乐: { icon: '乐', color: '#7866d6', bg: '#f3f0ff' },
-  学习: { icon: '学', color: '#25a974', bg: '#eefbf4' },
-  生活: { icon: '家', color: '#f4a62a', bg: '#fff5df' },
-  其他: { icon: '记', color: '#8c94a3', bg: '#f0f4f6' },
-  工资: { icon: '薪', color: '#25a974', bg: '#eefbf4' },
-  兼职: { icon: '兼', color: '#2d7dd2', bg: '#edf5ff' },
-  红包: { icon: '红', color: '#e66a7a', bg: '#fff0f2' }
-};
-
-// 自定义分类的备选配色（与默认分类风格一致）
-const CUSTOM_PALETTE = [
-  { color: '#2d7dd2', bg: '#edf5ff' },
-  { color: '#25a974', bg: '#eefbf4' },
-  { color: '#f06f38', bg: '#fff1e8' },
-  { color: '#e66a7a', bg: '#fff0f2' },
-  { color: '#7866d6', bg: '#f3f0ff' },
-  { color: '#f4a62a', bg: '#fff5df' },
-  { color: '#3a9bd6', bg: '#e8f6ff' },
-  { color: '#9b6bd3', bg: '#f6f0ff' },
-  { color: '#e25d5d', bg: '#fdecea' },
-  { color: '#4caf7d', bg: '#e8f5ed' }
-];
-
-// 评价四档（消费观），从"超值"到"亏损"，颜色按情感语义
-const EVALUATION_OPTIONS = [
-  { key: 'great',   name: '超值消费', sub: '物超所值', color: '#25a974', bg: '#eefbf4' },
-  { key: 'worth',   name: '合理消费', sub: '物有所值', color: '#2d7dd2', bg: '#edf5ff' },
-  { key: 'impulse', name: '冲动消费', sub: '可有可无', color: '#f4a62a', bg: '#fff5df' },
-  { key: 'loss',    name: '亏损消费', sub: '不太值得', color: '#e25d5d', bg: '#fdecea' }
-];
-
-function getEvalMeta(note) {
-  if (!note) return null;
-  return EVALUATION_OPTIONS.find((opt) => opt.key === note) || null;
-}
-
-function loadBills() {
-  const list = getStorage(STORAGE_KEY, []);
-  return Array.isArray(list) ? list : [];
-}
-
-function saveBills(list) {
-  setStorage(STORAGE_KEY, list);
-}
-
-function loadCustomCategories(type) {
-  const key = type === 'income' ? CUSTOM_INCOME_KEY : CUSTOM_EXPENSE_KEY;
-  const list = getStorage(key, []);
-  return Array.isArray(list) ? list.filter((item) => typeof item === 'string' && item.trim()) : [];
-}
-
-function saveCustomCategories(type, list) {
-  const key = type === 'income' ? CUSTOM_INCOME_KEY : CUSTOM_EXPENSE_KEY;
-  setStorage(key, list);
-}
-
-function getCategories(type) {
-  const defaults = type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
-  const customs = loadCustomCategories(type);
-  // 去重并保持默认在前
-  const set = new Set(defaults);
-  customs.forEach((c) => set.add(c));
-  return Array.from(set);
-}
-
-function money(n) {
-  const value = Number(n) || 0;
-  return value.toFixed(2);
-}
-
-function monthKey(dateStr) {
-  return String(dateStr || '').slice(0, 7);
-}
-
-function currentMonth() {
-  return today().slice(0, 7);
-}
-
-function normalizeAmount(value) {
-  const amount = Number(String(value).replace(/[^\d.]/g, ''));
-  if (!Number.isFinite(amount)) return 0;
-  return Math.round(amount * 100) / 100;
-}
-
-// 为自定义分类生成稳定的图标/颜色
-function getCustomMeta(name) {
-  if (CATEGORY_META[name]) return CATEGORY_META[name];
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = ((hash << 5) - hash) + name.charCodeAt(i);
-    hash |= 0;
-  }
-  const palette = CUSTOM_PALETTE[Math.abs(hash) % CUSTOM_PALETTE.length];
-  return {
-    icon: name.charAt(0),
-    color: palette.color,
-    bg: palette.bg
-  };
-}
-
-function getCategoryMeta(name) {
-  return CATEGORY_META[name] || getCustomMeta(name);
-}
+const { today, genId } = require('../../utils/util');
+const {
+  TYPES, EXPENSE_CATEGORIES, EVALUATION_OPTIONS, INCOME_EVALUATION_OPTIONS,
+  loadBills, saveBills, loadBudget, saveBudget, getCurrentBalance,
+  loadCustomCategories, saveCustomCategories,
+  loadEvalCustom, saveEvalCustom,
+  loadHiddenCategories, saveHiddenCategories,
+  getCategories, isBuiltinCategory,
+  getEvalMeta, getCategoryMeta, money, moneyFmt, normalizeAmount,
+  monthKey, currentMonth, shiftMonth, formatMonthText, formatDayLabel,
+  summarize, billMatchesKeyword, paginateGroups
+} = require('../../utils/ledger');
 
 function buildManageList(type) {
   return getCategories(type).map((name) => ({
@@ -126,26 +20,53 @@ function buildManageList(type) {
   }));
 }
 
+// 当前类型的自定义评价（视图：文本即 key，配色稳定生成）
+function buildEvalCustomList(type) {
+  return loadEvalCustom(type).map((name) => getEvalMeta(name, type)).filter(Boolean);
+}
+
 Page({
   data: {
-    bills: [],
-    stats: { income: '0.00', expense: '0.00', balance: '0.00' },
+    renderedGroups: [],
+    renderedCount: 0,
+    hasMore: false,
+    stats: { income: '0.00', expense: '0.00', balance: '0.00', incomeCount: 0, expenseCount: 0, count: 0 },
+    viewMonth: '',
     monthText: '',
+    maxMonth: '',
+    canPrev: true,
+    canNext: false,
+    filterType: 'all',
+    searchOpen: false,
+    keyword: '',
+    budget: 0,
+    budgetText: '0.00',
+    budgetLeftText: '0.00',
+    budgetPct: 0,
+    budgetOver: false,
+    balanceOn: false,
+    balanceText: '0.00',
+    balanceNeg: false,
     showSheet: false,
     showCateSheet: false,
     showEvalSheet: false,
     kbHeight: 0,
+    editingId: '',
+    formTitle: '添加账单',
+    saveText: '保存账单',
     typeIndex: 0,
     types: TYPES,
     categories: EXPENSE_CATEGORIES,
-    evaluationOptions: EVALUATION_OPTIONS,
+    evaluationOptions: [],
+    customEvals: [],
     evalMeta: null,
     form: {
       amount: '',
       type: 'expense',
       category: EXPENSE_CATEGORIES[0],
       date: '',
-      note: ''
+      note: '',
+      remark: ''
     },
     cateForm: {
       type: 'expense',
@@ -155,8 +76,41 @@ Page({
     usedMap: {}
   },
 
+  // 当前月的完整视图模型与分组结果（仅内存，不进 setData）
+  _monthBills: [],
+  _allGroups: [],
+
+  onLoad() {
+    const month = currentMonth();
+    this.setData({
+      viewMonth: month,
+      monthText: formatMonthText(month),
+      maxMonth: month,
+      evaluationOptions: EVALUATION_OPTIONS,
+      customEvals: buildEvalCustomList('expense')
+    });
+  },
+
   onShow() {
     this.refresh();
+  },
+
+  // 触底追加下一页（滚动加载）
+  onReachBottom() {
+    if (!this.data.hasMore) return;
+    const page = (this._page || 1) + 1;
+    const result = paginateGroups(this._allGroups, page);
+    const appended = result.groups.slice(this.data.renderedGroups.length);
+    if (!appended.length) {
+      this.setData({ hasMore: false });
+      return;
+    }
+    this._page = page;
+    this.setData({
+      renderedGroups: this.data.renderedGroups.concat(appended),
+      renderedCount: this.data.renderedCount + appended.reduce((s, g) => s + g.items.length, 0),
+      hasMore: result.hasMore
+    });
   },
 
   onKbFocus(e) {
@@ -172,7 +126,10 @@ Page({
     this.setData({ kbHeight: 0 });
   },
 
+  // 读存储 -> 视图模型 -> 当月汇总，然后交给 applyView 渲染
   refresh() {
+    const viewMonth = this.data.viewMonth || currentMonth();
+
     const bills = loadBills()
       .slice()
       .sort((a, b) => {
@@ -183,7 +140,7 @@ Page({
         const meta = getCategoryMeta(bill.category);
         const typeName = bill.type === 'income' ? '收入' : '支出';
         const sign = bill.type === 'income' ? '+' : '-';
-        const evalMeta = getEvalMeta(bill.note);
+        const evalMeta = getEvalMeta(bill.note, bill.type);
         return Object.assign({}, bill, {
           typeName,
           amountText: sign + money(bill.amount),
@@ -194,34 +151,170 @@ Page({
           evalLabel: evalMeta ? evalMeta.name : '',
           evalColor: evalMeta ? evalMeta.color : '',
           evalBg: evalMeta ? evalMeta.bg : '',
-          evalSub: evalMeta ? evalMeta.sub : ''
+          evalSub: evalMeta ? evalMeta.sub : '',
+          remarkText: bill.remark || ''
         });
       });
 
-    const month = currentMonth();
-    let income = 0;
-    let expense = 0;
-    bills.forEach((bill) => {
-      if (monthKey(bill.date) !== month) return;
-      if (bill.type === 'income') income += Number(bill.amount) || 0;
-      else expense += Number(bill.amount) || 0;
-    });
-
+    // 全量账单的分类占用（删除自定义分类前校验用）
     const usedMap = {};
     bills.forEach((bill) => { usedMap[bill.type + '::' + bill.category] = true; });
 
+    // 当前浏览月份的账单与汇总
+    this._monthBills = bills.filter((bill) => monthKey(bill.date) === viewMonth);
+    const sum = summarize(this._monthBills);
+
+    // 月预算进度 + 钱包余额（右上角胶囊入口）
+    const budget = loadBudget();
+    const used = sum.expense;
+    const budgetPct = budget > 0 ? Math.min(100, Math.round((used / budget) * 100)) : 0;
+    const balanceValue = getCurrentBalance(bills);
+
+    const cur = currentMonth();
     this.setData({
-      bills,
-      monthText: month.replace('-', '年') + '月',
+      monthText: formatMonthText(viewMonth),
+      canPrev: viewMonth > '2000-01',
+      canNext: viewMonth < cur,
       stats: {
-        income: money(income),
-        expense: money(expense),
-        balance: money(income - expense)
+        income: moneyFmt(sum.income),
+        expense: moneyFmt(sum.expense),
+        balance: moneyFmt(sum.income - sum.expense),
+        incomeCount: sum.incomeCount,
+        expenseCount: sum.expenseCount,
+        count: sum.incomeCount + sum.expenseCount
       },
+      budget,
+      budgetText: moneyFmt(budget),
+      budgetLeftText: moneyFmt(Math.abs(budget - used)),
+      budgetPct,
+      budgetOver: budget > 0 && used > budget,
+      balanceOn: balanceValue !== null,
+      balanceText: balanceValue === null ? '0.00' : moneyFmt(balanceValue),
+      balanceNeg: balanceValue !== null && balanceValue < 0,
       usedMap
+    });
+    this.applyView(true);
+  },
+
+  // 类型筛选 + 搜索 -> 分组 -> 分页渲染（resetPage 为 true 时回到第一页）
+  applyView(resetPage) {
+    const { filterType, keyword } = this.data;
+    let list = this._monthBills;
+    if (filterType !== 'all') list = list.filter((bill) => bill.type === filterType);
+    if (String(keyword || '').trim()) list = list.filter((bill) => billMatchesKeyword(bill, keyword));
+
+    const groupMap = {};
+    const groupOrder = [];
+    list.forEach((bill) => {
+      if (!groupMap[bill.date]) {
+        groupMap[bill.date] = [];
+        groupOrder.push(bill.date);
+      }
+      groupMap[bill.date].push(bill);
+    });
+    this._allGroups = groupOrder.map((date) => {
+      const daySum = summarize(groupMap[date]);
+      const parts = [];
+      if (daySum.expense > 0) parts.push(`支出 ¥${money(daySum.expense)}`);
+      if (daySum.income > 0) parts.push(`收入 ¥${money(daySum.income)}`);
+      return {
+        date,
+        label: formatDayLabel(date),
+        sumText: parts.join(' · '),
+        items: groupMap[date]
+      };
+    });
+
+    if (resetPage) this._page = 1;
+    const result = paginateGroups(this._allGroups, this._page);
+    this.setData({
+      renderedGroups: result.groups,
+      renderedCount: result.groups.reduce((s, g) => s + g.items.length, 0),
+      hasMore: result.hasMore
     });
   },
 
+  // ---------- 月份切换与筛选 ----------
+  prevMonth() {
+    if (!this.data.canPrev) return;
+    this.setData({ viewMonth: shiftMonth(this.data.viewMonth, -1) });
+    this.refresh();
+  },
+
+  nextMonth() {
+    if (!this.data.canNext) return;
+    this.setData({ viewMonth: shiftMonth(this.data.viewMonth, 1) });
+    this.refresh();
+  },
+
+  onMonthChange(e) {
+    this.setData({ viewMonth: e.detail.value });
+    this.refresh();
+  },
+
+  setFilter(e) {
+    const type = e.currentTarget.dataset.type;
+    if (type === this.data.filterType) return;
+    this.setData({ filterType: type });
+    this.applyView(true);
+  },
+
+  // ---------- 搜索 ----------
+  openSearch() {
+    this.setData({ searchOpen: true });
+  },
+
+  closeSearch() {
+    if (!this.data.keyword) {
+      this.setData({ searchOpen: false });
+      return;
+    }
+    this.setData({ keyword: '', searchOpen: false });
+    this.applyView(true);
+  },
+
+  onKeywordInput(e) {
+    this.setData({ keyword: e.detail.value });
+    this.applyView(true);
+  },
+
+  clearKeyword() {
+    if (!this.data.keyword) return;
+    this.setData({ keyword: '' });
+    this.applyView(true);
+  },
+
+  // ---------- 预算 ----------
+  openBudgetSetting() {
+    wx.showModal({
+      title: '月预算',
+      editable: true,
+      placeholderText: '输入每月支出预算，如 2000',
+      content: this.data.budget > 0 ? String(this.data.budget) : '',
+      confirmColor: '#2d7dd2',
+      success: (res) => {
+        if (!res.confirm) return;
+        const value = normalizeAmount(res.content);
+        saveBudget(value);
+        this.refresh();
+        wx.showToast({
+          title: value > 0 ? '预算已更新' : '已清除预算',
+          icon: 'success',
+          duration: 800
+        });
+      }
+    });
+  },
+
+  goBalance() {
+    wx.navigateTo({ url: '/pages/ledger-balance/ledger-balance' });
+  },
+
+  goStats() {
+    wx.navigateTo({ url: `/pages/ledger-stats/ledger-stats?month=${this.data.viewMonth}` });
+  },
+
+  // ---------- 添加 / 编辑 ----------
   openAdd() {
     const categories = getCategories('expense');
     this.setData({
@@ -229,13 +322,51 @@ Page({
       kbHeight: 0,
       typeIndex: 0,
       categories,
+      evaluationOptions: EVALUATION_OPTIONS,
+      customEvals: buildEvalCustomList('expense'),
       evalMeta: null,
+      editingId: '',
+      formTitle: '添加账单',
+      saveText: '保存账单',
       form: {
         amount: '',
         type: 'expense',
         category: categories[0],
         date: today(),
-        note: ''
+        note: '',
+        remark: ''
+      }
+    });
+  },
+
+  // 点击账单卡片 -> 编辑该笔
+  onBillTap(e) {
+    const id = e.currentTarget.dataset.id;
+    const bill = loadBills().find((item) => item.id === id);
+    if (!bill) {
+      wx.showToast({ title: '账单不存在', icon: 'none' });
+      return;
+    }
+    let categories = getCategories(bill.type);
+    if (!categories.includes(bill.category)) categories = categories.concat([bill.category]);
+    this.setData({
+      showSheet: true,
+      kbHeight: 0,
+      typeIndex: bill.type === 'income' ? 1 : 0,
+      categories,
+      evaluationOptions: bill.type === 'income' ? INCOME_EVALUATION_OPTIONS : EVALUATION_OPTIONS,
+      customEvals: buildEvalCustomList(bill.type),
+      evalMeta: getEvalMeta(bill.note, bill.type),
+      editingId: bill.id,
+      formTitle: '编辑账单',
+      saveText: '保存修改',
+      form: {
+        amount: String(bill.amount),
+        type: bill.type,
+        category: bill.category,
+        date: bill.date,
+        note: bill.note || '',
+        remark: bill.remark || ''
       }
     });
   },
@@ -255,24 +386,95 @@ Page({
 
   onEvalPick(e) {
     const key = e.currentTarget.dataset.key;
-    const meta = getEvalMeta(key);
+    const meta = getEvalMeta(key, this.data.form.type);
     this.setData({
-      'form.note': key,
+      'form.note': meta ? key : '',
       evalMeta: meta,
       showEvalSheet: false
     });
   },
 
+  // 清除已选评价
+  clearEval() {
+    this.setData({
+      'form.note': '',
+      evalMeta: null,
+      showEvalSheet: false
+    });
+  },
+
+  // ---------- 自定义评价 ----------
+  addEval() {
+    const type = this.data.form.type;
+    wx.showModal({
+      title: '新增评价',
+      editable: true,
+      placeholderText: '输入标签名，最多6个字',
+      confirmColor: '#2d7dd2',
+      success: (res) => {
+        if (!res.confirm) return;
+        const name = String(res.content || '').trim();
+        if (!name) {
+          wx.showToast({ title: '请输入评价名称', icon: 'none' });
+          return;
+        }
+        if (name.length > 6) {
+          wx.showToast({ title: '评价名称最多6个字', icon: 'none' });
+          return;
+        }
+        // 与预设（key 和名称）及已有自定义去重
+        const presets = type === 'income' ? INCOME_EVALUATION_OPTIONS : EVALUATION_OPTIONS;
+        const taken = presets.some((opt) => opt.key === name || opt.name === name);
+        const list = loadEvalCustom(type);
+        if (taken || list.includes(name)) {
+          wx.showToast({ title: '该评价已存在', icon: 'none' });
+          return;
+        }
+        if (list.length >= 8) {
+          wx.showToast({ title: '最多添加 8 个自定义评价', icon: 'none' });
+          return;
+        }
+        list.push(name);
+        saveEvalCustom(type, list);
+        this.setData({ customEvals: buildEvalCustomList(type) });
+        wx.showToast({ title: '已添加', icon: 'success' });
+      }
+    });
+  },
+
+  // 删除自定义评价（只影响以后可选，已使用的账单标签照常显示）
+  deleteEval(e) {
+    const name = e.currentTarget.dataset.name;
+    const type = this.data.form.type;
+    const list = loadEvalCustom(type).filter((item) => item !== name);
+    saveEvalCustom(type, list);
+    const update = { customEvals: buildEvalCustomList(type) };
+    // 若当前选中的正是被删的评价，一并清除
+    if (this.data.form.note === name) {
+      update['form.note'] = '';
+      update.evalMeta = null;
+    }
+    this.setData(update);
+    wx.showToast({ title: '已删除', icon: 'none', duration: 800 });
+  },
+
   onTypePick(e) {
     const index = Number(e.currentTarget.dataset.index);
     const type = TYPES[index].key;
+    if (type === this.data.form.type) return;
     const categories = getCategories(type);
-    this.setData({
+    const update = {
       typeIndex: index,
       categories,
+      evaluationOptions: type === 'income' ? INCOME_EVALUATION_OPTIONS : EVALUATION_OPTIONS,
+      customEvals: buildEvalCustomList(type),
+      // 收支方向变了，原来的评价语义不再适用
       'form.type': type,
-      'form.category': categories[0]
-    });
+      'form.category': categories[0],
+      'form.note': '',
+      evalMeta: null
+    };
+    this.setData(update);
   },
 
   onCategoryPick(e) {
@@ -281,6 +483,10 @@ Page({
 
   onAmountInput(e) {
     this.setData({ 'form.amount': e.detail.value });
+  },
+
+  onRemarkInput(e) {
+    this.setData({ 'form.remark': e.detail.value });
   },
 
   onDateChange(e) {
@@ -297,20 +503,47 @@ Page({
 
     const now = Date.now();
     const list = loadBills();
-    list.push({
-      id: genId(),
-      type: form.type,
-      category: form.category,
-      amount,
-      date: form.date || today(),
-      note: (form.note || '').trim(),
-      createdAt: now,
-      updatedAt: now
-    });
+    const editingId = this.data.editingId;
+    const date = form.date || today();
+    const note = (form.note || '').trim();
+    const remark = (form.remark || '').trim();
+
+    if (editingId) {
+      const index = list.findIndex((item) => item.id === editingId);
+      if (index < 0) {
+        wx.showToast({ title: '账单不存在', icon: 'none' });
+        return;
+      }
+      list[index] = Object.assign({}, list[index], {
+        type: form.type,
+        category: form.category,
+        amount,
+        date,
+        note,
+        remark,
+        updatedAt: now
+      });
+    } else {
+      list.push({
+        id: genId(),
+        type: form.type,
+        category: form.category,
+        amount,
+        date,
+        note,
+        remark,
+        createdAt: now,
+        updatedAt: now
+      });
+    }
     saveBills(list);
     this.setData({ showSheet: false, kbHeight: 0 });
+
+    // 账单不在当前浏览月份时，直接切到账单所在月份，避免「记完看不见」
+    const billMonth = monthKey(date);
+    if (billMonth !== this.data.viewMonth) this.setData({ viewMonth: billMonth });
     this.refresh();
-    wx.showToast({ title: '已记一笔', icon: 'success' });
+    wx.showToast({ title: editingId ? '已保存' : '已记一笔', icon: 'success' });
   },
 
   removeBill(e) {
@@ -376,8 +609,10 @@ Page({
       return;
     }
 
-    categories.push(trimmed);
-    saveCustomCategories(type, categories.filter((c) => !isBuiltinCategory(type, c)));
+    // 直接追加到自定义列表（允许顶替被删除的同名内置分类）
+    const customs = loadCustomCategories(type);
+    if (customs.indexOf(trimmed) < 0) customs.push(trimmed);
+    saveCustomCategories(type, customs);
 
     // 如果当前正在添加账单且类型一致，刷新分类列表并选中新分类
     const update = {
@@ -392,71 +627,67 @@ Page({
     wx.showToast({ title: '已添加', icon: 'success' });
   },
 
+  // 删除分类：内置与自定义规则一致——已被账单使用的不可删，未使用的可删
   deleteCustomCategory(e) {
     const name = e.currentTarget.dataset.name;
     const type = this.data.cateForm.type;
-    if (isBuiltinCategory(type, name)) {
-      wx.showToast({ title: '默认分类不能删除', icon: 'none' });
-      return;
-    }
 
     if (this.data.usedMap[type + '::' + name]) {
       wx.showToast({ title: '该分类已被账单使用，无法删除', icon: 'none' });
       return;
     }
 
+    const isBuiltin = isBuiltinCategory(type, name);
     wx.showModal({
       title: '删除分类',
-      content: `确定删除自定义分类「${name}」吗？`,
+      content: `确定删除分类「${name}」吗？${isBuiltin ? '之后可通过「恢复默认」找回。' : ''}`,
       confirmColor: '#e25d5d',
       success: (res) => {
         if (!res.confirm) return;
-        const categories = getCategories(type).filter((c) => c !== name);
-        saveCustomCategories(type, categories.filter((c) => !isBuiltinCategory(type, c)));
 
+        // 内置与自定义都从两侧列表清干净（覆盖同名自定义顶替内置的情况）
+        saveCustomCategories(type, loadCustomCategories(type).filter((c) => c !== name));
+        if (isBuiltin) {
+          const hidden = loadHiddenCategories(type);
+          if (hidden.indexOf(name) < 0) hidden.push(name);
+          saveHiddenCategories(type, hidden);
+        }
+
+        const categories = getCategories(type);
         const update = {
           manageCategories: buildManageList(type)
         };
         if (this.data.form.type === type) {
-          update.categories = getCategories(type);
+          update.categories = categories;
           if (this.data.form.category === name) {
-            update['form.category'] = getCategories(type)[0];
+            update['form.category'] = categories[0];
           }
         }
         this.setData(update);
+        wx.showToast({ title: '已删除', icon: 'success' });
       }
     });
   },
 
+  // 恢复默认：只找回被删除的默认分类，自定义分类完全不动（仅能由用户手动删除）
   resetCategories() {
     const type = this.data.cateForm.type;
-    const allCustoms = loadCustomCategories(type);
-    if (allCustoms.length === 0) {
-      wx.showToast({ title: '当前已是默认分类', icon: 'none' });
-      return;
-    }
-
-    const kept = allCustoms.filter((name) => this.data.usedMap[type + '::' + name]);
-    const removedCount = allCustoms.length - kept.length;
-
-    if (removedCount === 0) {
-      wx.showToast({ title: '自定义分类正在使用中，无法恢复默认', icon: 'none' });
+    const hiddenBuiltins = loadHiddenCategories(type);
+    if (hiddenBuiltins.length === 0) {
+      wx.showToast({ title: '没有已删除的默认分类', icon: 'none' });
       return;
     }
 
     wx.showModal({
       title: '恢复默认分类',
-      content: kept.length > 0
-        ? `将删除 ${removedCount} 个未使用的自定义分类；${kept.length} 个正在使用中的分类会被保留。`
-        : `确定删除所有自定义分类，恢复为默认分类吗？`,
-      confirmColor: '#e25d5d',
+      content: `将找回 ${hiddenBuiltins.length} 个被删除的默认分类，你的自定义分类不受影响。`,
+      confirmColor: '#2d7dd2',
       success: (res) => {
         if (!res.confirm) return;
-        saveCustomCategories(type, kept);
+        saveHiddenCategories(type, []);
 
         const categories = getCategories(type);
         const update = {
-          'cateForm.name': '',
           manageCategories: buildManageList(type)
         };
         if (this.data.form.type === type) {
@@ -466,7 +697,7 @@ Page({
           }
         }
         this.setData(update);
-        wx.showToast({ title: `已删除 ${removedCount} 个分类`, icon: 'success' });
+        wx.showToast({ title: '已恢复默认分类', icon: 'success' });
       }
     });
   },
@@ -485,8 +716,3 @@ Page({
     return { title: '日常琐事，交给这个小工具集就对了', imageUrl: '/images/share-cover.jpg' };
   }
 });
-
-function isBuiltinCategory(type, name) {
-  const defaults = type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
-  return defaults.includes(name);
-}

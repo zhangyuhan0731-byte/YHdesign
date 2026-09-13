@@ -1,0 +1,117 @@
+<!-- pages/ledger-stats/ledger-stats.wxml -->
+<view class="page">
+  <!-- 头部：模式/类型切换 + 时间选择 + 本期总览 -->
+  <view class="stats-head anim">
+    <view class="mode-row">
+      <view class="seg">
+        <view class="seg-item {{mode === 'month' ? 'active' : ''}}" data-mode="month" bindtap="setMode">月账单</view>
+        <view class="seg-item {{mode === 'year' ? 'active' : ''}}" data-mode="year" bindtap="setMode">年账单</view>
+      </view>
+      <view class="seg">
+        <view class="seg-item {{type === 'expense' ? 'active' : ''}}" data-type="expense" bindtap="setType">支出</view>
+        <view class="seg-item {{type === 'income' ? 'active' : ''}}" data-type="income" bindtap="setType">收入</view>
+      </view>
+    </view>
+
+    <view class="time-row">
+      <view class="time-arrow {{canPrev ? '' : 'disabled'}}" bindtap="prev">‹</view>
+      <picker wx:if="{{mode === 'month'}}" mode="date" fields="month" value="{{viewMonth}}"
+              start="2000-01" end="{{maxMonth}}" bindchange="onTimeChange">
+        <view class="time-current">{{monthText}}<text class="time-caret">▾</text></view>
+      </picker>
+      <picker wx:else mode="date" fields="year" value="{{viewYear}}"
+              start="2000" end="{{maxYear}}" bindchange="onTimeChange">
+        <view class="time-current">{{viewYear}}年<text class="time-caret">▾</text></view>
+      </picker>
+      <view class="time-arrow {{canNext ? '' : 'disabled'}}" bindtap="next">›</view>
+    </view>
+
+    <view class="amount-label">本期{{typeName}}</view>
+    <view class="amount-main">¥{{amountText}}</view>
+    <view class="amount-meta {{trendCls}}" wx:if="{{trendText}}">{{trendText}}</view>
+    <view class="amount-sub">
+      共 {{countText}} 笔{{avgText}} · 收入 ¥{{incomeText}} · 结余
+      <text class="{{balanceCls}}">{{balanceSign}}¥{{balanceAbsText}}</text>
+    </view>
+  </view>
+
+  <!-- 柱状图：维度切换 + 对比 -->
+  <view class="chart-card card anim" style="animation-delay:60ms">
+    <view class="chart-head">
+      <view class="chart-head-main">
+        <view class="chart-title">{{chartTitle}}</view>
+        <view class="chart-sub">{{chartSub}}</view>
+      </view>
+      <view class="dim-seg" wx:if="{{mode === 'month'}}">
+        <view class="dim-item {{dim === 'day' ? 'active' : ''}}" data-dim="day" bindtap="setDim">日</view>
+        <view class="dim-item {{dim === 'week' ? 'active' : ''}}" data-dim="week" bindtap="setDim">周</view>
+        <view class="dim-item {{dim === 'month' ? 'active' : ''}}" data-dim="month" bindtap="setDim">月</view>
+      </view>
+    </view>
+
+    <view class="chart-legend" wx:if="{{isPair && hasBars}}">
+      <view class="legend-item"><view class="legend-dot cur"></view><text>{{legendCur}}年</text></view>
+      <view class="legend-item"><view class="legend-dot prev"></view><text>{{legendPrev}}年</text></view>
+    </view>
+
+    <view class="bars {{dim === 'day' && mode === 'month' ? 'dense' : ''}}" wx:if="{{hasBars}}">
+      <view class="bar-col {{item.future ? 'future' : ''}}" wx:for="{{bars}}" wx:key="{{item.key}}"
+            data-month="{{item.month}}" bindtap="onBarTap">
+        <view class="bar-amount active" wx:if="{{item.active}}">{{item.amountText}}</view>
+        <view class="bar-amount" wx:else></view>
+        <view class="bar-track {{isPair ? 'pair' : ''}}">
+          <block wx:if="{{isPair}}">
+            <view class="bar side prev-bar" style="height:{{item.prevPct}}%;"></view>
+            <view class="bar side {{item.active ? 'active' : ''}}" style="height:{{item.heightPct}}%;"></view>
+          </block>
+          <view class="bar {{item.active ? 'active' : ''}}" wx:else style="height:{{item.heightPct}}%;"></view>
+        </view>
+        <view class="bar-label {{item.active ? 'active' : ''}} {{item.label ? '' : 'blank'}}">{{item.label}}</view>
+      </view>
+    </view>
+    <view class="chart-empty" wx:else>
+      <view class="chart-empty-ic">
+        <view class="mini-bar b1"></view>
+        <view class="mini-bar b2"></view>
+        <view class="mini-bar b3"></view>
+      </view>
+      <view class="chart-empty-tip">{{chartEmptyTip}}暂无{{typeName}}记录</view>
+    </view>
+  </view>
+
+  <!-- 分类构成 -->
+  <view class="rank-card card anim" style="animation-delay:120ms">
+    <view class="rank-head">
+      <view class="rank-title">{{typeName}}构成</view>
+      <view class="rank-note">按金额排序</view>
+    </view>
+
+    <view class="rank-list" wx:if="{{breakdown.length > 0}}">
+      <view class="rank-item" wx:for="{{breakdown}}" wx:key="name">
+        <view class="rank-badge r{{index + 1}}" wx:if="{{index < 3}}">{{index + 1}}</view>
+        <view class="rank-badge-holder" wx:else></view>
+        <view class="cate-avatar" style="color:{{item.color}};background:{{item.bg}}">{{item.icon}}</view>
+        <view class="rank-main">
+          <view class="rank-row1">
+            <view class="rank-name-line">
+              <text class="rank-name">{{item.name}}</text>
+              <text class="rank-count">{{item.count}} 笔</text>
+            </view>
+            <text class="rank-amount">¥{{item.amountText}}</text>
+          </view>
+          <view class="rank-row2">
+            <view class="rank-track">
+              <view class="rank-bar" style="width:{{item.barPct}}%;background:{{item.color}};"></view>
+            </view>
+            <text class="rank-percent">{{item.percent}}%</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{breakdown.length === 0}}">
+      <view class="tip">{{mode === 'month' ? monthText : viewYear + '年'}}没有{{typeName}}记录</view>
+      <view class="tip-sub">回到记账本记几笔，这里就能看到分类构成了</view>
+    </view>
+  </view>
+</view>

@@ -11,6 +11,8 @@
     "pages/zodiac/zodiac",
     "pages/memo/memo",
     "pages/ledger/ledger",
+    "pages/ledger-stats/ledger-stats",
+    "pages/ledger-balance/ledger-balance",
     "pages/countdown/countdown",
     "pages/woodfish/woodfish"
   ],

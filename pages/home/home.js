@@ -6,9 +6,9 @@
 //     点一下就和相邻项交换位置并立即存到本机；首尾项对应的按钮自动禁用。
 //   - 点「完成」回到宫格。
 const DEFAULT_TOOLS = [
+  { key: 'ledger',        name: '记账本',   icon: 'ic-ledger',        desc: '收入支出轻松记',   tone: 'sky',    path: '/pages/ledger/ledger' },
   { key: 'chef',          name: '厨神',     icon: 'ic-chef',          desc: '368道菜照着做',     tone: 'orange', path: '/packages/chef/pages/index/index' },
   { key: 'pantry',        name: '我的食材', icon: 'ic-pantry',        desc: '看看现有食材能做什么', tone: 'mint', path: '/packages/chef/pages/pantry/pantry' },
-  { key: 'ledger',        name: '记账本',   icon: 'ic-ledger',        desc: '收入支出轻松记',   tone: 'sky',    path: '/pages/ledger/ledger' },
   { key: 'memo',          name: '备忘录',   icon: 'ic-memo',          desc: '随手保存小事情',   tone: 'ink',    path: '/pages/memo/memo' },
   { key: 'countdown',     name: '倒数日记', icon: 'ic-countdown',     desc: '重要日子不忘记',   tone: 'orange', path: '/pages/countdown/countdown' },
   { key: 'wheel',         name: '幸运转盘', icon: 'ic-wheel',         desc: '选择困难时转一下', tone: 'blue',   path: '/pages/wheel/wheel' },
